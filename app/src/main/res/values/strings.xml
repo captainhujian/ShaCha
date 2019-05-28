@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">I豆瓣</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="movies_title">电影Top250</string>
+    <string name="books_title">读书</string>
+    <string name="movies_fragment">电影 fragment</string>
+    <string name="books_fragment">读书 fragment</string>
+</resources>
