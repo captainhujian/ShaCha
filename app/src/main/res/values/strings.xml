@@ -2,8 +2,10 @@
     <string name="app_name">I豆瓣</string>
 
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="movies_title">电影Top250</string>
+    <string name="top250_movies_title">豆瓣Top250</string>
     <string name="books_title">读书</string>
+    <string name="hot_movies_title">影院热映</string>
     <string name="movies_fragment">电影 fragment</string>
     <string name="books_fragment">读书 fragment</string>
+    <string name="hot_movies_fragment">热门电影 Fragment</string>
 </resources>

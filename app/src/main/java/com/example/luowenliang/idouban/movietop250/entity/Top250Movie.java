@@ -1,4 +1,4 @@
-package com.example.luowenliang.idouban;
+package com.example.luowenliang.idouban.movietop250.entity;
 
 public class Top250Movie {
     String image;
@@ -10,8 +10,9 @@ public class Top250Movie {
     String durations;
     String year;
     String director;
+    String id;
 
-    public Top250Movie(String image, String title, String original_title, String cast, double rating, String genres, String durations, String year, String director) {
+    public Top250Movie(String image, String title, String original_title, String cast, double rating, String genres, String durations, String year, String director, String id) {
         this.image = image;
         this.title = title;
         this.original_title = original_title;
@@ -21,6 +22,15 @@ public class Top250Movie {
         this.durations = durations;
         this.year = year;
         this.director = director;
+        this.id = id;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getImage() {

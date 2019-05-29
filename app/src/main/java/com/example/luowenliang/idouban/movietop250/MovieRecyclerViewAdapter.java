@@ -1,7 +1,6 @@
-package com.example.luowenliang.idouban;
+package com.example.luowenliang.idouban.movietop250;
 
 
-import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -9,10 +8,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.RatingBar;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.example.luowenliang.idouban.application.MyApplication;
+import com.example.luowenliang.idouban.R;
+import com.example.luowenliang.idouban.movietop250.entity.Top250Movie;
 
 import java.math.BigDecimal;
 import java.util.List;

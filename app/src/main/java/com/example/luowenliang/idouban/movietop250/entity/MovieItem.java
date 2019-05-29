@@ -1,4 +1,4 @@
-package com.example.luowenliang.idouban;
+package com.example.luowenliang.idouban.movietop250.entity;
 
 import java.util.List;
 

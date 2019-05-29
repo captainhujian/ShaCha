@@ -1,4 +1,4 @@
-package com.example.luowenliang.idouban;
+package com.example.luowenliang.idouban.application;
 
 import android.app.Application;
 import android.content.Context;

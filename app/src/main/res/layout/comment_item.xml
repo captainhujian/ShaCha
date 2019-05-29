@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_marginLeft="15dp"
+    android:layout_marginRight="15dp"
+    android:layout_marginTop="15dp"
+    android:layout_marginBottom="15dp">
+    <com.shehuan.niv.NiceImageView
+        android:id="@+id/commenter_picture"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="2dp"
+        android:src="@mipmap/ic_launcher"
+        app:is_circle="true"/>
+    <LinearLayout
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintLeft_toRightOf="@id/commenter_picture"
+        android:layout_marginLeft="10dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/commenter_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="nick"
+            android:textSize="15dp"
+            android:textStyle="bold"
+            />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <com.hedgehog.ratingbar.RatingBar
+                android:id="@+id/commenter_rating_bar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:visibility="visible"
+                app:halfstart="true"
+                app:starEmpty="@drawable/ic_star_normal"
+                app:starFill="@drawable/ic_star_selected"
+                app:starHalf="@drawable/ic_star_half"
+                app:starImageHeight="12dp"
+                app:starImagePadding="2dp"
+                app:starImageWidth="12dp" />
+            <TextView
+                android:id="@+id/commenter_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="2019年5月29日"
+                android:textSize="10dp"
+                android:layout_marginLeft="5dp"
+                android:layout_gravity="center_vertical"/>
+        </LinearLayout>
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/comment"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:lineSpacingExtra="4dp"
+        android:textSize="15dp"
+        app:layout_constraintTop_toBottomOf="@id/commenter_picture"
+        android:layout_marginTop="10dp"
+        android:text="距离斯蒂芬·金和德拉邦特们缔造这部伟大的作品已经有十年了。我知道美好的东西想必大家都能感受，但是很抱歉，我的聒噪仍将一如既往。 在我眼里，肖申克的救赎与信念、自由和友谊有关。 "/>
+
+</android.support.constraint.ConstraintLayout>
