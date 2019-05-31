@@ -4,32 +4,28 @@ public class Top250Movie {
     String image;
     String title;
     String original_title;
-    String cast ;
+    String cast1 ;
+    String cast2;
     double rating;
-    String genres;
+    String genres1;
+    String genres2;
     String durations;
     String year;
     String director;
     String id;
 
-    public Top250Movie(String image, String title, String original_title, String cast, double rating, String genres, String durations, String year, String director, String id) {
+    public Top250Movie(String image, String title, String original_title, String cast1, String cast2, double rating, String genres1, String genres2, String durations, String year, String director, String id) {
         this.image = image;
         this.title = title;
         this.original_title = original_title;
-        this.cast = cast;
+        this.cast1 = cast1;
+        this.cast2 = cast2;
         this.rating = rating;
-        this.genres = genres;
+        this.genres1 = genres1;
+        this.genres2 = genres2;
         this.durations = durations;
         this.year = year;
         this.director = director;
-        this.id = id;
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
         this.id = id;
     }
 
@@ -57,12 +53,20 @@ public class Top250Movie {
         this.original_title = original_title;
     }
 
-    public String getCast() {
-        return cast;
+    public String getCast1() {
+        return cast1;
     }
 
-    public void setCast(String cast) {
-        this.cast = cast;
+    public void setCast1(String cast1) {
+        this.cast1 = cast1;
+    }
+
+    public String getCast2() {
+        return cast2;
+    }
+
+    public void setCast2(String cast2) {
+        this.cast2 = cast2;
     }
 
     public double getRating() {
@@ -73,12 +77,20 @@ public class Top250Movie {
         this.rating = rating;
     }
 
-    public String getGenres() {
-        return genres;
+    public String getGenres1() {
+        return genres1;
     }
 
-    public void setGenres(String genres) {
-        this.genres = genres;
+    public void setGenres1(String genres1) {
+        this.genres1 = genres1;
+    }
+
+    public String getGenres2() {
+        return genres2;
+    }
+
+    public void setGenres2(String genres2) {
+        this.genres2 = genres2;
     }
 
     public String getDurations() {
@@ -103,5 +115,13 @@ public class Top250Movie {
 
     public void setDirector(String director) {
         this.director = director;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 }

@@ -5,10 +5,11 @@
     android:layout_height="wrap_content"
     android:layout_marginRight="1dp">
     <ImageView
-        android:id="@+id/stage_photo"
+        android:id="@+id/stage_image_view"
         android:layout_width="230dp"
         android:layout_height="160dp"
-        android:scaleType="fitXY"
-        android:src="@mipmap/ic_launcher"/>
+        android:scaleType="centerCrop"
+        android:src="@mipmap/ic_launcher"
+        android:visibility="visible"/>
 
 </android.support.constraint.ConstraintLayout>

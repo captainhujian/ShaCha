@@ -57,6 +57,7 @@ public class MovieRecyclerViewAdapter extends RecyclerView.Adapter<MovieRecycler
             director_cast = itemView.findViewById(R.id.director_cast);
             number = itemView.findViewById(R.id.number);
             ratingBar = itemView.findViewById(R.id.rating_bar);
+            ratingBar.setmClickable(false);
         }
     }
 
@@ -69,10 +70,10 @@ public class MovieRecyclerViewAdapter extends RecyclerView.Adapter<MovieRecycler
         Glide.with(MyApplication.getContext()).load(top250Movie.getImage()).into(viewHolder.image);
         viewHolder.durations.setText(top250Movie.getDurations());
         viewHolder.year.setText(top250Movie.getYear());
-        viewHolder.genres.setText(top250Movie.getGenres());
+        viewHolder.genres.setText(top250Movie.getGenres1()+top250Movie.getGenres2());
         viewHolder.original_title.setText(top250Movie.getOriginal_title());
         viewHolder.title.setText(top250Movie.getTitle());
-        viewHolder.director_cast.setText(top250Movie.getDirector() + "/" + top250Movie.getCast());
+        viewHolder.director_cast.setText(top250Movie.getDirector() + "/" + top250Movie.getCast1()+top250Movie.getCast2());
         viewHolder.number.setText("No." + (i + 1));
         Log.d("分数", "名字: "+top250Movie.getTitle());
         //星级评分

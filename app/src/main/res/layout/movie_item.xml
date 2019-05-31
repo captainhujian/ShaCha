@@ -101,6 +101,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     app:halfstart="true"
+                    android:clickable="false"
                     app:starEmpty="@drawable/ic_star_normal"
                     app:starFill="@drawable/ic_star_selected"
                     app:starHalf="@drawable/ic_star_half"
@@ -128,6 +129,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="abc/abc"
+                    android:lineSpacingExtra="2dp"
                     android:layout_marginRight="10dp"/>
 
             </LinearLayout>
@@ -135,12 +137,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:layout_marginBottom="15dp">
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="类型："
-                    />
+                android:layout_marginBottom="15dp"
+                >
+
                 <TextView
                     android:id="@+id/genres"
                     android:layout_width="wrap_content"
@@ -151,8 +150,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="时长："
-                    android:layout_marginLeft="10dp"
+                    android:text="/"
                     />
                 <TextView
                     android:id="@+id/durations"

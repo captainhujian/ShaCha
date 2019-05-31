@@ -455,7 +455,7 @@ public class MovieDetailItem {
         this.clip_urls = clip_urls;
     }
 
-    public List<CastsBean> getCasts() {
+    public List<CastsBean>getCasts() {
         return casts;
     }
 
