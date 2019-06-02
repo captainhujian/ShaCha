@@ -2,6 +2,7 @@ package com.example.luowenliang.idouban.movietop250;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -39,6 +40,13 @@ public class Top250MoviesFragment extends Fragment {
     private List<Top250Movie> movieList = new ArrayList<>();
     private MovieRecyclerViewAdapter adapter;
     private ProgressBar progressBar;
+    private LinearLayoutManager linearLayoutManager;
+     int lastVisibleItem;
+    private int start = 0;
+    private final int count = 20;
+    //用来控制进入getdata()的次数
+    boolean isLoading = false;
+
 
     @Nullable
     @Override
@@ -47,24 +55,59 @@ public class Top250MoviesFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_movies_top250, null);
         progressBar = view.findViewById(R.id.progress_bar);
         movieRecyclerView = view.findViewById(R.id.movies_list);
-        if(savedInstanceState==null){
-            Log.d("进度条", "250onCreateView: ");
-            initMovieTop250Data();
-        }
+        //网络请求top250
+        initMovieTop250Data(start*count,count);
+        Log.d(TAG, "第一次请求成功");
         return view;
     }
 
 
-    private void initData() {
 
-        movieRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
+    private void initData() {
+        linearLayoutManager=new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
+        movieRecyclerView.setLayoutManager(linearLayoutManager);
         movieRecyclerView.setItemAnimator(new DefaultItemAnimator());
-        adapter = new MovieRecyclerViewAdapter(movieList);
+        adapter = new MovieRecyclerViewAdapter(getContext(),movieList);
         movieRecyclerView.setAdapter(adapter);
+        //给recyclerView添加滑动监听
+        movieRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+        /*
+        到达底部了,如果不加!isLoading的话到达底部如果还一滑动的话就会一直进入这个方法
+        就一直去做请求网络的操作,这样的用户体验肯定不好.添加一个判断,每次滑倒底只进行一次网络请求去请求数据
+        当请求完成后,在把isLoading赋值为false,下次滑倒底又能进入这个方法了
+         */
+                if (newState == RecyclerView.SCROLL_STATE_IDLE && lastVisibleItem + 1 == adapter.getItemCount() && !isLoading) {
+                    //到达底部之后如果footView的状态不是正在加载的状态,就将 他切换成正在加载的状态
+                    if (start < 250) {
+                        Log.e(TAG, "onScrollStateChanged: " + "进来了");
+                        isLoading = true;
+                        adapter.changeState(1);
+                        start++;
+                        Log.d(TAG, "第"+(start+1)+"次请求开始");
+                        initMovieTop250Data(start*count,count);
+                        Log.d(TAG, "第"+(start+1)+"次请求成功");
+                    } else {
+                            adapter.changeState(2);
+
+                    }
+                }
+            }
+
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                //拿到最后一个出现的item的位置
+                lastVisibleItem = linearLayoutManager.findLastVisibleItemPosition();
+            }
+        });
+
     }
 
-    private rx.Observable<MovieItem> requsetMovieData() {
-        Log.d(TAG, "requsetMovieData: ");
+    private rx.Observable<MovieItem> requsetMovieData(int start,int count) {
+        Log.d(TAG, "start:"+start+"count:"+count);
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl("http://api.douban.uieee.com/v2/movie/")
                 .addConverterFactory(GsonConverterFactory.create())
@@ -72,13 +115,14 @@ public class Top250MoviesFragment extends Fragment {
                 .build();
         Top250MovieService movieService = retrofit.create(Top250MovieService.class);
 //        rx.Observable<MovieItem> top250Movie = movieService.getMovie();//"0b2bdeda43b5688921839c8ecb20399b"
-        return movieService.getMovie();
+
+        return movieService.getMovie();//start,count
 
     }
 
-    private void initMovieTop250Data() {
+    private void initMovieTop250Data(int start,int count) {
         Log.d(TAG, "initMovieTop250Data: ");
-        requsetMovieData()
+        requsetMovieData(start,count)
                 .subscribeOn(Schedulers.io())//io加载数据
                 .observeOn(AndroidSchedulers.mainThread())//主线程显示数据
                 .subscribe(new Subscriber<MovieItem>() {
@@ -96,7 +140,7 @@ public class Top250MoviesFragment extends Fragment {
 
                     @Override
                     public void onNext(MovieItem movieItem) {
-                        String cast1=null,cast2 = null,genres1=null,genres2=null;
+                        String cast1,cast2 ,genres1,genres2;
                         Log.d(TAG, "onNext: ");
                         progressBar.setVisibility(View.VISIBLE);
                         for (int i = 0; i < movieItem.getSubjects().size(); i++) {
@@ -130,12 +174,12 @@ public class Top250MoviesFragment extends Fragment {
                                 genres2 = "";
                             }
 
-                            Log.d(TAG, "海报：" + image + " 影片名：" + title + " 原名：" + original_title + " 主演：" + cast1 +"/"+cast2+ " 导演：" +director+ " 评分：" + rating
-                                    + " 类型：" + genres1+"/"+genres2 + " 时长：" + durations + " 年份：" + year + "\n");
+//                            Log.d(TAG, "海报：" + image + " 影片名：" + title + " 原名：" + original_title + " 主演：" + cast1 +"/"+cast2+ " 导演：" +director+ " 评分：" + rating
+//                                    + " 类型：" + genres1+"/"+genres2 + " 时长：" + durations + " 年份：" + year + "\n");
                             setMovieData(image, title, original_title, cast1,cast2, rating, genres1,genres2,
                                     durations, year, director,id);
                         }
-                        Log.d(TAG, "movieList: " + movieList.size());
+                       // Log.d(TAG, "movieList: " + movieList.size());
 
                     }
 
