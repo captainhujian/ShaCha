@@ -1,4 +1,4 @@
-package com.example.luowenliang.idouban.moviedetail;
+package com.example.luowenliang.idouban.moviedetail.utils;
 
 import android.util.Log;
 import android.view.View;
@@ -13,12 +13,12 @@ import com.hedgehog.ratingbar.RatingBar;
 
 import java.math.BigDecimal;
 
-public class SetDetailData {
+public class SetMovieDetailData {
 
     private MovieDetailItem movieDetailItem;
     private String genres,genre1,genre2;
 
-    public SetDetailData(MovieDetailItem movieDetailItem) {
+    public SetMovieDetailData(MovieDetailItem movieDetailItem) {
         this.movieDetailItem = movieDetailItem;
     }
 
@@ -28,8 +28,15 @@ public class SetDetailData {
         title.setText(movieDetailItem.getTitle());
         originTitleYear.setText(movieDetailItem.getOriginal_title() + " (" + movieDetailItem.getYear() + ")");
         getGenres();
-        message.setText(movieDetailItem.getCountries().get(0) + "/" + genres + "/上映时间：" + movieDetailItem.getPubdates().get(0)
-                + "/片长：" + movieDetailItem.getDurations().get(0) + ">");
+        //当没有时长时的防空措施
+        if(!(movieDetailItem.getDurations().isEmpty())){
+            message.setText(movieDetailItem.getCountries().get(0) + "/" + genres + "/上映时间：" + movieDetailItem.getPubdates().get(0)
+                    + "/片长：" + movieDetailItem.getDurations().get(0) +">");
+        }else{
+            message.setText(movieDetailItem.getCountries().get(0) + "/" + genres + "/上映时间：" + movieDetailItem.getPubdates().get(0)
+                    + "/集数：" + movieDetailItem.getEpisodes_count() + "集>");
+        }
+
         summary.setText(movieDetailItem.getSummary());
         //星级评分
         double fitRate = fitRating(movieDetailItem.getRating().getAverage());

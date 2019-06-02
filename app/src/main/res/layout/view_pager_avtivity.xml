@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-    <com.example.luowenliang.idouban.moviedetail.PhotoViewPager
+    <com.example.luowenliang.idouban.moviedetail.utils.PhotoViewPager
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -15,7 +15,7 @@
         android:scaleType="centerInside"
         android:src="@mipmap/ic_launcher"
         android:visibility="visible">
-    </com.example.luowenliang.idouban.moviedetail.PhotoViewPager>
+    </com.example.luowenliang.idouban.moviedetail.utils.PhotoViewPager>
     <TextView
         android:id="@+id/tv_image_count"
         android:layout_width="match_parent"

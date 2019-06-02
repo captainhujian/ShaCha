@@ -1,14 +1,24 @@
 package com.example.luowenliang.idouban.moviedetail.entity;
 
 public class CastInfo {
+    private String castId;
     private String castPicture;
     private String castName;
     private String enName;
 
-    public CastInfo(String castPicture, String castName, String enName) {
+    public CastInfo(String castPicture, String castName, String enName,String castId) {
+        this.castId = castId;
         this.castPicture = castPicture;
         this.castName = castName;
         this.enName = enName;
+    }
+
+    public String getCastId() {
+        return castId;
+    }
+
+    public void setCastId(String castId) {
+        this.castId = castId;
     }
 
     public String getCastPicture() {

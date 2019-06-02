@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    >
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/cast_detail_title"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:theme="@style/ToolbarTheme"
+        >
+    </android.support.v7.widget.Toolbar>
+
+    <LinearLayout
+        android:id="@+id/cast_message"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintTop_toBottomOf="@id/cast_detail_title">
+
+        <android.support.v7.widget.CardView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:elevation="15dp"
+            app:cardCornerRadius="10dp">
+
+            <ImageView
+                android:id="@+id/cast_photo"
+                android:layout_width="85dp"
+                android:layout_height="120dp"
+                android:scaleType="fitXY"
+                android:background="@color/grey"/>
+        </android.support.v7.widget.CardView>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="10dp"
+            android:orientation="vertical"
+            >
+
+            <TextView
+                android:id="@+id/cast_detail_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#000"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:hint="影人名"
+                android:textColorHint="@color/grey"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="5dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/cast_detail_origin_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="2dp"
+                    android:textSize="14dp"
+                    android:textStyle="bold"
+                    android:hint="原名"
+                    android:textColorHint="@color/grey"/>
+
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/birthday"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="10dp"
+                android:lineSpacingExtra="2dp"
+                android:textSize="12dp"
+                android:hint="生日：yyyy-mm-dd"
+                android:textColorHint="@color/grey"
+                />
+
+        </LinearLayout>
+    </LinearLayout>
+    <TextView
+        android:id="@+id/cast_summary_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="15dp"
+        android:layout_marginTop="15dp"
+        android:layout_marginRight="15dp"
+        android:text="简介"
+        android:textSize="18dp"
+        android:textStyle="bold"
+        app:layout_constraintTop_toBottomOf="@id/cast_message" />
+
+    <TextView
+        android:id="@+id/cast_summary"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="15dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginRight="15dp"
+        android:lineSpacingExtra="4dp"
+        android:lines="4"
+        android:scrollbars="vertical"
+        android:textSize="15dp"
+        android:hint="蒂姆·罗宾斯1958年出生于美国加利福尼亚州，美国男演员、导演、编剧及制片人。1984年，出演了他第一部电影《玩具兵》。1992年凭影片《超级大玩家》夺得戛纳电影节及金球奖最佳男主角。"
+        android:textColorHint="@color/grey"
+        app:layout_constraintTop_toBottomOf="@id/cast_summary_title" />
+    <TextView
+        android:id="@+id/film_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="影视"
+        android:textSize="18dp"
+        android:textStyle="bold"
+        app:layout_constraintTop_toBottomOf="@id/cast_summary"
+        android:layout_marginLeft="15dp"
+        android:layout_marginTop="15dp"/>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/film_recycler_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="15dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginRight="15dp"
+        app:layout_constraintTop_toBottomOf="@id/film_title">
+    </android.support.v7.widget.RecyclerView>
+
+    <TextView
+        android:id="@+id/album"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/film_recycler_view"
+        android:text="相册"
+        android:textSize="18dp"
+        android:textStyle="bold"
+        android:layout_marginLeft="15dp"
+        android:layout_marginTop="15dp"/>
+    <LinearLayout
+        android:id="@+id/album_layout"
+        android:layout_width="match_parent"
+        android:layout_height="160dp"
+        android:layout_margin="15dp"
+        app:layout_constraintTop_toBottomOf="@id/album"
+        >
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/album_recycler_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            >
+        </android.support.v7.widget.RecyclerView>
+    </LinearLayout>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="15dp"
+        android:text=" "
+        app:layout_constraintTop_toBottomOf="@id/album_layout"
+        />
+</android.support.constraint.ConstraintLayout>
+</ScrollView>

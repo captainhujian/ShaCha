@@ -7,13 +7,15 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 
 import com.example.luowenliang.idouban.book.BooksFragment;
 import com.example.luowenliang.idouban.moviehot.HotMoviesFragment;
 import com.example.luowenliang.idouban.movietop250.Top250MoviesFragment;
+import com.example.luowenliang.idouban.photoViewer.DoubanPagerAdapter;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends BaseActivity {
     private static final String TAG = "豆瓣";
     private ViewPager mViewPager;
     private TabLayout tabLayout;
@@ -29,7 +31,8 @@ public class MainActivity extends AppCompatActivity {
             //设置状态栏颜色为透明
             getWindow().setStatusBarColor(Color.TRANSPARENT);
         }
-        setContentView(R.layout.activity_main);
+        setSlideable(isActivitySlideBack());
+        setContentView(LayoutInflater.from(this).inflate(R.layout.activity_main,null,false));
         mViewPager = findViewById(R.id.douban_view_pager);
         tabLayout = findViewById(R.id.douban_sliding_tabs);
         setupViewPager(mViewPager);
@@ -40,6 +43,15 @@ public class MainActivity extends AppCompatActivity {
             tabLayout.setupWithViewPager(mViewPager);
             Log.d(TAG, "onCreate: ");
         }
+    }
+
+    /**
+     * 是否开启左侧滑动退出
+     * @return
+     */
+    @Override
+    public boolean isActivitySlideBack() {
+        return true;
     }
 
     private void setupViewPager(ViewPager viewPager) {

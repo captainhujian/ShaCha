@@ -1,5 +1,6 @@
 package com.example.luowenliang.idouban.moviedetail.adapter;
 
+import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -12,6 +13,7 @@ import com.bumptech.glide.Glide;
 import com.example.luowenliang.idouban.R;
 import com.example.luowenliang.idouban.application.MyApplication;
 import com.example.luowenliang.idouban.moviedetail.entity.CastInfo;
+
 
 import java.util.List;
 
@@ -36,6 +38,12 @@ public class CastRecyclerViewAdapter extends RecyclerView.Adapter<CastRecyclerVi
         Glide.with(MyApplication.getContext()).load(castInfo.getCastPicture()).into(viewHolder.castPicture);
         viewHolder.castName.setText(castInfo.getCastName());
         viewHolder.enName.setText(castInfo.getEnName());
+        viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                listener.onClick(castInfo);
+            }
+        });
     }
 
     @Override
@@ -53,5 +61,17 @@ public class CastRecyclerViewAdapter extends RecyclerView.Adapter<CastRecyclerVi
             castName=itemView.findViewById(R.id.cast_name);
             enName=itemView.findViewById(R.id.en_name);
         }
+    }
+    /**
+     * item点击事件
+     */
+    public interface OnCastItemClickListener {
+        void onClick(CastInfo castInfo);
+    }
+
+    private OnCastItemClickListener listener;
+
+    public void setOnItemClickListener(OnCastItemClickListener listener) {
+        this.listener = listener;
     }
 }

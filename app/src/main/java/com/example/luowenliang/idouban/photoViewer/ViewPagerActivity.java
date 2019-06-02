@@ -1,4 +1,4 @@
-package com.example.luowenliang.idouban.moviedetail;
+package com.example.luowenliang.idouban.photoViewer;
 
 import android.content.Intent;
 import android.graphics.Color;
@@ -13,6 +13,7 @@ import android.widget.TextView;
 import com.example.luowenliang.idouban.R;
 import com.example.luowenliang.idouban.moviedetail.adapter.MyImageAdapter;
 import com.example.luowenliang.idouban.moviedetail.entity.StagePhotoInfo;
+import com.example.luowenliang.idouban.moviedetail.utils.PhotoViewPager;
 
 import java.util.List;
 
@@ -50,7 +51,7 @@ public class ViewPagerActivity extends AppCompatActivity {
     private void initData() {
         Intent intent = getIntent();
         currentPosition=intent.getIntExtra("currentPosition",0);
-        stagePictureUrls= (List<StagePhotoInfo>) intent.getSerializableExtra("stagePhotoInfos");
+        stagePictureUrls= (List<StagePhotoInfo>) intent.getSerializableExtra("photo");
         adapter = new MyImageAdapter(stagePictureUrls,this);
         mViewPager.setAdapter(adapter);
         mViewPager.setCurrentItem(currentPosition,false);

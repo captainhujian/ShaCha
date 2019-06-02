@@ -1,4 +1,4 @@
-package com.example.luowenliang.idouban.moviedetail;
+package com.example.luowenliang.idouban.moviedetail.service;
 
 import com.example.luowenliang.idouban.moviedetail.entity.MovieDetailItem;
 

@@ -160,6 +160,11 @@ public class Top250MoviesFragment extends Fragment {
         });
     }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        Log.d(TAG, "onDestroy: ");
+    }
 }
 
 

@@ -1,4 +1,4 @@
-package com.example.luowenliang.idouban.moviedetail;
+package com.example.luowenliang.idouban.moviedetail.utils;
 
 import android.content.Context;
 import android.support.annotation.NonNull;

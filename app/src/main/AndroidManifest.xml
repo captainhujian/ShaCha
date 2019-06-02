@@ -17,9 +17,9 @@
             </intent-filter>
         </activity>
         <activity android:name=".MainActivity"/>
-        <activity android:name=".moviedetail.MovieDetailActivity"
-            android:theme="@style/JK.SwipeBack.Transparent.Theme"/>
-        <activity android:name=".moviedetail.ViewPagerActivity"/>
+        <activity android:name=".moviedetail.MovieDetailActivity"/>
+        <activity android:name=".photoViewer.ViewPagerActivity"/>
+        <activity android:name=".castdetail.CastDetailActivity"/>
     </application>
     <uses-permission android:name="android.permission.INTERNET"/>
 </manifest>
