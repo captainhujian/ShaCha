@@ -28,6 +28,7 @@ public class MovieRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.
     static final int TYPE_ITEM = 0;
     //脚布局
     static final int TYPE_FOOTER = 1;
+
     // 上拉加载更多
     static final int PULL_LOAD_MORE = 0;
     //正在加载更多
@@ -37,9 +38,11 @@ public class MovieRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.
     //脚布局当前的状态,默认为没有更多
     int footer_state = 1;
 
-    public MovieRecyclerViewAdapter(Context context, List<Top250Movie> top250MovieList) {
-        this.top250MovieList = top250MovieList;
+    public MovieRecyclerViewAdapter(Context context) {
         mContext=context;
+    }
+    public void setData(List<Top250Movie> top250MovieList) {
+        this.top250MovieList = top250MovieList;
     }
 
     @NonNull
@@ -106,33 +109,39 @@ public class MovieRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.
         }else if(viewHolder instanceof FootViewHolder ){
             FootViewHolder footViewHolder = (FootViewHolder)viewHolder;
             if(i==0){
+                Log.d("脚布局", "隐藏脚布局");
                 //如果第一个就是脚布局,,那就让他隐藏
                 footViewHolder.mProgressBar.setVisibility(View.GONE);
+                Log.d("脚布局", "进度条隐藏");
                 footViewHolder.tv_line1.setVisibility(View.GONE);
                 footViewHolder.tv_line2.setVisibility(View.GONE);
                 footViewHolder.tv_state.setText("");
-            }
-            switch (footer_state){
-                //根据状态来让脚布局发生改变
-                case PULL_LOAD_MORE://上拉加载
-                    footViewHolder.mProgressBar.setVisibility(View.GONE);
-                    footViewHolder.tv_state.setText("上拉加载更多");
-                    break;
-                case LOADING_MORE:
-                    footViewHolder.mProgressBar.setVisibility(View.VISIBLE);
-                    footViewHolder.tv_line1.setVisibility(View.GONE);
-                    footViewHolder.tv_line2.setVisibility(View.GONE);
-                    footViewHolder.tv_state.setText("正在加载...");
-                    break;
-                case NO_MORE:
-                    footViewHolder.mProgressBar.setVisibility(View.GONE);
-                    footViewHolder.tv_line1.setVisibility(View.VISIBLE);
-                    footViewHolder.tv_line2.setVisibility(View.VISIBLE);
-                    footViewHolder.tv_state.setText("我是有底线的");
-                    footViewHolder.tv_state.setTextColor(Color.parseColor("#CD853F"));
-                    break;
-                default:
-                    break;
+            }else {
+                switch (footer_state){
+                    //根据状态来让脚布局发生改变
+                    case PULL_LOAD_MORE://上拉加载
+                        Log.d("脚布局", "上拉加载更多");
+                        footViewHolder.mProgressBar.setVisibility(View.GONE);
+                        footViewHolder.tv_state.setText("上拉加载更多");
+                        break;
+                    case LOADING_MORE:
+                        Log.d("脚布局", "正在加载");
+                        footViewHolder.mProgressBar.setVisibility(View.VISIBLE);
+                        footViewHolder.tv_line1.setVisibility(View.GONE);
+                        footViewHolder.tv_line2.setVisibility(View.GONE);
+                        footViewHolder.tv_state.setText("正在加载...");
+                        break;
+                    case NO_MORE:
+                        Log.d("脚布局", "我是有底线的");
+                        footViewHolder.mProgressBar.setVisibility(View.GONE);
+                        footViewHolder.tv_line1.setVisibility(View.VISIBLE);
+                        footViewHolder.tv_line2.setVisibility(View.VISIBLE);
+                        footViewHolder.tv_state.setText("我是有底线的");
+                        footViewHolder.tv_state.setTextColor(Color.parseColor("#CD853F"));
+                        break;
+                    default:
+                        break;
+                }
             }
         }
     }
@@ -195,6 +204,13 @@ public class MovieRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.
      */
     public void changeState(int state) {
         this.footer_state = state;
+        notifyDataSetChanged();
+    }
+    public void updateList(List<Top250Movie> newDatas) {
+        // 在原有的数据之上增加新数据
+        if (newDatas != null) {
+            top250MovieList.addAll(newDatas);
+        }
         notifyDataSetChanged();
     }
 

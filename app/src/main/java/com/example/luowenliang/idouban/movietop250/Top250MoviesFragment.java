@@ -38,12 +38,13 @@ public class Top250MoviesFragment extends Fragment {
     private RecyclerView movieRecyclerView;
     private Top250Movie top250Movie;
     private List<Top250Movie> movieList = new ArrayList<>();
+    private List<Top250Movie>addedMovieList=new ArrayList<>();
     private MovieRecyclerViewAdapter adapter;
     private ProgressBar progressBar;
     private LinearLayoutManager linearLayoutManager;
-     int lastVisibleItem;
-    private int start = 0;
-    private final int count = 20;
+    int lastVisibleItem;
+    private  int start = 0;
+    private static int count = 10;
     //用来控制进入getdata()的次数
     boolean isLoading = false;
 
@@ -56,8 +57,9 @@ public class Top250MoviesFragment extends Fragment {
         progressBar = view.findViewById(R.id.progress_bar);
         movieRecyclerView = view.findViewById(R.id.movies_list);
         //网络请求top250
-        initMovieTop250Data(start*count,count);
-        Log.d(TAG, "第一次请求成功");
+        Log.d(TAG, "第1次请求成功");
+        initMovieTop250Data(String.valueOf(start));
+        Log.d(TAG, "第1次请求成功");
         return view;
     }
 
@@ -67,7 +69,7 @@ public class Top250MoviesFragment extends Fragment {
         linearLayoutManager=new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
         movieRecyclerView.setLayoutManager(linearLayoutManager);
         movieRecyclerView.setItemAnimator(new DefaultItemAnimator());
-        adapter = new MovieRecyclerViewAdapter(getContext(),movieList);
+        adapter = new MovieRecyclerViewAdapter(getContext());
         movieRecyclerView.setAdapter(adapter);
         //给recyclerView添加滑动监听
         movieRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
@@ -81,16 +83,17 @@ public class Top250MoviesFragment extends Fragment {
          */
                 if (newState == RecyclerView.SCROLL_STATE_IDLE && lastVisibleItem + 1 == adapter.getItemCount() && !isLoading) {
                     //到达底部之后如果footView的状态不是正在加载的状态,就将 他切换成正在加载的状态
-                    if (start < 250) {
+                    if (start < 24) {
                         Log.e(TAG, "onScrollStateChanged: " + "进来了");
                         isLoading = true;
                         adapter.changeState(1);
                         start++;
                         Log.d(TAG, "第"+(start+1)+"次请求开始");
-                        initMovieTop250Data(start*count,count);
+                        initMovieTop250Data(String.valueOf(start*count));
                         Log.d(TAG, "第"+(start+1)+"次请求成功");
                     } else {
                             adapter.changeState(2);
+                        Log.d(TAG, "");
 
                     }
                 }
@@ -106,31 +109,38 @@ public class Top250MoviesFragment extends Fragment {
 
     }
 
-    private rx.Observable<MovieItem> requsetMovieData(int start,int count) {
+    private rx.Observable<MovieItem> requsetMovieData(String start) {
         Log.d(TAG, "start:"+start+"count:"+count);
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("http://api.douban.uieee.com/v2/movie/")
+                .baseUrl("https://douban.uieee.com/v2/movie/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
                 .build();
         Top250MovieService movieService = retrofit.create(Top250MovieService.class);
 //        rx.Observable<MovieItem> top250Movie = movieService.getMovie();//"0b2bdeda43b5688921839c8ecb20399b"
 
-        return movieService.getMovie();//start,count
+        return movieService.getMovie(start,String.valueOf(count));//
 
     }
 
-    private void initMovieTop250Data(int start,int count) {
+    private void initMovieTop250Data(String start) {
         Log.d(TAG, "initMovieTop250Data: ");
-        requsetMovieData(start,count)
+        requsetMovieData(start)
                 .subscribeOn(Schedulers.io())//io加载数据
                 .observeOn(AndroidSchedulers.mainThread())//主线程显示数据
                 .subscribe(new Subscriber<MovieItem>() {
                     @Override
                     public void onCompleted() {
+                        Log.d(TAG, "onCompleted: ");
                         progressBar.setVisibility(View.GONE);
                         initData();
+                        // 然后调用updateRecyclerview方法更新RecyclerView
+                       // updateRecyclerView(adapter.getRealLastPosition(), adapter.getRealLastPosition() + PAGE_COUNT);
+                        adapter.setData(movieList);
+                        adapter.notifyDataSetChanged();
                         MovieRecyclerViewOnClickItem();
+                        //上拉加载标志位更新
+                        isLoading=false;
                     }
 
                     @Override
@@ -203,6 +213,20 @@ public class Top250MoviesFragment extends Fragment {
             }
         });
     }
+
+//    // 上拉加载时调用的更新RecyclerView的方法
+//    private void updateRecyclerView(int fromIndex, int toIndex) {
+//        // 获取从fromIndex到toIndex的数据
+//        List<Top250Movie> newDatas = getDatas(fromIndex, toIndex);
+//        if (newDatas.size() > 0) {
+//            // 然后传给Adapter，并设置hasMore为true
+//            adapter.updateList(newDatas);
+//        } else {
+//            adapter.updateList(null);
+//        }
+//    }
+
+
 
     @Override
     public void onDestroy() {

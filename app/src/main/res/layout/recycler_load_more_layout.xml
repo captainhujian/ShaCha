@@ -16,14 +16,16 @@
             android:layout_width="60dp"
             android:layout_height="1dp"
             android:layout_marginRight="10dp"
-            android:background="#ff00ff"
+            android:background="@color/themeGreen"
             android:visibility="gone"/>
 
         <ProgressBar
             android:id="@+id/progressbar"
             android:layout_width="25dp"
             android:layout_height="25dp"
-            android:visibility="visible"/>
+            android:visibility="visible"
+            android:indeterminateTint="@color/themeGreen"
+            />
 
         <TextView
             android:id="@+id/foot_view_item_tv"

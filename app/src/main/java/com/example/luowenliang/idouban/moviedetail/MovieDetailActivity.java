@@ -51,7 +51,7 @@ public class MovieDetailActivity extends BaseActivity {
     private StagePhotoInfo stagePhotoInfo;
     private CommentInfo commentInfo;
     private ImageView image;
-    private TextView title,originTitleYear,mesage,rating,starCount,summary;
+    private TextView detailTitleText,title,originTitleYear,mesage,rating,noneRating,starCount,summary;
     private RatingBar ratingBar;
     private ProgressBar star5,star4,star3,star2,star1;
     private List<CastInfo> castInfos=new ArrayList<>();
@@ -80,22 +80,8 @@ public class MovieDetailActivity extends BaseActivity {
         setSlideable(isActivitySlideBack());
         setContentView(LayoutInflater.from(this).inflate(R.layout.activity_movie_detail,null,false));
 
-
         //界面和控件初始化
         initView();
-        showHideFullSummary();
-        ratingBar.setmClickable(false);
-        //summary.setMovementMethod(ScrollingMovementMethod.getInstance());
-        castRecyclerView.setLayoutManager(new LinearLayoutManager(this,LinearLayoutManager.HORIZONTAL,false));
-        stageRecyclerView.setLayoutManager(new LinearLayoutManager(this,LinearLayoutManager.HORIZONTAL,false));
-        //评论不可滑动recyclerview
-        LinearLayoutManager layoutManager = new LinearLayoutManager(this,LinearLayoutManager.VERTICAL,false){
-            @Override
-            public boolean canScrollVertically() {
-                return false;
-            }
-        };
-        commentRecyclerView.setLayoutManager(layoutManager);
 
         //接收影片id，接着进行影片详情信息的网络请求
         Intent intent =getIntent();
@@ -114,14 +100,16 @@ public class MovieDetailActivity extends BaseActivity {
     }
 
     /**
-     * 绑定控件
+     * 界面初始化
      */
     private void initView() {
+        detailTitleText=findViewById(R.id.detail_title_text);
         image=findViewById(R.id.movie_image);
         title=findViewById(R.id.movie_title);
         originTitleYear=findViewById(R.id.movie_origin_title_year);
         mesage=findViewById(R.id.detail_message);
         rating=findViewById(R.id.rating_number);
+        noneRating=findViewById(R.id.none_rating);
         ratingBar=findViewById(R.id.movie_detail_rating_bar);
         star5=findViewById(R.id.progress_bar_h5);
         star4=findViewById(R.id.progress_bar_h4);
@@ -133,6 +121,19 @@ public class MovieDetailActivity extends BaseActivity {
         castRecyclerView=findViewById(R.id.cast_recycler_view);
         stageRecyclerView=findViewById(R.id.stage_photo_recycler_view);
         commentRecyclerView=findViewById(R.id.comment_recycler_view);
+        ratingBar.setmClickable(false);
+        //summary.setMovementMethod(ScrollingMovementMethod.getInstance());
+        castRecyclerView.setLayoutManager(new LinearLayoutManager(this,LinearLayoutManager.HORIZONTAL,false));
+        stageRecyclerView.setLayoutManager(new LinearLayoutManager(this,LinearLayoutManager.HORIZONTAL,false));
+        //评论不可滑动recyclerview
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this,LinearLayoutManager.VERTICAL,false){
+            @Override
+            public boolean canScrollVertically() {
+                return false;
+            }
+        };
+        commentRecyclerView.setLayoutManager(layoutManager);
+        showHideFullSummary();
     }
 
     //网络请求
@@ -173,8 +174,8 @@ public class MovieDetailActivity extends BaseActivity {
                         localMovieDetailItem=new MovieDetailItem();
                         localMovieDetailItem=movieDetailItem;
                         setDetailData=new SetMovieDetailData(movieDetailItem);
-                        setDetailData.setMovieMessage(image,title,originTitleYear,mesage,ratingBar,rating,
-                                star5,star4,star3,star2,star1,starCount,summary);
+                        setDetailData.setMovieMessage(detailTitleText,image,title,originTitleYear,mesage,ratingBar,rating,
+                                noneRating,star5,star4,star3,star2,star1,starCount,summary);
                         setCastData(movieDetailItem);
                         setStagePhoto(movieDetailItem);
                         setCommentData(movieDetailItem);

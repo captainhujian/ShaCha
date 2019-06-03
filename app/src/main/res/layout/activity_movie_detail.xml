@@ -19,13 +19,13 @@
             android:theme="@style/ToolbarTheme"
            >
                 <TextView
+                    android:id="@+id/detail_title_text"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
                     android:gravity="center|bottom"
                     android:layout_marginBottom="10dp"
                     android:textColor="@color/white"
-                    android:text="电影"
                     android:textSize="15dp" />
         </android.support.v7.widget.Toolbar>
 
@@ -143,8 +143,15 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="10dp"
-                        android:layout_gravity="center|bottom"
+                        android:layout_gravity="center"
                         android:orientation="vertical">
+                        <TextView
+                            android:id="@+id/none_rating"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_gravity="center"
+                            android:visibility="gone"
+                            android:text="暂无评分"/>
 
                         <TextView
                             android:id="@+id/rating_number"
@@ -152,7 +159,8 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_horizontal"
                             android:text="0.0"
-                            android:textSize="30dp" />
+                            android:textSize="30dp"
+                            />
 
                         <com.hedgehog.ratingbar.RatingBar
                             android:id="@+id/movie_detail_rating_bar"
