@@ -44,7 +44,7 @@ import rx.schedulers.Schedulers;
 
 public class MovieDetailActivity extends BaseActivity {
     private static final String TAG = "详情";
-    public static final String PICTURE_PLACE_HOLDER="http://image.baidu.com/search/detail?ct=503316480&z=0&ipn=d&word=%E5%9B%BE%E7%89%87%E5%8D%A0%E4%BD%8D%E5%9B%BE&step_word=&hs=2&pn=3&spn=0&di=660&pi=0&rn=1&tn=baiduimagedetail&is=0%2C0&istype=0&ie=utf-8&oe=utf-8&in=&cl=2&lm=-1&st=undefined&cs=319223871%2C3949806150&os=4290579727%2C470734890&simid=0%2C0&adpicid=0&lpn=0&ln=769&fr=&fmq=1559270247510_R&fm=&ic=undefined&s=undefined&hd=undefined&latest=undefined&copyright=undefined&se=&sme=&tab=0&width=undefined&height=undefined&face=undefined&ist=&jit=&cg=&bdtype=0&oriquery=&objurl=http%3A%2F%2F6120491.s21i.faiusr.com%2F2%2FABUIABACGAAg0725rAUoiLv9qAQwrAI4rAI.jpg&fromurl=ippr_z2C%24qAzdH3FAzdH3Fooo_z%26e3B15g2uwg2x7_z%26e3Bv54AzdH3Fr51_z%26e3B3fr%3Ft1%3D0b&gsm=0&rpstart=0&rpnum=0&islist=&querylist=&force=undefined";
+    public static final String PICTURE_PLACE_HOLDER="http://6120491.s21i.faiusr.com/2/ABUIABACGAAg0725rAUoiLv9qAQwrAI4rAI.jpg";
     private String id;
     private MovieDetailItem localMovieDetailItem;
     private CastInfo castInfo;
@@ -345,7 +345,7 @@ public class MovieDetailActivity extends BaseActivity {
                 String castId=castInfo.getCastId();
                 //当id为空,传空值给卡司详情无法做网络请求时的备用数据
                 String castName=castInfo.getCastName();
-                String castEnName=castInfo.getEnName();
+                String castDetailPhoto=castInfo.getCastPicture();
                 String castDetailFilmPicture = localMovieDetailItem.getImages().getLarge();
                 String castDetailFilmTitle=localMovieDetailItem.getTitle();
                 double castDetailFilmRating=localMovieDetailItem.getRating().getAverage();
@@ -355,6 +355,7 @@ public class MovieDetailActivity extends BaseActivity {
                 //传递备用数据
                 intent.putExtra("castName",castName);
                 intent.putExtra("castEnName",castName);
+                intent.putExtra("castDetailPhoto",castDetailPhoto);
                 intent.putExtra("castDetailFilmPicture",castDetailFilmPicture);
                 intent.putExtra("castDetailFilmTitle",castDetailFilmTitle);
                 intent.putExtra("castDetailFilmRating",castDetailFilmRating);

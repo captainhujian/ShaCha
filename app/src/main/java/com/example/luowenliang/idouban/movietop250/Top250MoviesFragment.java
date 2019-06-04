@@ -186,8 +186,9 @@ public class Top250MoviesFragment extends Fragment {
 
 //                            Log.d(TAG, "海报：" + image + " 影片名：" + title + " 原名：" + original_title + " 主演：" + cast1 +"/"+cast2+ " 导演：" +director+ " 评分：" + rating
 //                                    + " 类型：" + genres1+"/"+genres2 + " 时长：" + durations + " 年份：" + year + "\n");
-                            setMovieData(image, title, original_title, cast1,cast2, rating, genres1,genres2,
+                            top250Movie = new Top250Movie(image, title, original_title, cast1,cast2, rating, genres1,genres2,
                                     durations, year, director,id);
+                            movieList.add(top250Movie);
                         }
                        // Log.d(TAG, "movieList: " + movieList.size());
 
@@ -195,13 +196,7 @@ public class Top250MoviesFragment extends Fragment {
 
                 });
     }
-
-    private void setMovieData(String image, String title, String original_title, String cast1,String cast2,
-                              double rating, String genres1,String genres2 ,String durations, String year, String director,String id) {
-        top250Movie = new Top250Movie(image, title, original_title, cast1,cast2, rating, genres1,genres2,
-                durations, year, director,id);
-        movieList.add(top250Movie);
-    }
+    
 
     private void MovieRecyclerViewOnClickItem() {
         adapter.setOnItemClickListener(new MovieRecyclerViewAdapter.OnItemClickListener() {

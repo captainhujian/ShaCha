@@ -34,7 +34,7 @@ public class SetMovieDetailData {
         Glide.with(MyApplication.getContext()).load(movieDetailItem.getImages().getLarge()).into(image);
         title.setText(movieDetailItem.getTitle());
         evadeMessageNull();
-        message.setText(country+genres+pubdate+episodesCount+duration);
+        message.setText(country+genres+pubdate+episodesCount+duration+">");
         originTitleYear.setText(oTitle+year);
         summary.setText(movieDetailItem.getSummary());
         //星级评分
@@ -113,11 +113,16 @@ public class SetMovieDetailData {
         if(episodesCount==null){
             isTelevision=false;
             episodesCount="";
-            duration="片长："+duration+">";
+            if(!duration.equals("")){
+                duration="片长："+duration;
+            }
+
         }else {
             isTelevision=true;
             episodesCount="集数："+episodesCount+"集/";
-            duration="单集片长："+duration+">";
+            if(!duration.equals("")){
+                duration="单集片长："+duration;
+            }
         }
 
         //影视详情标题
@@ -132,19 +137,19 @@ public class SetMovieDetailData {
          * 获取前两个影片类型
          */
         private void getGenres () {
-            if(movieDetailItem.getGenres()==null){
+            if(movieDetailItem.getGenres().size()==0){
                 genre1="";genre2="";
             }else{
                 if (movieDetailItem.getGenres().size() >= 2) {
                     genre1 = movieDetailItem.getGenres().get(0);
-                    genre2 = " " + movieDetailItem.getGenres().get(1);
+                    genre2 = " " + movieDetailItem.getGenres().get(1)+"/";
                 } else {
                     genre1 = movieDetailItem.getGenres().get(0);
-                    genre2 = "";
+                    genre2 = "/";
                 }
             }
 
-            genres = genre1 + genre2+"/";
+            genres = genre1 + genre2;
         }
         /**
          * 转换合理的评分以星级显示

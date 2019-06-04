@@ -45,14 +45,14 @@ import static com.example.luowenliang.idouban.moviedetail.MovieDetailActivity.PI
 public class CastDetailActivity extends BaseActivity {
     private static final String TAG = "影人详情";
     private CastDetailItem localCastDetailItem;
-    private String castId,castSpareName,castSpareEnName,castSpareDetailFilmPicture,castSpareDetailFilmTitle,castSpareDetailFilmId;
+    private String castId,castSpareName,castSpareEnName,castSpareDetailFilmPicture,castSpareDetailFilmTitle,castSpareDetailFilmId,castSpareDetailPhoto;
     private double castSpareDetailFilmRating;
     private CastDetailFilmInfo castDetailFilmInfo;
     private List<CastDetailFilmInfo>castDetailFilmInfos=new ArrayList<>();
     private CastDetailAlbumInfo castDetailAlbumInfo;
     private List<CastDetailAlbumInfo>castDetailAlbumInfos=new ArrayList<>();
     private ImageView castPhotoView;
-    private TextView castDetailNameView,castDetailOriginNameView,birthdayView,castSummaryView;
+    private TextView castDetailNameView,castDetailOriginNameView,birthdayView,bornPlaceView,professionsView,castSummaryView;
     private RecyclerView castFilmRecyclerView;
     private RecyclerView castAlbumRecyclerView;
     private CastFilmRecyclerViewAdapter castFilmRecyclerViewAdapter;
@@ -111,6 +111,8 @@ public class CastDetailActivity extends BaseActivity {
         castDetailNameView=findViewById(R.id.cast_detail_name);
         castDetailOriginNameView=findViewById(R.id.cast_detail_origin_name);
         birthdayView=findViewById(R.id.birthday);
+        bornPlaceView=findViewById(R.id.born_place);
+        professionsView=findViewById(R.id.professions);
         castSummaryView=findViewById(R.id.cast_summary);
         castFilmRecyclerView=findViewById(R.id.film_recycler_view);
         castAlbumRecyclerView=findViewById(R.id.album_recycler_view);
@@ -165,7 +167,9 @@ public class CastDetailActivity extends BaseActivity {
                        String castDetailOriginName=castDetailItem.getName_en();
                        String birthday=castDetailItem.getBirthday();
                        String castSummary=castDetailItem.getSummary();
-                        setCastDetailMessage(castPhoto,castDetailName,castDetailOriginName,birthday,castSummary);
+                       String bornPlace=castDetailItem.getBorn_place();
+                       List<String>professions=castDetailItem.getProfessions();
+                        setCastDetailMessage(castPhoto,castDetailName,castDetailOriginName,birthday,bornPlace,professions,castSummary);
                         setFilmData(castDetailItem);
                         setAlbum(castDetailItem);
                     }
@@ -178,6 +182,7 @@ public class CastDetailActivity extends BaseActivity {
      * 接收备用数据,并接入布局
      */
     private void initSpareCastDetailData(Intent intent) {
+        castSpareDetailPhoto=intent.getStringExtra("castDetailPhoto");
         castSpareName= intent.getStringExtra("castName");
         castSpareEnName=intent.getStringExtra("castEnName");
         castSpareDetailFilmPicture = intent.getStringExtra("castDetailFilmPicture");
@@ -186,7 +191,8 @@ public class CastDetailActivity extends BaseActivity {
         castSpareDetailFilmId=intent.getStringExtra("castDetailFilmId");
         //星级评分
         double fitSpareFilmRate = fitRating(castSpareDetailFilmRating);
-        setCastDetailMessage("",castSpareName,castSpareEnName,"未知","暂无简介");
+        List<String>noneProfessions=null;
+        setCastDetailMessage(castSpareDetailPhoto,castSpareName,castSpareEnName,"","",noneProfessions,"");
         CastDetailFilmInfo spareCastDetailFilmInfo=new CastDetailFilmInfo(castSpareDetailFilmPicture,castSpareDetailFilmTitle,
                 castSpareDetailFilmRating,castSpareDetailFilmId,fitSpareFilmRate);
         List<CastDetailFilmInfo>castSpareDetailFilmInfos=new ArrayList<>();
@@ -199,13 +205,26 @@ public class CastDetailActivity extends BaseActivity {
      * 接入非recyclerView的网络请求数据
      */
     private void setCastDetailMessage(String castPhoto, String castDetailName,String castDetailOriginName,String birthay,
-                                      String castSummary) {
+                                      String bornPlace, List<String>professions, String castSummary) {
+        //防止空指针
         if(castSummary.equals("")){ castSummary="暂无简介"; }
-        if(birthay==null){birthay="未知";}
+        if(birthay.equals("")){birthay="未知";}
+        if(bornPlace.equals("")){bornPlace="未知";}
+        professionsView.setText("职业：");
+        if(!(professions==null)){
+            for(int i=0;i<professions.size();i++){
+                String tempProfession=professions.get(i)+" ";
+                professionsView.append(tempProfession);
+            }
+        }else{
+            professionsView.append("未知");
+        }
+
         Glide.with(MyApplication.getContext()).load(castPhoto).into(castPhotoView);
         castDetailNameView.setText(castDetailName);
         castDetailOriginNameView.setText(castDetailOriginName);
-        birthdayView.setText("生日："+birthay);
+        birthdayView.setText("出生日期："+birthay);
+        bornPlaceView.setText("出生地："+bornPlace);
         castSummaryView.setText(castSummary);
     }
 
@@ -214,6 +233,9 @@ public class CastDetailActivity extends BaseActivity {
      * @param castDetailItem
      */
     private void setFilmData(CastDetailItem castDetailItem) {
+        if(castDetailItem.getWorks()==null){
+
+        }
         //防止有的图片为空导致recyclerView不显示，这里设置占位图
         String filmPicture = null;
         for(int i=0;i<castDetailItem.getWorks().size();i++){

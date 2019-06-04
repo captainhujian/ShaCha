@@ -336,8 +336,7 @@
             android:lines="4"
             android:scrollbars="vertical"
             android:textSize="15dp"
-            android:hint="故事发生在1947年，银行家安迪（Andy）被指控枪杀了妻子及其情人，安迪被判无期徒刑，这意味着他将在肖申克监狱中渡过余生。瑞德（Red）1927年因谋杀罪被判无期徒刑，数次假释都未获成功。"
-            android:textColorHint="@color/grey"
+            android:hint="暂无简介"
             app:layout_constraintTop_toBottomOf="@id/summary_title" />
 
         <TextView

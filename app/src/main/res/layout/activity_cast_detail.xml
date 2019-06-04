@@ -78,10 +78,29 @@
                 android:id="@+id/birthday"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginRight="10dp"
                 android:lineSpacingExtra="2dp"
                 android:textSize="12dp"
-                android:hint="生日：yyyy-mm-dd"
+                android:hint="出生日期：yyyy-mm-dd"
+                android:textColorHint="@color/grey"
+                />
+            <TextView
+                android:id="@+id/born_place"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:lineSpacingExtra="2dp"
+                android:layout_marginTop="5dp"
+                android:textSize="12dp"
+                android:hint="出生地：地名"
+                android:textColorHint="@color/grey"
+                />
+            <TextView
+                android:id="@+id/professions"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:lineSpacingExtra="2dp"
+                android:layout_marginTop="5dp"
+                android:textSize="12dp"
+                android:hint="职业：职业名"
                 android:textColorHint="@color/grey"
                 />
 
@@ -110,9 +129,9 @@
         android:lines="4"
         android:scrollbars="vertical"
         android:textSize="15dp"
-        android:hint="蒂姆·罗宾斯1958年出生于美国加利福尼亚州，美国男演员、导演、编剧及制片人。1984年，出演了他第一部电影《玩具兵》。1992年凭影片《超级大玩家》夺得戛纳电影节及金球奖最佳男主角。"
-        android:textColorHint="@color/grey"
+        android:hint="暂无简介"
         app:layout_constraintTop_toBottomOf="@id/cast_summary_title" />
+
     <TextView
         android:id="@+id/film_title"
         android:layout_width="match_parent"
