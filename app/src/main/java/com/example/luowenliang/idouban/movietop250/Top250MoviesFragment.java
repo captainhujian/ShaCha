@@ -13,6 +13,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
@@ -44,7 +45,7 @@ public class Top250MoviesFragment extends Fragment {
     private LinearLayoutManager linearLayoutManager;
     int lastVisibleItem;
     private  int start = 0;
-    private static int count = 40;
+    private static int count = 10;
     //用来控制进入getdata()的次数
     boolean isLoading = false;
 
@@ -56,6 +57,12 @@ public class Top250MoviesFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_movies_top250, null);
         progressBar = view.findViewById(R.id.progress_bar);
         movieRecyclerView = view.findViewById(R.id.movies_list);
+        linearLayoutManager=new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
+        movieRecyclerView.setLayoutManager(linearLayoutManager);
+        movieRecyclerView.setItemAnimator(new DefaultItemAnimator());
+        //adapter实例化完成，等待数据加入，不能重复new和setAdapter，否则每次都会回到第一个item
+        adapter = new MovieRecyclerViewAdapter(getContext());
+        movieRecyclerView.setAdapter(adapter);
         //网络请求top250
         Log.d(TAG, "第1次请求成功");
         initMovieTop250Data(String.valueOf(start));
@@ -66,11 +73,6 @@ public class Top250MoviesFragment extends Fragment {
 
 
     private void initData() {
-        linearLayoutManager=new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
-        movieRecyclerView.setLayoutManager(linearLayoutManager);
-        movieRecyclerView.setItemAnimator(new DefaultItemAnimator());
-        adapter = new MovieRecyclerViewAdapter(getContext());
-        movieRecyclerView.setAdapter(adapter);
         //给recyclerView添加滑动监听
         movieRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
@@ -83,7 +85,7 @@ public class Top250MoviesFragment extends Fragment {
          */
                 if (newState == RecyclerView.SCROLL_STATE_IDLE && lastVisibleItem + 1 == adapter.getItemCount() && !isLoading) {
                     //到达底部之后如果footView的状态不是正在加载的状态,就将 他切换成正在加载的状态
-                    if (start < 3) {
+                    if (start < 24) {
                         Log.e(TAG, "onScrollStateChanged: " + "进来了");
                         isLoading = true;
                         adapter.changeState(1);
@@ -124,6 +126,7 @@ public class Top250MoviesFragment extends Fragment {
     }
 
     private void initMovieTop250Data(String start) {
+        final List<Top250Movie>updateMovieList=new ArrayList<>();
         Log.d(TAG, "initMovieTop250Data: ");
         requsetMovieData(start)
                 .subscribeOn(Schedulers.io())//io加载数据
@@ -134,9 +137,7 @@ public class Top250MoviesFragment extends Fragment {
                         Log.d(TAG, "onCompleted: ");
                         progressBar.setVisibility(View.GONE);
                         initData();
-                        // 然后调用updateRecyclerview方法更新RecyclerView
-                       // updateRecyclerView(adapter.getRealLastPosition(), adapter.getRealLastPosition() + PAGE_COUNT);
-                        adapter.setData(movieList);
+                        adapter.setData(updateMovieList);
                         adapter.notifyDataSetChanged();
                         MovieRecyclerViewOnClickItem();
                         //上拉加载标志位更新
@@ -150,7 +151,7 @@ public class Top250MoviesFragment extends Fragment {
 
                     @Override
                     public void onNext(MovieItem movieItem) {
-                        String cast1,cast2 ,genres1,genres2;
+                        String durations,director,cast1=null,cast2=null ,genres1=null,genres2=null;
                         Log.d(TAG, "onNext: ");
                         progressBar.setVisibility(View.VISIBLE);
                         for (int i = 0; i < movieItem.getSubjects().size(); i++) {
@@ -166,29 +167,44 @@ public class Top250MoviesFragment extends Fragment {
                             String title = movieItem.getSubjects().get(i).getTitle();
                             String original_title = movieItem.getSubjects().get(i).getOriginal_title();
                             double rating = movieItem.getSubjects().get(i).getRating().getAverage();
-                            String durations = movieItem.getSubjects().get(i).getDurations().get(0);
+                            if(movieItem.getSubjects().get(i).getDurations()!=null){
+                                durations = movieItem.getSubjects().get(i).getDurations().get(0);
+                            }else {
+                                durations="";
+                            }
                             String year = "(" + movieItem.getSubjects().get(i).getYear() + ")";
-                            String director = movieItem.getSubjects().get(i).getDirectors().get(0).getName();
-                            if(movieItem.getSubjects().get(i).getCasts().size()>=2){
-                             cast1 = movieItem.getSubjects().get(i).getCasts().get(0).getName();
-                             cast2 = " "+movieItem.getSubjects().get(i).getCasts().get(1).getName();
+                            if(movieItem.getSubjects().get(i).getDirectors()!=null){
+                                director = movieItem.getSubjects().get(i).getDirectors().get(0).getName();
                             }else {
-                                cast1 = movieItem.getSubjects().get(i).getCasts().get(0).getName();
-                                cast2 ="";
+                                director="";
                             }
-                            if(movieItem.getSubjects().get(i).getGenres().size()>=2){
-                                genres1 = movieItem.getSubjects().get(i).getGenres().get(0);
-                                genres2 = " "+movieItem.getSubjects().get(i).getGenres().get(1);
-                            }else {
-                                genres1 = movieItem.getSubjects().get(i).getGenres().get(0);
-                                genres2 = "";
+                           if(movieItem.getSubjects().get(i).getCasts()!=null){
+                               if(movieItem.getSubjects().get(i).getCasts().size()>1){
+                                   cast1 = movieItem.getSubjects().get(i).getCasts().get(0).getName();
+                                   cast2 = " "+movieItem.getSubjects().get(i).getCasts().get(1).getName();
+                               }else if(movieItem.getSubjects().get(i).getCasts().size()==1){
+                                   cast1 = movieItem.getSubjects().get(i).getCasts().get(0).getName();
+                                   cast2 ="";
+                               }
+                           }else {
+                                cast1="";cast2="";
+                           }
+                            if(movieItem.getSubjects().get(i).getGenres()!=null){
+                                if(movieItem.getSubjects().get(i).getGenres().size()>1){
+                                    genres1 = movieItem.getSubjects().get(i).getGenres().get(0);
+                                    genres2 = " "+movieItem.getSubjects().get(i).getGenres().get(1);
+                                }else if(movieItem.getSubjects().get(i).getGenres().size()==1){
+                                    genres1 = movieItem.getSubjects().get(i).getGenres().get(0);
+                                    genres2 = "";
+                                }
+                            }else{
+                                genres1="";genres2="";
                             }
-
 //                            Log.d(TAG, "海报：" + image + " 影片名：" + title + " 原名：" + original_title + " 主演：" + cast1 +"/"+cast2+ " 导演：" +director+ " 评分：" + rating
 //                                    + " 类型：" + genres1+"/"+genres2 + " 时长：" + durations + " 年份：" + year + "\n");
                             top250Movie = new Top250Movie(image, title, original_title, cast1,cast2, rating, genres1,genres2,
                                     durations, year, director,id);
-                            movieList.add(top250Movie);
+                            updateMovieList.add(top250Movie);
                         }
                        // Log.d(TAG, "movieList: " + movieList.size());
 
@@ -210,20 +226,6 @@ public class Top250MoviesFragment extends Fragment {
             }
         });
     }
-
-//    // 上拉加载时调用的更新RecyclerView的方法
-//    private void updateRecyclerView(int fromIndex, int toIndex) {
-//        // 获取从fromIndex到toIndex的数据
-//        List<Top250Movie> newDatas = getDatas(fromIndex, toIndex);
-//        if (newDatas.size() > 0) {
-//            // 然后传给Adapter，并设置hasMore为true
-//            adapter.updateList(newDatas);
-//        } else {
-//            adapter.updateList(null);
-//        }
-//    }
-
-
 
     @Override
     public void onDestroy() {

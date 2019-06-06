@@ -110,6 +110,7 @@
         android:layout_marginRight="@dimen/margin_size_small"
         app:layout_constraintTop_toBottomOf="@id/coming_soon_title">
     </android.support.v7.widget.RecyclerView>
+
     <TextView
         android:id="@+id/public_praise_title"
         android:layout_width="match_parent"

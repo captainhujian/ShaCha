@@ -19,11 +19,12 @@ import com.example.luowenliang.idouban.R;
 import com.example.luowenliang.idouban.movietop250.entity.Top250Movie;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 
 public class MovieRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private Context mContext;
-    private List<Top250Movie> top250MovieList;
+    private List<Top250Movie> top250MovieList=new ArrayList<>();
     //普通布局的type
     static final int TYPE_ITEM = 0;
     //脚布局
@@ -41,8 +42,8 @@ public class MovieRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.
     public MovieRecyclerViewAdapter(Context context) {
         mContext=context;
     }
-    public void setData(List<Top250Movie> top250MovieList) {
-        this.top250MovieList = top250MovieList;
+    public void setData(List<Top250Movie> updatetop250MovieList) {
+        top250MovieList.addAll(updatetop250MovieList);
     }
 
     @NonNull
@@ -195,7 +196,6 @@ public class MovieRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.
 
         }
 
-
     }
     /**
      * 改变脚布局的状态的方法,在activity根据请求数据的状态来改变这个状态
@@ -204,13 +204,6 @@ public class MovieRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.
      */
     public void changeState(int state) {
         this.footer_state = state;
-        notifyDataSetChanged();
-    }
-    public void updateList(List<Top250Movie> newDatas) {
-        // 在原有的数据之上增加新数据
-        if (newDatas != null) {
-            top250MovieList.addAll(newDatas);
-        }
         notifyDataSetChanged();
     }
 
