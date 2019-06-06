@@ -233,9 +233,7 @@ public class CastDetailActivity extends BaseActivity {
      * @param castDetailItem
      */
     private void setFilmData(CastDetailItem castDetailItem) {
-        if(castDetailItem.getWorks()==null){
 
-        }
         //防止有的图片为空导致recyclerView不显示，这里设置占位图
         String filmPicture = null;
         for(int i=0;i<castDetailItem.getWorks().size();i++){

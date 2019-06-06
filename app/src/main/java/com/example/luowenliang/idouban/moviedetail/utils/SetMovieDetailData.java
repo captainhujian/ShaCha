@@ -87,11 +87,10 @@ public class SetMovieDetailData {
             year= "("+year+")";
         }
         //国家
-        country = movieDetailItem.getCountries().get(0);
-        if(country==null){
+        if(movieDetailItem.getCountries()==null){
             country="";
         }else {
-            country=country+"/";
+            country=movieDetailItem.getCountries().get(0)+"/";
         }
         //影片类型
         getGenres();

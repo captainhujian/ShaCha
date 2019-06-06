@@ -1,4 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginBottom="20dp"
+    >
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -7,7 +13,7 @@
     tools:context=".moviehot.HotMoviesFragment">
 
     <android.support.v7.widget.Toolbar
-        android:id="@+id/detail_title"
+        android:id="@+id/hot_movie_toobar"
         android:layout_width="match_parent"
         android:layout_height="81dp"
         android:background="@color/themeGreen"
@@ -23,19 +29,24 @@
                 app:cardCornerRadius="17.5dp"
                 >
                 <LinearLayout
+                    android:id="@+id/search"
                     android:layout_width="match_parent"
-                    android:layout_height="35dp">
+                    android:layout_height="35dp"
+                    >
                     <ImageView
                         android:layout_width="35dp"
                         android:layout_height="match_parent"
                         android:src="@drawable/pic_search_up" />
                     <EditText
-                        android:layout_width="match_parent"
+                        android:id="@+id/search_text"
+                        android:layout_width="0dp"
                         android:layout_height="match_parent"
-                        android:background="@color/white"
-                        android:gravity="center_vertical"
+                        android:layout_weight="9"
+                        android:imeOptions="actionSearch"
                         android:hint="肖申克的救赎"
                         android:textSize="15dp"
+                        android:background="@null"
+                        android:singleLine="true"
                         android:textCursorDrawable="@color/themeGreen"
                         />
                 </LinearLayout>
@@ -43,13 +54,85 @@
             </android.support.v7.widget.CardView>
 
     </android.support.v7.widget.Toolbar>
+
+
     <TextView
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
+        android:id="@+id/hot_movie_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/margin_size_small"
+        android:layout_marginTop="@dimen/margin_size_large"
+        android:layout_marginRight="@dimen/margin_size_small"
+        android:text="影院热映"
+        android:textSize="20dp"
+        android:textStyle="bold"
+        android:textColor="#000"
+        android:visibility="invisible"
+        app:layout_constraintTop_toBottomOf="@id/hot_movie_toobar" />
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/hot_movie_recycler_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/margin_size_small"
+        android:layout_marginTop="@dimen/margin_size_small"
+        android:layout_marginRight="@dimen/margin_size_small"
+        app:layout_constraintTop_toBottomOf="@id/hot_movie_title">
+    </android.support.v7.widget.RecyclerView>
+
+    <TextView
+        android:id="@+id/coming_soon_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/margin_size_small"
+        android:layout_marginTop="@dimen/margin_size_large"
+        android:layout_marginRight="@dimen/margin_size_small"
+        android:text="即将上映"
+        android:textSize="20dp"
+        android:textStyle="bold"
+        android:textColor="#000"
+        android:visibility="invisible"
+        app:layout_constraintTop_toBottomOf="@id/hot_movie_recycler_view"/>
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/coming_soon_recycler_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/margin_size_small"
+        android:layout_marginTop="@dimen/margin_size_small"
+        android:layout_marginRight="@dimen/margin_size_small"
+        app:layout_constraintTop_toBottomOf="@id/coming_soon_title">
+    </android.support.v7.widget.RecyclerView>
+    <TextView
+        android:id="@+id/public_praise_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/margin_size_small"
+        android:layout_marginTop="@dimen/margin_size_large"
+        android:layout_marginRight="@dimen/margin_size_small"
+        android:text="一周口碑电影榜"
+        android:textSize="20dp"
+        android:textStyle="bold"
+        android:textColor="#000"
+        android:visibility="invisible"
+        app:layout_constraintTop_toBottomOf="@id/coming_soon_recycler_view"  />
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/public_praise_recycler_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/margin_size_small"
+        android:layout_marginTop="@dimen/margin_size_small"
+        android:layout_marginRight="@dimen/margin_size_small"
+        app:layout_constraintTop_toBottomOf="@id/public_praise_title">
+    </android.support.v7.widget.RecyclerView>
+    <ProgressBar
+        android:id="@+id/hot_movie_progress_bar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/hot_movies_fragment" />
+        android:indeterminateTint="@color/themeGreen"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/public_praise_recycler_view"
+        />
 
 </android.support.constraint.ConstraintLayout>
+</ScrollView>

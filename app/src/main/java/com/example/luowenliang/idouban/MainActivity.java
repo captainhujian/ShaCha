@@ -56,8 +56,8 @@ public class MainActivity extends BaseActivity {
 
     private void setupViewPager(ViewPager viewPager) {
         DoubanPagerAdapter pagerAdapter = new DoubanPagerAdapter(getSupportFragmentManager());
-        pagerAdapter.addFragment(new Top250MoviesFragment(), getApplicationContext().getResources().getString(R.string.top250_movies_title));
         pagerAdapter.addFragment(new HotMoviesFragment(),getApplicationContext().getResources().getString(R.string.hot_movies_title));
+        pagerAdapter.addFragment(new Top250MoviesFragment(), getApplicationContext().getResources().getString(R.string.top250_movies_title));
         pagerAdapter.addFragment(new BooksFragment(), getApplicationContext().getResources().getString(R.string.books_title));
         //设置缓存fragment页面数
         viewPager.setOffscreenPageLimit(2);

@@ -87,6 +87,7 @@ public class MovieDetailActivity extends BaseActivity {
         Intent intent =getIntent();
         id = intent.getStringExtra("id");
         Log.d(TAG, "接收id："+id);
+        Log.d("搜索", "接收id: "+id);
         initMovieDetailData();
     }
 

@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="@dimen/margin_size_small"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginRight="15dp">
+        <android.support.v7.widget.CardView
+            android:id="@+id/hot_movie_card"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            app:cardCornerRadius="10dp"
+            android:elevation="5dp">
+
+            <ImageView
+                android:id="@+id/hot_movie_picture"
+                android:layout_width="100dp"
+                android:layout_height="140dp"
+                android:scaleType="fitXY"
+                android:background="@color/lightGrey"
+                android:src="@drawable/placeholder"
+                />
+        </android.support.v7.widget.CardView>
+        <TextView
+            android:id="@+id/hot_movie_title"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/film_card"
+            android:singleLine="true"
+            android:textSize="13dp"
+            android:text="肖申克的救赎"
+            android:layout_marginLeft="5dp"
+            android:textColor="@color/black"
+            android:textStyle="bold"
+
+            />
+        <LinearLayout
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            app:layout_constraintTop_toBottomOf="@id/film_title">
+            <com.hedgehog.ratingbar.RatingBar
+                android:id="@+id/hot_movie_rating_bar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                app:halfstart="true"
+                android:clickable="false"
+                app:starEmpty="@drawable/ic_star_normal"
+                app:starFill="@drawable/ic_star_selected"
+                app:starHalf="@drawable/ic_star_half"
+                app:starImageHeight="12dp"
+                app:starImageWidth="12dp"
+                app:starImagePadding="2dp"
+                android:layout_marginRight="5dp"
+                android:visibility="visible"
+                />
+
+            <TextView
+                android:id="@+id/hot_movie_rating"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:singleLine="true"
+                android:text="9.0"
+                android:textSize="11dp"
+                android:textStyle="bold"
+                android:visibility="visible" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+</android.support.constraint.ConstraintLayout>
