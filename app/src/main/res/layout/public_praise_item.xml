@@ -1,8 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+
+    <android.support.v7.widget.CardView
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="5dp">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -12,7 +16,7 @@
                 android:id="@+id/praise_rank_card"
                 android:layout_width="50dp"
                 android:layout_height="25dp"
-                android:layout_marginLeft="10dp"
+                android:layout_marginLeft="15dp"
                 android:layout_marginTop="10dp"
                 app:cardCornerRadius="5dp"
                 >
@@ -23,22 +27,27 @@
                     android:gravity="center"
                     android:text="No.1"
                     android:textSize="12dp"
+                    android:textStyle="bold"
                     android:textColor="@color/white"
                     android:background="@color/grey"
                     />
             </android.support.v7.widget.CardView>
 
 
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-
                 android:layout_marginRight="@dimen/margin_size_small">
+
                 <android.support.v7.widget.CardView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_margin="10dp"
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginBottom="10dp"
                     app:cardCornerRadius="10dp"
                     android:elevation="15dp"
                     >
@@ -64,7 +73,7 @@
                             android:id="@+id/praise_title"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:textSize="16sp"
+                            android:textSize="17sp"
                             android:textStyle="bold"
                             android:text="123"
                             android:textColor="#000"
@@ -85,8 +94,8 @@
                             app:starEmpty="@drawable/ic_star_normal"
                             app:starFill="@drawable/ic_star_selected"
                             app:starHalf="@drawable/ic_star_half"
-                            app:starImageHeight="15dp"
-                            app:starImageWidth="15dp"
+                            app:starImageHeight="12dp"
+                            app:starImageWidth="12dp"
                             app:starImagePadding="2dp"
                             android:layout_marginRight="5dp"
                             android:visibility="visible"
@@ -96,6 +105,8 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="abc"
+                            android:textSize="12dp"
+                            android:textStyle="bold"
                             />
                     </LinearLayout>
                         <TextView
@@ -104,9 +115,8 @@
                             android:layout_height="wrap_content"
                             android:text="abc/abc"
                             android:lineSpacingExtra="2dp"
-                            android:layout_marginRight="10dp"/>
+                            android:layout_marginRight="20dp"/>
                 </LinearLayout>
             </LinearLayout>
         </LinearLayout>
-
-</android.support.constraint.ConstraintLayout>
+    </android.support.v7.widget.CardView>

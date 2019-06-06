@@ -48,6 +48,8 @@ dependencies {
     implementation 'com.github.chrisbanes:PhotoView:2.0.0'
     //左侧边缘滑动退出
     implementation 'com.github.zouxianbincc:AndroidSlideBack:v1.0.0'
+    //滑动布局
+    implementation 'com.android.support:design:24.2.1'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'//
 

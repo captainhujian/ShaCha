@@ -2,10 +2,12 @@ package com.example.luowenliang.idouban.moviehot;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
@@ -29,6 +31,7 @@ import com.example.luowenliang.idouban.moviehot.adapter.HotMovieRecyclerViewAdap
 import com.example.luowenliang.idouban.moviehot.adapter.PublicPraiseRecyclerViewAdapter;
 import com.example.luowenliang.idouban.moviehot.entity.HotMovieInfo;
 import com.example.luowenliang.idouban.moviehot.entity.HotMovieItem;
+import com.example.luowenliang.idouban.moviehot.entity.PublicPraiseItem;
 import com.example.luowenliang.idouban.moviehot.service.ComingSoonService;
 import com.example.luowenliang.idouban.moviehot.service.HotMovieService;
 import com.example.luowenliang.idouban.moviehot.service.PublicPraiseService;
@@ -49,14 +52,15 @@ import static com.example.luowenliang.idouban.moviedetail.MovieDetailActivity.PI
 
 public class HotMoviesFragment extends Fragment {
     private static final String TAG = "热门";
+    private SwipeRefreshLayout swipeRefreshLayout;
     private EditText search;
-    private TextView hotMovieTitle,comingSoonTitle,publicPraiseTitle;
+    private TextView hotMovieTitle, comingSoonTitle, publicPraiseTitle;
     private String searchText;
     private SearchInfo searchInfo;
     private HotMovieInfo hotMovieInfo;
-    private List<HotMovieInfo>hotMovieInfos=new ArrayList<>();
-    private List<HotMovieInfo>comingSoonMovieInfos=new ArrayList<>();
-    private List<HotMovieInfo>publicPraiseInfos=new ArrayList<>();
+    private List<HotMovieInfo> hotMovieInfos = new ArrayList<>();
+    private List<HotMovieInfo> comingSoonMovieInfos = new ArrayList<>();
+    private List<HotMovieInfo> publicPraiseInfos = new ArrayList<>();
     private RecyclerView hotMovieRecyclerView;
     private HotMovieRecyclerViewAdapter hotMovieRecyclerViewAdapter;
     private RecyclerView comingSoonRecyclerView;
@@ -68,33 +72,33 @@ public class HotMoviesFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view=inflater.inflate(R.layout.fragment_movies_hot,null);
+        View view = inflater.inflate(R.layout.fragment_movies_hot, null);
         Log.d("进度条", "热门onCreateView: ");
-        search=view.findViewById(R.id.search_text);
-        hotMovieTitle=view.findViewById(R.id.hot_movie_title);
-        comingSoonTitle=view.findViewById(R.id.coming_soon_title);
-        publicPraiseTitle=view.findViewById(R.id.public_praise_title);
-        hotMovieRecyclerView=view.findViewById(R.id.hot_movie_recycler_view);
-        comingSoonRecyclerView=view.findViewById(R.id.coming_soon_recycler_view);
-        publicPraiseRecyclerView=view.findViewById(R.id.public_praise_recycler_view);
-        hotMovieProgressBar=view.findViewById(R.id.hot_movie_progress_bar);
+        search = view.findViewById(R.id.search_text);
+        hotMovieTitle = view.findViewById(R.id.hot_movie_title);
+        comingSoonTitle = view.findViewById(R.id.coming_soon_title);
+        publicPraiseTitle = view.findViewById(R.id.public_praise_title);
+        hotMovieRecyclerView = view.findViewById(R.id.hot_movie_recycler_view);
+        comingSoonRecyclerView = view.findViewById(R.id.coming_soon_recycler_view);
+        publicPraiseRecyclerView = view.findViewById(R.id.public_praise_recycler_view);
+        hotMovieProgressBar = view.findViewById(R.id.hot_movie_progress_bar);
         //网格recyclerView的样式初始化
 
         //评论不可滑动recyclerview
-        GridLayoutManager gridLayoutManager = new GridLayoutManager (getActivity (),3,GridLayoutManager.VERTICAL,false){
+        GridLayoutManager gridLayoutManager = new GridLayoutManager(getActivity(), 3, GridLayoutManager.VERTICAL, false) {
             @Override
             public boolean canScrollVertically() {
                 return false;
             }
         };
-        GridLayoutManager gridLayoutManager2 = new GridLayoutManager (getActivity (),3,GridLayoutManager.VERTICAL,false){
+        GridLayoutManager gridLayoutManager2 = new GridLayoutManager(getActivity(), 3, GridLayoutManager.VERTICAL, false) {
             @Override
             public boolean canScrollVertically() {
                 return false;
             }
         };
         //评论不可滑动recyclerview
-        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext(),LinearLayoutManager.VERTICAL,false){
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false) {
             @Override
             public boolean canScrollVertically() {
                 return false;
@@ -106,12 +110,43 @@ public class HotMoviesFragment extends Fragment {
         comingSoonRecyclerView.setLayoutManager(gridLayoutManager2);
         publicPraiseRecyclerView.setItemAnimator(new DefaultItemAnimator());
         publicPraiseRecyclerView.setLayoutManager(layoutManager);
+        swipeRefreshLayout=view.findViewById(R.id.refresh_layout);
+        swipeRefreshLayout.setSize(SwipeRefreshLayout.DEFAULT);//设置加载默认图标
+        swipeRefreshLayout.setColorSchemeColors(Color.parseColor("#CD853F"));
+        //设置触发刷新的距离
+        swipeRefreshLayout.setDistanceToTriggerSync(200);
+
         searchMovie();
         initHotMovieData();
         initComingSoonMovieData();
         initPublicPraiseMovieData();
+        RefreshMovieData();
+
 
         return view;
+    }
+
+    /**
+     * 下拉刷新数据
+     */
+    private void RefreshMovieData(){
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener()
+
+        {
+            @Override
+            public void onRefresh () {
+                Log.d(TAG, "刷新啦！");
+                //先清空list防止数据重复加载
+                hotMovieInfos.clear();
+                comingSoonMovieInfos.clear();
+                publicPraiseInfos.clear();
+                //重新做网络请求
+                initHotMovieData();
+                initComingSoonMovieData();
+                initPublicPraiseMovieData();
+                swipeRefreshLayout.setRefreshing(false);
+            }
+        });
     }
 
     /**
@@ -166,7 +201,6 @@ public class HotMoviesFragment extends Fragment {
                 .subscribe(new Subscriber<SearchItem>() {
                     @Override
                     public void onCompleted() {
-                        //hideInput();
                         Intent intent =new Intent(getActivity(),MovieDetailActivity.class);
                         intent.putExtra("id",searchInfo.getSearchId());
                         startActivity(intent);
@@ -280,7 +314,7 @@ public class HotMoviesFragment extends Fragment {
      * 口碑榜的网络请求
      * @return
      */
-    private rx.Observable<HotMovieItem> requestPublicPraiseData() {
+    private rx.Observable<PublicPraiseItem> requestPublicPraiseData() {
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl("https://douban.uieee.com/v2/movie/")
                 .addConverterFactory(GsonConverterFactory.create())
@@ -296,7 +330,7 @@ public class HotMoviesFragment extends Fragment {
         requestPublicPraiseData()
                 .subscribeOn(Schedulers.io())//io加载数据
                 .observeOn(AndroidSchedulers.mainThread())//主线程显示数据
-                .subscribe(new Subscriber<HotMovieItem>() {
+                .subscribe(new Subscriber<PublicPraiseItem>() {
                     @Override
                     public void onCompleted() {
                         publicPraiseRecyclerViewAdapter=new PublicPraiseRecyclerViewAdapter(publicPraiseInfos);
@@ -310,9 +344,8 @@ public class HotMoviesFragment extends Fragment {
                     }
 
                     @Override
-                    public void onNext(HotMovieItem hotMovieItem) {
-                        setHotMovieData(hotMovieItem,publicPraiseInfos);
-                        Log.d(TAG, "口碑标题: "+ hotMovieItem.getSubjects().get(0).getTitle());
+                    public void onNext(PublicPraiseItem publicPraiseItem) {
+                        setPublicPraiseData(publicPraiseItem);
 
                     }
                 });
@@ -320,7 +353,7 @@ public class HotMoviesFragment extends Fragment {
 
 
     /**
-     * 影院热门、即将上映、口碑榜电影数据加载到tempList中传递给adapter
+     * 影院热门、即将上映电影数据加载到tempList中传递给adapter
      */
     private void setHotMovieData(HotMovieItem hotMovieItem,List<HotMovieInfo>movieInfoList){
         List<HotMovieInfo>tempList=new ArrayList<>();
@@ -346,44 +379,76 @@ public class HotMoviesFragment extends Fragment {
             //星级评分
             double fitFilmRate = fitRating(hotMovieRating);
             Log.d("分数", "合理的分数: " + fitFilmRate);
-            String hotMovieMessage= setPublicPraiseMesssage(hotMovieItem,i);
-            hotMovieInfo=new HotMovieInfo(hotMoviePicture,hotMovieTitle,hotMovieRating,hotMovieId,fitFilmRate,hotMovieMessage);
+            hotMovieInfo=new HotMovieInfo(hotMoviePicture,hotMovieTitle,hotMovieRating,hotMovieId,fitFilmRate,"");
             tempList.add(hotMovieInfo);
         }
         movieInfoList.addAll(tempList);
     }
 
-
+    private void setPublicPraiseData(PublicPraiseItem publicPraiseItem) {
+        String publicPraisePicture;
+        double publicPraiseRating;
+        for (int i = 0; i < publicPraiseItem.getSubjects().size(); i++) {
+            Log.d(TAG, "item: " + publicPraiseItem);
+            if (publicPraiseItem.getSubjects().get(i).getSubject().getImages() == null) {
+                publicPraisePicture = PICTURE_PLACE_HOLDER;
+            } else {
+                publicPraisePicture = publicPraiseItem.getSubjects().get(i).getSubject().getImages().getLarge();
+                Log.d(TAG, "directorpicture: " + publicPraisePicture);
+            }
+            String publicPraiseTitle = publicPraiseItem.getSubjects().get(i).getSubject().getTitle();
+            if (publicPraiseItem.getSubjects().get(i).getSubject().getRating() != null) {
+                publicPraiseRating = publicPraiseItem.getSubjects().get(i).getSubject().getRating().getAverage();
+            } else {
+                publicPraiseRating = 0f;
+            }
+            String publicPraiseId = publicPraiseItem.getSubjects().get(i).getSubject().getId();
+            //星级评分
+            double fitFilmRate = fitRating(publicPraiseRating);
+            Log.d("分数", "合理的分数: " + fitFilmRate);
+            String publicPraiseMessage = setPublicPraiseMesssage(publicPraiseItem, i);
+            hotMovieInfo = new HotMovieInfo(publicPraisePicture, publicPraiseTitle, publicPraiseRating, publicPraiseId, fitFilmRate,publicPraiseMessage);
+            publicPraiseInfos.add(hotMovieInfo);
+        }
+    }
     /**
      * 排行榜详细信息数据加载(做防空指针操作)
      */
-    private String setPublicPraiseMesssage(HotMovieItem hotMovieItem,int i) {
-        String genre1,genre2,cast1=null,cast2=null;
-      //类型
-        if(hotMovieItem.getSubjects().get(i).getGenres()==null){
-            genre1="";genre2="";
-        }else{
-            if (hotMovieItem.getSubjects().get(i).getGenres().size() > 1) {
-                genre1 = hotMovieItem.getSubjects().get(i).getGenres().get(0);
-                genre2 =" " + hotMovieItem.getSubjects().get(i).getGenres().get(1)+"/";
+    private String setPublicPraiseMesssage (PublicPraiseItem publicPraiseItem,int i){
+        String genre1, genre2, director,cast1 = null, cast2 = null;
+        //类型
+        if (publicPraiseItem.getSubjects().get(i).getSubject().getGenres() == null) {
+            genre1 = "";
+            genre2 = "";
+        } else {
+            if (publicPraiseItem.getSubjects().get(i).getSubject().getGenres().size() > 1) {
+                genre1 = publicPraiseItem.getSubjects().get(i).getSubject().getGenres().get(0);
+                genre2 = " " + publicPraiseItem.getSubjects().get(i).getSubject().getGenres().get(1) + "/";
             } else {
-                genre1 = hotMovieItem.getSubjects().get(i).getGenres().get(0);
+                genre1 = publicPraiseItem.getSubjects().get(i).getSubject().getGenres().get(0);
                 genre2 = "/";
             }
         }
-        //卡司
-        if(hotMovieItem.getSubjects().get(i).getCasts()==null) {
-            cast1 = "";cast2 = "";
+        //导演
+        if(publicPraiseItem.getSubjects().get(i).getSubject().getDirectors()!=null){
+            director=publicPraiseItem.getSubjects().get(i).getSubject().getDirectors().get(0).getName()+"/";
         }else {
-            if (hotMovieItem.getSubjects().get(i).getCasts().size() > 1) {
-                cast1 = "";hotMovieItem.getSubjects().get(i).getCasts().get(0).getName();
-                cast2 =" " + hotMovieItem.getSubjects().get(i).getCasts().get(1).getName() + "/";
-            } else if(hotMovieItem.getSubjects().get(i).getCasts().size()==1){
-                cast1 = "";hotMovieItem.getSubjects().get(i).getCasts().get(0).getName();
-                cast2 = "/";
+            director="";
+        }
+        //卡司
+        if (publicPraiseItem.getSubjects().get(i).getSubject().getCasts() == null) {
+            cast1 = "";
+            cast2 = "";
+        } else {
+            if (publicPraiseItem.getSubjects().get(i).getSubject().getCasts().size() > 1) {
+                cast1 = publicPraiseItem.getSubjects().get(i).getSubject().getCasts().get(0).getName();
+                cast2 = " " + publicPraiseItem.getSubjects().get(i).getSubject().getCasts().get(1).getName();
+            } else if (publicPraiseItem.getSubjects().get(i).getSubject().getCasts().size() == 1) {
+                cast1 =  publicPraiseItem.getSubjects().get(i).getSubject().getCasts().get(0).getName();
+                cast2 = "";
             }
         }
-        return genre1+genre2+cast1+cast2;
+        return genre1 + genre2 + director + cast1 + cast2;
     }
 
 

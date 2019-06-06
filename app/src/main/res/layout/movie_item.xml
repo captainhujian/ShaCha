@@ -30,6 +30,7 @@
                 android:textSize="12dp"
                 android:textColor="#5C4033"
                 android:background="#F4A460"
+
                 />
         </android.support.v7.widget.CardView>
 

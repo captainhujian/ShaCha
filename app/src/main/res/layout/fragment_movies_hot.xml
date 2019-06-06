@@ -1,9 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v4.widget.SwipeRefreshLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/refresh_layout"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    app:layout_constraintTop_toBottomOf="@id/hot_movie_toobar"
+    android:text="Hello World!">
+<android.support.v4.widget.NestedScrollView
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_marginBottom="20dp"
+    android:elevation="0dp"
     >
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
@@ -109,21 +117,25 @@
         android:layout_marginLeft="@dimen/margin_size_small"
         android:layout_marginTop="@dimen/margin_size_large"
         android:layout_marginRight="@dimen/margin_size_small"
-        android:text="一周口碑电影榜"
+        android:text="一周电影口碑榜"
         android:textSize="20dp"
         android:textStyle="bold"
         android:textColor="#000"
         android:visibility="invisible"
         app:layout_constraintTop_toBottomOf="@id/coming_soon_recycler_view"  />
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/public_praise_recycler_view"
+    <LinearLayout
+        android:id="@+id/public_praise_recycler_view_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/margin_size_small"
-        android:layout_marginTop="@dimen/margin_size_small"
-        android:layout_marginRight="@dimen/margin_size_small"
         app:layout_constraintTop_toBottomOf="@id/public_praise_title">
-    </android.support.v7.widget.RecyclerView>
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/public_praise_recycler_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_size_small"
+            >
+        </android.support.v7.widget.RecyclerView>
+    </LinearLayout>
     <ProgressBar
         android:id="@+id/hot_movie_progress_bar"
         android:layout_width="wrap_content"
@@ -131,8 +143,11 @@
         android:indeterminateTint="@color/themeGreen"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/public_praise_recycler_view"
+        app:layout_constraintTop_toBottomOf="@id/hot_movie_recycler_view"
+        android:visibility="visible"
         />
 
+
 </android.support.constraint.ConstraintLayout>
-</ScrollView>
+</android.support.v4.widget.NestedScrollView>
+</android.support.v4.widget.SwipeRefreshLayout>
