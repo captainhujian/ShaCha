@@ -45,7 +45,7 @@ public class Top250MoviesFragment extends Fragment {
     private LinearLayoutManager linearLayoutManager;
     int lastVisibleItem;
     private  int start = 0;
-    private static int count = 10;
+    private static int count = 25;
     //用来控制进入getdata()的次数
     boolean isLoading = false;
 
@@ -85,7 +85,7 @@ public class Top250MoviesFragment extends Fragment {
          */
                 if (newState == RecyclerView.SCROLL_STATE_IDLE && lastVisibleItem + 1 == adapter.getItemCount() && !isLoading) {
                     //到达底部之后如果footView的状态不是正在加载的状态,就将 他切换成正在加载的状态
-                    if (start < 24) {
+                    if (start < 9) {
                         Log.e(TAG, "onScrollStateChanged: " + "进来了");
                         isLoading = true;
                         adapter.changeState(1);

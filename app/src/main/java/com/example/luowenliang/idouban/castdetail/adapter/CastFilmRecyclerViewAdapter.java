@@ -52,6 +52,7 @@ public class CastFilmRecyclerViewAdapter extends RecyclerView.Adapter<CastFilmRe
         viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Log.d("最后的错误", "id： "+castDetailFilmInfo.getFilmId());
                 listener.onClick(castDetailFilmInfo.getFilmId());
             }
         });
@@ -84,7 +85,7 @@ public class CastFilmRecyclerViewAdapter extends RecyclerView.Adapter<CastFilmRe
     public interface OnFilmClickListener{
         void onClick(String filmId);
     }
-    public OnFilmClickListener listener;
+    private OnFilmClickListener listener;
     public void setOnFilmClickListener(OnFilmClickListener listener){
         this.listener=listener;
     }

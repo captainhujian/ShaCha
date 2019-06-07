@@ -21,6 +21,9 @@
         <activity android:name=".moviedetail.MovieDetailActivity"/>
         <activity android:name=".photoViewer.ViewPagerActivity"/>
         <activity android:name=".castdetail.CastDetailActivity"/>
+        <activity android:name=".VedioViewer.VideoViewerActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="portrait"/>
     </application>
     <uses-permission android:name="android.permission.INTERNET"/>
 </manifest>

@@ -18,6 +18,7 @@ import android.widget.TextView;
 
 import com.example.luowenliang.idouban.BaseActivity;
 import com.example.luowenliang.idouban.R;
+import com.example.luowenliang.idouban.VedioViewer.VideoViewerActivity;
 import com.example.luowenliang.idouban.castdetail.CastDetailActivity;
 import com.example.luowenliang.idouban.moviedetail.adapter.CastRecyclerViewAdapter;
 import com.example.luowenliang.idouban.moviedetail.adapter.CommentRecyclerViewAdapter;
@@ -48,7 +49,6 @@ public class MovieDetailActivity extends BaseActivity {
     private String id;
     private MovieDetailItem localMovieDetailItem;
     private CastInfo castInfo;
-    private StagePhotoInfo stagePhotoInfo;
     private CommentInfo commentInfo;
     private ImageView image;
     private TextView detailTitleText,title,originTitleYear,mesage,rating,noneRating,starCount,summary;
@@ -241,9 +241,21 @@ public class MovieDetailActivity extends BaseActivity {
         }
     }
     /**
-     * 获取剧照
+     * 获取预告片、剧照
      */
     private void setStagePhoto(MovieDetailItem movieDetailItem) {
+        //获取预告片
+        if(movieDetailItem.getTrailers()!=null){
+            for(int i =0;i<movieDetailItem.getTrailers().size();i++){
+                String videoPicture=movieDetailItem.getTrailers().get(i).getMedium();
+                String videoUrl=movieDetailItem.getTrailers().get(i).getResource_url();
+                String videoTitle=movieDetailItem.getTitle();
+                StagePhotoInfo previewInfo=new StagePhotoInfo(videoPicture,videoUrl,videoTitle);
+                stagePhotoInfos.add(previewInfo);
+            }
+        }
+
+        //获取剧照
         for (int j= 0;j<movieDetailItem.getPhotos().size();j++){
             Log.d(TAG, "Photo: "+movieDetailItem.getPhotos().get(j).getImage());
             //防止有的图片为空导致recyclerView不显示，这里设置占位图
@@ -254,7 +266,7 @@ public class MovieDetailActivity extends BaseActivity {
             else{
                 stagePhoto=movieDetailItem.getPhotos().get(j).getImage();
             }
-            stagePhotoInfo=new StagePhotoInfo(stagePhoto);
+            StagePhotoInfo stagePhotoInfo=new StagePhotoInfo(stagePhoto,null,null);
             stagePhotoInfos.add(stagePhotoInfo);
         }
 
@@ -302,18 +314,30 @@ public class MovieDetailActivity extends BaseActivity {
             }
         });
     }
-    /**剧照的点击事件*/
+    /**预告片、剧照的点击事件*/
     private void setStageRecyclerViewOnclickItem(){
         stageRecyclerViewAdapter.setOnPhotoListener(new StageRecyclerViewAdapter.OnPhotoClickListener() {
             @Override
             public void onClick(List<StagePhotoInfo> stagePhotoInfos,int i) {
-                //Toast.makeText(MyApplication.getContext(),stagePhotoInfo.getStagePhoto(),Toast.LENGTH_SHORT).show();
-              Intent intent = new Intent(MovieDetailActivity.this,ViewPagerActivity.class);
-              Bundle bundle = new Bundle();
-              bundle.putSerializable("photo", (Serializable) stagePhotoInfos);
-                intent.putExtras(bundle);
-                intent.putExtra("currentPosition",i);
-              startActivity(intent);
+                //判断是视频还是图片
+                if(stagePhotoInfos.get(i).getVideoUrl()==null){
+                    Intent intent = new Intent(MovieDetailActivity.this,ViewPagerActivity.class);
+                    Bundle bundle = new Bundle();
+                    bundle.putSerializable("photo", (Serializable) stagePhotoInfos);
+                    intent.putExtras(bundle);
+                    intent.putExtra("currentPosition",i);
+                    startActivity(intent);
+                }else{
+                    //预告片
+                    String videoUrl=stagePhotoInfos.get(i).getVideoUrl();
+                    String videoTitle=stagePhotoInfos.get(i).getVideoTitle();
+                    Intent intent = new Intent(MovieDetailActivity.this,VideoViewerActivity.class);
+                    intent.putExtra("videoUrl",videoUrl);
+                    intent.putExtra("videoTitle",videoTitle);
+                    Log.d("预告", "发送url："+videoUrl);
+                    startActivity(intent);
+                }
+
             }
         });
     }
@@ -327,7 +351,7 @@ public class MovieDetailActivity extends BaseActivity {
                 Intent intent = new Intent(MovieDetailActivity.this,ViewPagerActivity.class);
                 Bundle bundle = new Bundle();
                 List<StagePhotoInfo>photos=new ArrayList<>();
-                StagePhotoInfo photo=new StagePhotoInfo(localMovieDetailItem.getImages().getLarge());
+                StagePhotoInfo photo=new StagePhotoInfo(localMovieDetailItem.getImages().getLarge(),null,null);
                 photos.add(photo);
                 bundle.putSerializable("photo",(Serializable)photos);
                 intent.putExtras(bundle);
