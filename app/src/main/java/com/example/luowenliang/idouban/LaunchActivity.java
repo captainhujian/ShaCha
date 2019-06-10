@@ -5,7 +5,9 @@ import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.TextView;
@@ -17,6 +19,28 @@ import java.util.Date;
 
 public class LaunchActivity extends AppCompatActivity {
     private TextView dateTime;
+
+    /**
+     * 判断是否赋予储存权限
+     * @param requestCode
+     * @param permissions
+     * @param grantResults
+     */
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        boolean isGranted=false;
+        if (requestCode == 1) {
+            isGranted = true;
+        }
+        if(isGranted){
+            //储存权限获取成功，跳转至主界面
+            Intent intent = new Intent(LaunchActivity.this,MainActivity.class);
+            LaunchActivity.this.finish();
+            startActivity(intent);
+        }
+    }
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,15 +60,17 @@ public class LaunchActivity extends AppCompatActivity {
         dateTime.setText(simpleDateFormat.format(date)+"，"+getWeek(simpleDateFormat.format(date)));
         Integer time = 3000;    //设置等待时间，单位为毫秒
         Handler handler = new Handler();
-        //当计时结束时，跳转至主界面
+        //当计时结束时，请求储存权限
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                Intent intent = new Intent(LaunchActivity.this,MainActivity.class);
-                startActivity(intent);
-                LaunchActivity.this.finish();
+                //权限请求
+                ActivityCompat.requestPermissions(LaunchActivity.this, new String[]{android
+                        .Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
             }
         },time);
+
+
 
     }
     /**

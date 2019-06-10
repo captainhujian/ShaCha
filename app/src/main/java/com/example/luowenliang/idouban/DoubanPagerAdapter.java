@@ -1,4 +1,4 @@
-package com.example.luowenliang.idouban.photoViewer;
+package com.example.luowenliang.idouban;
 
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;

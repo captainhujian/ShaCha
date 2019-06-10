@@ -1,5 +1,6 @@
 package com.example.luowenliang.idouban.moviedetail;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Build;
@@ -190,7 +191,7 @@ public class MovieDetailActivity extends BaseActivity {
      * 数据接入RecyclerView
      */
     private void showRecyclerViewData() {
-        castRecyclerViewAdapter=new CastRecyclerViewAdapter(castInfos);
+        castRecyclerViewAdapter=new CastRecyclerViewAdapter(castInfos,this);
         castRecyclerView.setAdapter(castRecyclerViewAdapter);
         stageRecyclerViewAdapter=new StageRecyclerViewAdapter(stagePhotoInfos);
         stageRecyclerView.setAdapter(stageRecyclerViewAdapter);
@@ -209,7 +210,7 @@ public class MovieDetailActivity extends BaseActivity {
         String directorPicture = null;
         for(int i=0;i<movieDetailItem.getDirectors().size();i++){
         if(movieDetailItem.getDirectors().get(i).getAvatars()==null){
-            directorPicture=PICTURE_PLACE_HOLDER;
+            directorPicture="";
         }
         else{
                 directorPicture=movieDetailItem.getDirectors().get(i).getAvatars().getLarge();
@@ -227,7 +228,7 @@ public class MovieDetailActivity extends BaseActivity {
             //防止有的图片为空导致recyclerView不显示，这里设置占位图
             String castPicture =null ;
             if(movieDetailItem.getCasts().get(i).getAvatars()==null){
-                castPicture=PICTURE_PLACE_HOLDER;
+                castPicture="";
             }
             else{
                 castPicture=movieDetailItem.getCasts().get(i).getAvatars().getLarge();

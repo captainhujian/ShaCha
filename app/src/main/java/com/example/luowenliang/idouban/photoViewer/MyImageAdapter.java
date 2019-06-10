@@ -1,7 +1,9 @@
-package com.example.luowenliang.idouban.moviedetail.adapter;
+package com.example.luowenliang.idouban.photoViewer;
 
+import android.content.DialogInterface;
 import android.support.annotation.NonNull;
 import android.support.v4.view.PagerAdapter;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -14,7 +16,7 @@ import com.github.chrisbanes.photoview.PhotoView;
 
 import java.util.List;
 
-public class MyImageAdapter extends PagerAdapter {
+public class MyImageAdapter extends PagerAdapter  {
 
     private List<StagePhotoInfo>stagePhotoInfos;
     private AppCompatActivity activity;
@@ -26,8 +28,8 @@ public class MyImageAdapter extends PagerAdapter {
 
     @NonNull
     @Override
-    public Object instantiateItem(@NonNull ViewGroup container, int position) {
-       String stagephoto =stagePhotoInfos.get(position).getStagePhoto();
+    public Object instantiateItem(@NonNull ViewGroup container, final int position) {
+       final String stagephoto =stagePhotoInfos.get(position).getStagePhoto();
         PhotoView photoView = new PhotoView(activity);
         Glide.with(MyApplication.getContext()).load(stagephoto).into(photoView);
         container.addView(photoView);
@@ -38,7 +40,32 @@ public class MyImageAdapter extends PagerAdapter {
                 activity.finish();
             }
         });
+        photoView.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+                if(listener!=null){
+                    listener.onLongClick(position,stagephoto);
+
+                }
+
+                return false;
+            }
+        });
         return photoView;
+    }
+
+    /**
+     *监听图片长按事件
+     * @return
+     */
+    public interface OnImageLongClickListener {
+        void onLongClick(int position,String stagephoto);
+    }
+
+    private OnImageLongClickListener listener;
+
+    public void setOnImageLongClickListener(OnImageLongClickListener listener) {
+        this.listener = listener;
     }
 
     @Override

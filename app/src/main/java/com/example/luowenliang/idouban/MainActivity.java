@@ -3,8 +3,8 @@ package com.example.luowenliang.idouban;
 import android.graphics.Color;
 import android.os.Build;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -13,7 +13,6 @@ import android.view.View;
 import com.example.luowenliang.idouban.book.BooksFragment;
 import com.example.luowenliang.idouban.moviehot.HotMoviesFragment;
 import com.example.luowenliang.idouban.movietop250.Top250MoviesFragment;
-import com.example.luowenliang.idouban.photoViewer.DoubanPagerAdapter;
 
 public class MainActivity extends BaseActivity {
     private static final String TAG = "豆瓣";

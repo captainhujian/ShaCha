@@ -55,8 +55,7 @@
                         android:id="@+id/movie_image"
                         android:layout_width="85dp"
                         android:layout_height="120dp"
-                        android:scaleType="fitXY"
-                        android:background="@color/grey"/>
+                        android:scaleType="fitXY" />
                 </android.support.v7.widget.CardView>
 
                 <LinearLayout

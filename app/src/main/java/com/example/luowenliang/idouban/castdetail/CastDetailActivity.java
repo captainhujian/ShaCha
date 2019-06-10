@@ -15,6 +15,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.example.luowenliang.idouban.BaseActivity;
 import com.example.luowenliang.idouban.R;
 import com.example.luowenliang.idouban.application.MyApplication;
@@ -220,7 +221,10 @@ public class CastDetailActivity extends BaseActivity {
             professionsView.append("未知");
         }
 
-        Glide.with(MyApplication.getContext()).load(castPhoto).into(castPhotoView);
+        Glide.with(MyApplication.getContext()).load(castPhoto)
+                .apply(new RequestOptions().placeholder(R.drawable.placeholder))
+                .apply(new RequestOptions().error(R.drawable.placeholder))
+                .into(castPhotoView);
         castDetailNameView.setText(castDetailName);
         castDetailOriginNameView.setText(castDetailOriginName);
         birthdayView.setText("出生日期："+birthay);

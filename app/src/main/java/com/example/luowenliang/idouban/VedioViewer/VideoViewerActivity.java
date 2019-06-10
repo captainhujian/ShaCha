@@ -57,6 +57,8 @@ public class VideoViewerActivity extends BaseActivity {
         videoPlayer.setController(controller);
         //设置视频标题
         controller.setTitle(videoTitle);
+        //中间播放按钮
+        controller.setCenterPlayer(true,R.drawable.ic_player_center_start);
         videoPlayer.start();
         //让用户自己处理返回键事件的逻辑
         controller.setOnVideoBackListener(new OnVideoBackListener() {

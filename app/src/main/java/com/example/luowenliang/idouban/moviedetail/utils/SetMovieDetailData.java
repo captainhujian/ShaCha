@@ -7,6 +7,8 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
+import com.example.luowenliang.idouban.R;
 import com.example.luowenliang.idouban.application.MyApplication;
 import com.example.luowenliang.idouban.moviedetail.entity.MovieDetailItem;
 import com.hedgehog.ratingbar.RatingBar;
@@ -31,7 +33,11 @@ public class SetMovieDetailData {
 
         this.message=message;
         this.detailTitleText=detailTitleText;
-        Glide.with(MyApplication.getContext()).load(movieDetailItem.getImages().getLarge()).into(image);
+        Glide.with(MyApplication.getContext())
+                .load(movieDetailItem.getImages().getLarge())
+                .apply(new RequestOptions().placeholder(R.drawable.placeholder))
+                .apply(new RequestOptions().error(R.drawable.placeholder))
+                .into(image);
         title.setText(movieDetailItem.getTitle());
         evadeMessageNull();
         message.setText(country+genres+pubdate+episodesCount+duration+">");

@@ -10,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.example.luowenliang.idouban.R;
 import com.example.luowenliang.idouban.application.MyApplication;
 import com.example.luowenliang.idouban.moviedetail.entity.CastInfo;
@@ -19,9 +20,11 @@ import java.util.List;
 
 public class CastRecyclerViewAdapter extends RecyclerView.Adapter<CastRecyclerViewAdapter.ViewHolder>  {
     private List<CastInfo>castInfos;
+    private Context mContext;
 
-    public CastRecyclerViewAdapter(List<CastInfo> castInfos) {
+    public CastRecyclerViewAdapter(List<CastInfo> castInfos, Context mContext) {
         this.castInfos = castInfos;
+        this.mContext = mContext;
     }
 
     @NonNull
@@ -35,7 +38,11 @@ public class CastRecyclerViewAdapter extends RecyclerView.Adapter<CastRecyclerVi
     @Override
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int i) {
         final CastInfo castInfo=castInfos.get(i);
-        Glide.with(MyApplication.getContext()).load(castInfo.getCastPicture()).into(viewHolder.castPicture);
+        Glide.with(mContext)
+                .load(castInfo.getCastPicture())
+                .apply(new RequestOptions().placeholder(R.drawable.placeholder))
+                .apply(new RequestOptions().error(R.drawable.placeholder))
+                .into(viewHolder.castPicture);
         viewHolder.castName.setText(castInfo.getCastName());
         viewHolder.enName.setText(castInfo.getEnName());
         viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
