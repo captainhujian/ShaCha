@@ -17,7 +17,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
-public class LaunchActivity extends AppCompatActivity {
+public class LaunchActivity extends BaseActivity {
     private TextView dateTime;
 
     /**
@@ -73,6 +73,12 @@ public class LaunchActivity extends AppCompatActivity {
 
 
     }
+
+    @Override
+    public boolean isActivitySlideBack() {
+        return false;
+    }
+
     /**
      * 根据当前日期获得是星期几
      * time=yyyy年MM月dd日

@@ -25,7 +25,6 @@ import android.widget.TextView;
 
 import com.example.luowenliang.idouban.R;
 import com.example.luowenliang.idouban.moviedetail.MovieDetailActivity;
-import com.example.luowenliang.idouban.moviedetail.utils.SetMovieDetailData;
 import com.example.luowenliang.idouban.moviehot.adapter.ComingSoonRecyclerViewAdapter;
 import com.example.luowenliang.idouban.moviehot.adapter.HotMovieRecyclerViewAdapter;
 import com.example.luowenliang.idouban.moviehot.adapter.PublicPraiseRecyclerViewAdapter;
@@ -52,9 +51,11 @@ import static com.example.luowenliang.idouban.moviedetail.MovieDetailActivity.PI
 
 public class HotMoviesFragment extends Fragment {
     private static final String TAG = "热门";
+    private static String TOTAL_HOT_MOVIES_URL="in_theaters";
+    private static String TOTAL_COMING_SOON_URL="coming_soon";
     private SwipeRefreshLayout swipeRefreshLayout;
     private EditText search;
-    private TextView hotMovieTitle, comingSoonTitle, publicPraiseTitle;
+    private TextView hotMovieTitle,hotMovieTotal,comingSoonTitle,comingSoonTotal,publicPraiseTitle,publicPraiseUpdate;
     private String searchText;
     private SearchInfo searchInfo;
     private HotMovieInfo hotMovieInfo;
@@ -76,8 +77,11 @@ public class HotMoviesFragment extends Fragment {
         Log.d("进度条", "热门onCreateView: ");
         search = view.findViewById(R.id.search_text);
         hotMovieTitle = view.findViewById(R.id.hot_movie_title);
+        hotMovieTotal=view.findViewById(R.id.hot_movie_total);
         comingSoonTitle = view.findViewById(R.id.coming_soon_title);
+        comingSoonTotal=view.findViewById(R.id.coming_soon_total);
         publicPraiseTitle = view.findViewById(R.id.public_praise_title);
+        publicPraiseUpdate=view.findViewById(R.id.public_praise_update);
         hotMovieRecyclerView = view.findViewById(R.id.hot_movie_recycler_view);
         comingSoonRecyclerView = view.findViewById(R.id.coming_soon_recycler_view);
         publicPraiseRecyclerView = view.findViewById(R.id.public_praise_recycler_view);
@@ -110,6 +114,7 @@ public class HotMoviesFragment extends Fragment {
         comingSoonRecyclerView.setLayoutManager(gridLayoutManager2);
         publicPraiseRecyclerView.setItemAnimator(new DefaultItemAnimator());
         publicPraiseRecyclerView.setLayoutManager(layoutManager);
+        //下拉刷新
         swipeRefreshLayout=view.findViewById(R.id.refresh_layout);
         swipeRefreshLayout.setSize(SwipeRefreshLayout.DEFAULT);//设置加载默认图标
         swipeRefreshLayout.setColorSchemeColors(Color.parseColor("#CD853F"));
@@ -121,9 +126,37 @@ public class HotMoviesFragment extends Fragment {
         initComingSoonMovieData();
         initPublicPraiseMovieData();
         RefreshMovieData();
+        showTotalMovie();
 
 
         return view;
+    }
+
+    /**
+     * 跳转显示热门和即将上映的全部电影
+     */
+    private void showTotalMovie() {
+        //热门
+        hotMovieTotal.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent=new Intent(getActivity(),TotalMoviesActivity.class);
+                intent.putExtra("total_url",TOTAL_HOT_MOVIES_URL);
+                intent.putExtra("total_title","影院热映");
+                startActivity(intent);
+            }
+        });
+        //即将上映
+        comingSoonTotal.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent=new Intent(getActivity(),TotalMoviesActivity.class);
+                intent.putExtra("total_url",TOTAL_COMING_SOON_URL);
+                intent.putExtra("total_title","即将上映");
+                startActivity(intent);
+            }
+        });
+
     }
 
     /**
@@ -415,7 +448,13 @@ public class HotMoviesFragment extends Fragment {
      * 排行榜详细信息数据加载(做防空指针操作)
      */
     private String setPublicPraiseMesssage (PublicPraiseItem publicPraiseItem,int i){
-        String genre1, genre2, director,cast1 = null, cast2 = null;
+        String year, genre1, genre2, director,cast1 = null, cast2 = null;
+        //年份
+        if(publicPraiseItem.getSubjects().get(i).getSubject().getYear()!=null){
+            year=publicPraiseItem.getSubjects().get(i).getSubject().getYear()+"/";
+        }else {
+            year="";
+        }
         //类型
         if (publicPraiseItem.getSubjects().get(i).getSubject().getGenres() == null) {
             genre1 = "";
@@ -448,7 +487,7 @@ public class HotMoviesFragment extends Fragment {
                 cast2 = "";
             }
         }
-        return genre1 + genre2 + director + cast1 + cast2;
+        return year + genre1 + genre2 + director + cast1 + cast2;
     }
 
 
@@ -457,8 +496,11 @@ public class HotMoviesFragment extends Fragment {
      */
     private void showTitle() {
         hotMovieTitle.setVisibility(View.VISIBLE);
+        hotMovieTotal.setVisibility(View.VISIBLE);
         comingSoonTitle.setVisibility(View.VISIBLE);
+        comingSoonTotal.setVisibility(View.VISIBLE);
         publicPraiseTitle.setVisibility(View.VISIBLE);
+        publicPraiseUpdate.setVisibility(View.VISIBLE);
     }
 
 

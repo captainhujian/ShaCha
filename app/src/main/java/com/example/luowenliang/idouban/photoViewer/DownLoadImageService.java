@@ -6,11 +6,9 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Environment;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.Target;
-import com.example.luowenliang.idouban.application.MyApplication;
 
 import java.io.File;
 import java.io.FileInputStream;

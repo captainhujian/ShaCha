@@ -1,15 +1,12 @@
 package com.example.luowenliang.idouban.photoViewer;
 
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Looper;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
@@ -19,8 +16,8 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.luowenliang.idouban.BaseActivity;
 import com.example.luowenliang.idouban.R;
-import com.example.luowenliang.idouban.VedioViewer.VideoViewerActivity;
 import com.example.luowenliang.idouban.application.MyApplication;
 import com.example.luowenliang.idouban.moviedetail.entity.StagePhotoInfo;
 import com.example.luowenliang.idouban.moviedetail.utils.PhotoViewPager;
@@ -28,7 +25,7 @@ import com.example.luowenliang.idouban.moviedetail.utils.PhotoViewPager;
 import java.io.File;
 import java.util.List;
 
-public class ViewPagerActivity extends AppCompatActivity {
+public class ViewPagerActivity extends BaseActivity {
     private PhotoViewPager mViewPager;
     private int currentPosition;
     private List<StagePhotoInfo>stagePictureUrls;
@@ -41,20 +38,16 @@ public class ViewPagerActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        /**
-         * 状态栏透明
-         */
-        if(Build.VERSION.SDK_INT >= 21) {
-            View decorView = getWindow().getDecorView();
-            //让应用主题内容占用系统状态栏的空间,注意:下面两个参数必须一起使用 stable 牢固的
-            int option = View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN|View.SYSTEM_UI_FLAG_LAYOUT_STABLE;
-            decorView.setSystemUiVisibility(option);
-            //设置状态栏颜色为透明
-            getWindow().setStatusBarColor(Color.TRANSPARENT);
-        }
         setContentView(R.layout.view_pager_avtivity);
+        //设置左滑退出
+        setSlideable(isActivitySlideBack());
         initView();
         initData();
+    }
+
+    @Override
+    public boolean isActivitySlideBack() {
+        return true;
     }
 
     private void initView() {
