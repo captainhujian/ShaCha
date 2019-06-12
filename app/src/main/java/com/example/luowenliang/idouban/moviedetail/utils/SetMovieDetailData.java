@@ -101,12 +101,16 @@ public class SetMovieDetailData {
         //影片类型
         getGenres();
         //上映时间
-        if(movieDetailItem.getPubdates().size()==0){
-            pubdate="";
+        if(movieDetailItem.getMainland_pubdate().equals("")){
+            if(movieDetailItem.getPubdates().size()!=0){
+                pubdate=movieDetailItem.getPubdates().get(0);
+            }else {
+                pubdate="";
+            }
         }else {
-            pubdate=movieDetailItem.getPubdates().get(0);
-            pubdate="上映时间："+pubdate+"/";
+            pubdate=movieDetailItem.getMainland_pubdate()+"(中国大陆)";
         }
+        pubdate="上映时间："+pubdate+"/";
         //时长
         if(movieDetailItem.getDurations().size()==0){
             duration="";
