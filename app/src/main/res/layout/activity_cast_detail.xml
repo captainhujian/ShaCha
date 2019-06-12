@@ -12,9 +12,25 @@
     <android.support.v7.widget.Toolbar
         android:id="@+id/cast_detail_title"
         android:layout_width="match_parent"
-        android:layout_height="48dp"
+        android:layout_height="64dp"
         android:theme="@style/ToolbarTheme"
+        app:contentInsetLeft="0dp"
+        app:contentInsetStart="0dp"
+
         >
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <TextView
+                android:id="@+id/cast_detail_exit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="×"
+                android:textSize="35dp"
+                android:layout_marginLeft="@dimen/margin_size_large"
+                android:layout_alignParentBottom="true"
+                />
+        </RelativeLayout>
     </android.support.v7.widget.Toolbar>
 
     <LinearLayout

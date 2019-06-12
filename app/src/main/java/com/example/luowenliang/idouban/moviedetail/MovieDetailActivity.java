@@ -1,14 +1,13 @@
 package com.example.luowenliang.idouban.moviedetail;
 
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -36,6 +35,7 @@ import com.hedgehog.ratingbar.RatingBar;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
@@ -44,15 +44,19 @@ import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
+import static java.util.Arrays.asList;
+
 public class MovieDetailActivity extends BaseActivity {
     private static final String TAG = "详情";
     public static final String PICTURE_PLACE_HOLDER="http://6120491.s21i.faiusr.com/2/ABUIABACGAAg0725rAUoiLv9qAQwrAI4rAI.jpg";
+    private List<String>colorList=new ArrayList<>();
     private String id;
     private MovieDetailItem localMovieDetailItem;
     private CastInfo castInfo;
     private CommentInfo commentInfo;
+    private Toolbar detailToolbar;
     private ImageView image;
-    private TextView detailTitleText,title,originTitleYear,mesage,rating,noneRating,starCount,summary;
+    private TextView movieDetailExit,detailTitleText,title,originTitleYear,mesage,rating,noneRating,starCount,summary;
     private RatingBar ratingBar;
     private ProgressBar star5,star4,star3,star2,star1;
     private List<CastInfo> castInfos=new ArrayList<>();
@@ -68,15 +72,37 @@ public class MovieDetailActivity extends BaseActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setSlideable(isActivitySlideBack());
-        setContentView(LayoutInflater.from(this).inflate(R.layout.activity_movie_detail,null,false));
+        View view=LayoutInflater.from(this).inflate(R.layout.activity_movie_detail,null,false);
+        setContentView(view);
         //界面和控件初始化
         initView();
+        //动态设置背景色
+        colorList = asList("#42426F","#5C4033","#4A766E","#42426F","#4A708B","#993333","#8B4789","#473C8B","#8B7D7B","#426F42","#CD919E",
+                "#8B7355","#668B8B","#CD853F","#2F2F4F","#4A766E","#104E8B","#27408B","#996699","#8B8386","#339966");
+        String colorString=colorList.get((int)(0+Math.random()*(colorList.size()-0)));
+        view.setBackgroundColor(Color.parseColor(colorString));
+        detailToolbar.setBackgroundColor(Color.parseColor(colorString));
         //接收影片id，接着进行影片详情信息的网络请求
         Intent intent =getIntent();
         id = intent.getStringExtra("id");
         Log.d(TAG, "接收id："+id);
         Log.d("搜索", "接收id: "+id);
         initMovieDetailData();
+        exitMovieDetailActivity();
+
+    }
+
+    /**
+     * 按键退出
+     */
+    private void exitMovieDetailActivity() {
+        movieDetailExit.setText("×");
+        movieDetailExit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
     }
 
     /**
@@ -92,6 +118,8 @@ public class MovieDetailActivity extends BaseActivity {
      * 界面初始化
      */
     private void initView() {
+        movieDetailExit=findViewById(R.id.movie_detail_exit);
+        detailToolbar=findViewById(R.id.detail_title);
         detailTitleText=findViewById(R.id.detail_title_text);
         image=findViewById(R.id.movie_image);
         title=findViewById(R.id.movie_title);

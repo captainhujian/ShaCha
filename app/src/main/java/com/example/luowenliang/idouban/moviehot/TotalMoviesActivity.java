@@ -14,10 +14,8 @@ import android.widget.TextView;
 import com.example.luowenliang.idouban.BaseActivity;
 import com.example.luowenliang.idouban.R;
 import com.example.luowenliang.idouban.moviedetail.MovieDetailActivity;
-import com.example.luowenliang.idouban.moviehot.adapter.HotMovieRecyclerViewAdapter;
 import com.example.luowenliang.idouban.moviehot.entity.HotMovieInfo;
 import com.example.luowenliang.idouban.moviehot.entity.HotMovieItem;
-import com.example.luowenliang.idouban.moviehot.service.HotMovieService;
 import com.example.luowenliang.idouban.moviehot.service.TotalMoviesService;
 
 import java.util.ArrayList;
@@ -35,6 +33,7 @@ import static com.example.luowenliang.idouban.moviedetail.MovieDetailActivity.PI
 public class TotalMoviesActivity extends BaseActivity {
     private static final String TAG = "全部";
     private TextView totalMoviesTitle;
+    private TextView totalExit;
     private ProgressBar totalProgressBar;
     private RecyclerView totalMoviesRecyclerView;
     private TotalMoviesRecyclerViewAdapter adapter;
@@ -46,6 +45,7 @@ public class TotalMoviesActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(LayoutInflater.from(this).inflate(R.layout.activity_hotmovie_total,null,false));
         totalMoviesTitle=findViewById(R.id.total_movie_title);
+        totalExit=findViewById(R.id.total_exit);
         totalProgressBar=findViewById(R.id.total_movie_progress_bar);
         totalMoviesRecyclerView=findViewById(R.id.total_movie_recycle_view);
         totalMoviesRecyclerView.setItemAnimator(new DefaultItemAnimator());
@@ -55,7 +55,20 @@ public class TotalMoviesActivity extends BaseActivity {
         String totalUrl = intent.getStringExtra("total_url");
         String totalTitle=intent.getStringExtra("total_title");
         initTotalMovieData(totalUrl,totalTitle);
+        exitActivity();
 
+    }
+
+    /**
+     * 退出界面
+     */
+    private void exitActivity() {
+        totalExit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
     }
 
     /**

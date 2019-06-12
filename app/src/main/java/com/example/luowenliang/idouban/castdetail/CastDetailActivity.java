@@ -53,7 +53,7 @@ public class CastDetailActivity extends BaseActivity {
     private CastDetailAlbumInfo castDetailAlbumInfo;
     private List<CastDetailAlbumInfo>castDetailAlbumInfos=new ArrayList<>();
     private ImageView castPhotoView;
-    private TextView castDetailNameView,castDetailOriginNameView,birthdayView,bornPlaceView,professionsView,castSummaryView;
+    private TextView castDetailExit,castDetailNameView,castDetailOriginNameView,birthdayView,bornPlaceView,professionsView,castSummaryView;
     private RecyclerView castFilmRecyclerView;
     private RecyclerView castAlbumRecyclerView;
     private CastFilmRecyclerViewAdapter castFilmRecyclerViewAdapter;
@@ -80,7 +80,19 @@ public class CastDetailActivity extends BaseActivity {
             initSpareCastDetailData(intent);
         }
 
+        exitCastDetailActivity();
+    }
 
+    /**
+     * 按键退出
+     */
+    private void exitCastDetailActivity() {
+        castDetailExit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
     }
 
     /**
@@ -97,6 +109,7 @@ public class CastDetailActivity extends BaseActivity {
      * 绑定控件
      */
     private void initView() {
+        castDetailExit=findViewById(R.id.cast_detail_exit);
         castPhotoView=findViewById(R.id.cast_photo);
         castDetailNameView=findViewById(R.id.cast_detail_name);
         castDetailOriginNameView=findViewById(R.id.cast_detail_origin_name);

@@ -12,26 +12,41 @@
     <android.support.v7.widget.Toolbar
         android:id="@+id/total_movie_toolbar"
         android:layout_width="match_parent"
-        android:layout_height="64dp"
+        android:layout_height="72dp"
         android:theme="@style/ToolbarTheme"
+        app:contentInsetLeft="0dp"
+        app:contentInsetStart="0dp"
         >
-        <TextView
-            android:id="@+id/total_movie_title"
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:gravity="bottom|center"
-            android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
-            android:textSize="18dp"
-            android:textStyle="bold"
-            android:layout_marginBottom="3dp"
-           />
+            >
+            <TextView
+                android:id="@+id/total_exit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="×"
+                android:textSize="35dp"
+                android:layout_marginLeft="10dp"
+                android:layout_alignParentBottom="true"
+                />
+            <TextView
+                android:id="@+id/total_movie_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="18dp"
+                android:textStyle="bold"
+                android:layout_alignParentBottom="true"
+                android:layout_centerHorizontal="true"
+                android:layout_marginBottom="10dp"
+                />
+        </RelativeLayout>
     </android.support.v7.widget.Toolbar>
         <android.support.v7.widget.RecyclerView
             android:id="@+id/total_movie_recycle_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginTop="15dp"
-            android:layout_marginBottom="15dp"
             app:layout_constraintTop_toBottomOf="@id/total_movie_toolbar">
         </android.support.v7.widget.RecyclerView>
 

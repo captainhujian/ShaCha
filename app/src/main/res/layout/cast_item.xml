@@ -36,6 +36,7 @@
         android:gravity="center"
         android:singleLine="true"
         android:textSize="12dp"
+        android:textColor="@color/white"
         android:text="蒂姆.罗宾斯"
         />
     <TextView
@@ -48,6 +49,7 @@
         android:textSize="10dp"
         android:layout_gravity="center"
         android:gravity="center"
-        android:text="饰: 安迪.杜佛兰 AndyDufresne"/>
+        android:text="饰: 安迪.杜佛兰 AndyDufresne"
+        android:textColor="@color/white"/>
         </LinearLayout>
 </android.support.constraint.ConstraintLayout>

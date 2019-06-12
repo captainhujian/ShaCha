@@ -5,11 +5,11 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginTop="10dp"
-    android:layout_marginLeft="10dp"
-    android:layout_marginRight="10dp"
-    app:cardCornerRadius="10dp"
-    android:elevation="15dp"
+    android:layout_marginTop="@dimen/margin_size_small"
+    android:layout_marginLeft="@dimen/margin_size_small"
+    android:layout_marginRight="@dimen/margin_size_small"
+    app:cardCornerRadius="@dimen/margin_size_small"
+    android:elevation="@dimen/margin_size_large"
 
    >
     <LinearLayout
@@ -19,9 +19,9 @@
         <android.support.v7.widget.CardView
             android:layout_width="50dp"
             android:layout_height="25dp"
-            android:layout_marginLeft="10dp"
-            android:layout_marginTop="15dp"
-            app:cardCornerRadius="5dp"
+            android:layout_marginLeft="@dimen/margin_size_large"
+            android:layout_marginTop="@dimen/margin_size_large"
+            app:cardCornerRadius="@dimen/margin_size_tiny"
             >
             <TextView
                 android:id="@+id/number"
@@ -41,16 +41,16 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:layout_marginTop="5dp">
+        android:layout_marginTop="@dimen/margin_size_tiny">
         <android.support.v7.widget.CardView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
-            android:layout_marginBottom="15dp"
-            app:cardCornerRadius="10dp"
-            android:elevation="15dp"
+            android:layout_marginTop="@dimen/margin_size_tiny"
+            android:layout_marginLeft="@dimen/margin_size_large"
+            android:layout_marginRight="@dimen/margin_size_small"
+            android:layout_marginBottom="@dimen/margin_size_large"
+            app:cardCornerRadius="@dimen/margin_size_small"
+            android:elevation="@dimen/margin_size_large"
             >
             <ImageView
                 android:id="@+id/image"
@@ -63,7 +63,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical"
-            android:layout_marginTop="5dp">
+            android:layout_marginTop="@dimen/margin_size_tiny">
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -83,7 +83,7 @@
                     android:id="@+id/year"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="5dp"
+                    android:layout_marginLeft="@dimen/margin_size_tiny"
                     android:textSize="16sp"
                     android:text="abc"
                     android:textStyle="bold"
@@ -96,7 +96,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="3dp"
                 android:text="abc"
-                android:layout_marginRight="10dp"
+                android:layout_marginRight="@dimen/margin_size_small"
                 />
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -116,7 +116,7 @@
                     app:starImageHeight="12dp"
                     app:starImageWidth="12dp"
                     app:starImagePadding="2dp"
-                    android:layout_marginRight="5dp"
+                    android:layout_marginRight="@dimen/margin_size_tiny"
                     android:visibility="visible"
                     />
                 <TextView
@@ -141,14 +141,14 @@
                     android:text="abc/abc"
                     android:textSize="13dp"
                     android:lineSpacingExtra="2dp"
-                    android:layout_marginRight="10dp"/>
+                    android:layout_marginRight="30dp"/>
 
             </LinearLayout>
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:layout_marginBottom="15dp"
+                android:layout_marginBottom="@dimen/margin_size_large"
                 >
 
                 <TextView
