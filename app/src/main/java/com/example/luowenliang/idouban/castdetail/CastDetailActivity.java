@@ -316,7 +316,7 @@ public class CastDetailActivity extends BaseActivity {
                 Intent intent = new Intent(CastDetailActivity.this,ViewPagerActivity.class);
                 Bundle bundle = new Bundle();
                 List<StagePhotoInfo> photos=new ArrayList<>();
-                StagePhotoInfo photo=new StagePhotoInfo(localCastDetailItem.getAvatars().getLarge(),null,null);
+                StagePhotoInfo photo=new StagePhotoInfo(localCastDetailItem.getAvatars().getLarge(),null,null,0);
                 photos.add(photo);
                 bundle.putSerializable("photo",(Serializable)photos);
                 intent.putExtras(bundle);
@@ -353,7 +353,7 @@ public class CastDetailActivity extends BaseActivity {
                 Bundle bundle = new Bundle();
                 List<StagePhotoInfo> photos=new ArrayList<>();
                 for(int k=0;k<castDetailAlbumInfos.size();k++){
-                    StagePhotoInfo photo=new StagePhotoInfo(castDetailAlbumInfos.get(k).getAlbum(),null,null);
+                    StagePhotoInfo photo=new StagePhotoInfo(castDetailAlbumInfos.get(k).getAlbum(),null,null,0);
                     photos.add(photo);
                 }
                 bundle.putSerializable("photo", (Serializable) photos);

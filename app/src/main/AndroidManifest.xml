@@ -13,12 +13,16 @@
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
-
             </intent-filter>
         </activity>
         <activity android:name=".MainActivity"
             android:windowSoftInputMode="stateHidden"/>
-        <activity android:name=".moviedetail.MovieDetailActivity"/>
+        <activity android:name=".moviedetail.MovieDetailActivity">
+        <intent-filter>
+            <action android:name="android.intent.action.VIEW"/>
+            <category android:name="android.intent.category.DEFAULT"/>
+        </intent-filter>
+        </activity>
         <activity android:name=".photoViewer.ViewPagerActivity"/>
         <activity android:name=".castdetail.CastDetailActivity"/>
         <activity android:name=".VedioViewer.VideoViewerActivity"

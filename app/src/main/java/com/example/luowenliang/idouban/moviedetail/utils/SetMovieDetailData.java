@@ -46,6 +46,7 @@ public class SetMovieDetailData {
         //星级评分
         double fitRate = fitRating(movieDetailItem.getRating().getAverage());
         Log.d("分数", "合理的分数: " + fitRate);
+        //暂无评价
         if (fitRate == 0f) {
             ratingBar.setVisibility(View.GONE);
             rating.setVisibility(View.GONE);

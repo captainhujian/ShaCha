@@ -6,6 +6,7 @@ import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -64,7 +65,8 @@ public class MovieDetailActivity extends BaseActivity {
     private MovieResourceInfo movieResourceInfo;
     private Toolbar detailToolbar;
     private ImageView image;
-    private TextView movieDetailExit,detailTitleText,title,originTitleYear,mesage,rating,noneRating,starCount,summary;
+    private TextView movieDetailExit,detailTitleText,title,originTitleYear,mesage,rating,noneRating,starCount,summary,stagePhotoTitle;
+    private CardView stagePhotoCardView;
     private RatingBar ratingBar;
     private ProgressBar star5,star4,star3,star2,star1;
     private RelativeLayout watchMovie;
@@ -107,8 +109,6 @@ public class MovieDetailActivity extends BaseActivity {
 
     }
 
-
-
     /**
      * 按键退出
      */
@@ -144,6 +144,8 @@ public class MovieDetailActivity extends BaseActivity {
         mesage=findViewById(R.id.detail_message);
         rating=findViewById(R.id.rating_number);
         noneRating=findViewById(R.id.none_rating);
+        stagePhotoTitle=findViewById(R.id.stage_photo);
+        stagePhotoCardView=findViewById(R.id.stage_photo_card_view);
         ratingBar=findViewById(R.id.movie_detail_rating_bar);
         star5=findViewById(R.id.progress_bar_h5);
         star4=findViewById(R.id.progress_bar_h4);
@@ -355,35 +357,55 @@ public class MovieDetailActivity extends BaseActivity {
         }
     }
     /**
-     * 获取预告片、剧照
+     * 获取预告片、主创特辑、片段、剧照
      */
     private void setStagePhoto(MovieDetailItem movieDetailItem) {
         //获取预告片
-        if(movieDetailItem.getTrailers()!=null){
-            for(int i =0;i<movieDetailItem.getTrailers().size();i++){
-                String videoPicture=movieDetailItem.getTrailers().get(i).getMedium();
-                String videoUrl=movieDetailItem.getTrailers().get(i).getResource_url();
-                String videoTitle=movieDetailItem.getTitle();
-                StagePhotoInfo previewInfo=new StagePhotoInfo(videoPicture,videoUrl,videoTitle);
-                stagePhotoInfos.add(previewInfo);
-            }
+        if (movieDetailItem.getTrailers().size() != 0) {
+            String videoPicture = movieDetailItem.getTrailers().get(0).getMedium();
+            String videoUrl = movieDetailItem.getTrailers().get(0).getResource_url();
+            String videoTitle = movieDetailItem.getTrailers().get(0).getTitle();
+            StagePhotoInfo previewInfo = new StagePhotoInfo(videoPicture, videoUrl, videoTitle,1);
+            stagePhotoInfos.add(previewInfo);
         }
+        //获取主创特辑
+        if (movieDetailItem.getBloopers().size()!=0) {
+                String videoPicture = movieDetailItem.getBloopers().get(0).getMedium();
+                String videoUrl = movieDetailItem.getBloopers().get(0).getResource_url();
+                String videoTitle = movieDetailItem.getBloopers().get(0).getTitle();
+                StagePhotoInfo blooerInfo = new StagePhotoInfo(videoPicture, videoUrl, videoTitle,2);
+                stagePhotoInfos.add(blooerInfo);
 
+        }
+        //获取影片片段
+        if (movieDetailItem.getClips().size()!=0) {
+                String videoPicture = movieDetailItem.getClips().get(0).getMedium();
+                String videoUrl = movieDetailItem.getClips().get(0).getResource_url();
+                String videoTitle = movieDetailItem.getClips().get(0).getTitle();
+                StagePhotoInfo clipInfo = new StagePhotoInfo(videoPicture, videoUrl, videoTitle,3);
+                stagePhotoInfos.add(clipInfo);
+        }
         //获取剧照
-        for (int j= 0;j<movieDetailItem.getPhotos().size();j++){
-            Log.d(TAG, "Photo: "+movieDetailItem.getPhotos().get(j).getImage());
+        for (int j = 0; j < movieDetailItem.getPhotos().size(); j++) {
+            Log.d(TAG, "Photo: " + movieDetailItem.getPhotos().get(j).getImage());
             //防止有的图片为空导致recyclerView不显示，这里设置占位图
-            String stagePhoto =null ;
-            if(movieDetailItem.getPhotos().get(j).getImage()==null){
-                stagePhoto=PICTURE_PLACE_HOLDER;
+            String stagePhoto = null;
+            if (movieDetailItem.getPhotos().get(j).getImage() == null) {
+                stagePhoto = PICTURE_PLACE_HOLDER;
+            } else {
+                stagePhoto = movieDetailItem.getPhotos().get(j).getImage();
             }
-            else{
-                stagePhoto=movieDetailItem.getPhotos().get(j).getImage();
-            }
-            StagePhotoInfo stagePhotoInfo=new StagePhotoInfo(stagePhoto,null,null);
+            StagePhotoInfo stagePhotoInfo = new StagePhotoInfo(stagePhoto, null, null,0);
             stagePhotoInfos.add(stagePhotoInfo);
         }
-
+        //当剧照等为空时，隐藏标题和recyclerView
+        if(stagePhotoInfos.size()==0){
+            stagePhotoTitle.setVisibility(View.GONE);
+            stagePhotoCardView.setVisibility(View.GONE);
+        }else {
+            stagePhotoTitle.setVisibility(View.VISIBLE);
+            stagePhotoCardView.setVisibility(View.VISIBLE);
+        }
     }
 
     /**
@@ -481,7 +503,7 @@ public class MovieDetailActivity extends BaseActivity {
                 Intent intent = new Intent(MovieDetailActivity.this,ViewPagerActivity.class);
                 Bundle bundle = new Bundle();
                 List<StagePhotoInfo>photos=new ArrayList<>();
-                StagePhotoInfo photo=new StagePhotoInfo(localMovieDetailItem.getImages().getLarge(),null,null);
+                StagePhotoInfo photo=new StagePhotoInfo(localMovieDetailItem.getImages().getLarge(),null,null,0);
                 photos.add(photo);
                 bundle.putSerializable("photo",(Serializable)photos);
                 intent.putExtras(bundle);

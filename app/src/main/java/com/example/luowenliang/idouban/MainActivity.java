@@ -10,6 +10,10 @@ import com.example.luowenliang.idouban.book.BooksFragment;
 import com.example.luowenliang.idouban.moviehot.HotMoviesFragment;
 import com.example.luowenliang.idouban.movietop250.Top250MoviesFragment;
 
+/**
+ * author: Nick
+ * start_date:2019/5/24
+ */
 public class MainActivity extends BaseActivity {
     private static final String TAG = "豆瓣";
     private ViewPager mViewPager;

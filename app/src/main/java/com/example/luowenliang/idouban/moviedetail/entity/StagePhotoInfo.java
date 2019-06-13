@@ -6,11 +6,13 @@ public class StagePhotoInfo implements Serializable {
     private String stagePhoto;
     private String videoUrl;
     private String videoTitle;
+    private int videoStyle;
 
-    public StagePhotoInfo(String stagePhoto, String videoUrl, String videoTitle) {
+    public StagePhotoInfo(String stagePhoto, String videoUrl, String videoTitle, int videoStyle) {
         this.stagePhoto = stagePhoto;
         this.videoUrl = videoUrl;
         this.videoTitle = videoTitle;
+        this.videoStyle = videoStyle;
     }
 
     public String getStagePhoto() {
@@ -35,5 +37,13 @@ public class StagePhotoInfo implements Serializable {
 
     public void setVideoTitle(String videoTitle) {
         this.videoTitle = videoTitle;
+    }
+
+    public int getVideoStyle() {
+        return videoStyle;
+    }
+
+    public void setVideoStyle(int videoStyle) {
+        this.videoStyle = videoStyle;
     }
 }

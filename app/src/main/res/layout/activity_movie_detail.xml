@@ -172,9 +172,9 @@
                             android:orientation="vertical">
                             <TextView
                                 android:id="@+id/none_rating"
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent"
-                                android:layout_gravity="center"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="20dp"
                                 android:textColor="@color/white"
                                 android:visibility="gone"
                                 android:text="暂无评分"/>
@@ -182,12 +182,12 @@
                             <TextView
                                 android:id="@+id/rating_number"
                                 android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
+                                android:layout_height="match_parent"
                                 android:layout_gravity="center_horizontal"
-                                android:textColor="@color/white"
                                 android:text="0.0"
+                                android:textColor="@color/white"
                                 android:textSize="30dp"
-                                />
+                                android:visibility="visible"/>
 
                             <com.hedgehog.ratingbar.RatingBar
                                 android:id="@+id/movie_detail_rating_bar"

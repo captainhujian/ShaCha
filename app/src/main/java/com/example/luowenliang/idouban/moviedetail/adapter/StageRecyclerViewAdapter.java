@@ -1,5 +1,6 @@
 package com.example.luowenliang.idouban.moviedetail.adapter;
 
+import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
@@ -35,12 +36,28 @@ public class StageRecyclerViewAdapter extends RecyclerView.Adapter<StageRecycler
     @Override
     public void onBindViewHolder(@NonNull final StageRecyclerViewAdapter.ViewHolder viewHolder, final int i) {
         final StagePhotoInfo stagePhotoInfo=stagePhotoInfos.get(i);
-        //若为预告片显示视频可播放标识
+        //若为视频显示可播放标识
         if(stagePhotoInfo.getVideoUrl()!=null){
-            viewHolder.previewTitle.setVisibility(View.VISIBLE);
+            switch (stagePhotoInfo.getVideoStyle()){
+                case 1:
+                    viewHolder.previewTitle.setText("预告片");
+                    viewHolder.previewTitle.setBackgroundColor(Color.parseColor("#F4A460"));
+                    break;
+                case 2:
+                    viewHolder.previewTitle.setText("花絮");
+                    viewHolder.previewTitle.setBackgroundColor(Color.parseColor("#A2B5CD"));
+                    break;
+                case 3:
+                    viewHolder.previewTitle.setText("片段");
+                    viewHolder.previewTitle.setBackgroundColor(Color.parseColor("#1E1E1E"));
+                    break;
+                default:
+                    break;
+            }
+            viewHolder.previewTitleCard.setVisibility(View.VISIBLE);
             viewHolder.previewStart.setVisibility(View.VISIBLE);
         }else{
-            viewHolder.previewTitle.setVisibility(View.GONE);
+            viewHolder.previewTitleCard.setVisibility(View.GONE);
             viewHolder.previewStart.setVisibility(View.GONE);
         }
         Glide.with(MyApplication.getContext()).load(stagePhotoInfo.getStagePhoto()).into(viewHolder.stagePhoto);
@@ -62,14 +79,16 @@ public class StageRecyclerViewAdapter extends RecyclerView.Adapter<StageRecycler
 
     public class ViewHolder extends RecyclerView.ViewHolder{
     public ImageView stagePhoto;
-    public CardView previewTitle;
+    public CardView previewTitleCard;
     public TextView previewStart;
+    public TextView previewTitle;
 
          ViewHolder( View itemView) {
             super(itemView);
             stagePhoto=itemView.findViewById(R.id.stage_image_view);
-            previewTitle=itemView.findViewById(R.id.preview_title);
+            previewTitleCard=itemView.findViewById(R.id.preview_title_card);
             previewStart=itemView.findViewById(R.id.preview_start);
+            previewTitle=itemView.findViewById(R.id.preview_title);
         }
     }
 
