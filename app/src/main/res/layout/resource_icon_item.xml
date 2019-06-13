@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginRight="5dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <com.shehuan.niv.NiceImageView
+        android:id="@+id/resource_icon"
+        android:layout_width="22dp"
+        android:layout_height="22dp"
+        android:src="@mipmap/ic_launcher"
+        android:layout_marginRight="@dimen/margin_size_tiny"
+        app:is_circle="true"/>
+</android.support.constraint.ConstraintLayout>

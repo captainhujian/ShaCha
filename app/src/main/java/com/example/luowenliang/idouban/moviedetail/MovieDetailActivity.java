@@ -1,7 +1,9 @@
 package com.example.luowenliang.idouban.moviedetail;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.DividerItemDecoration;
@@ -12,8 +14,10 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.example.luowenliang.idouban.BaseActivity;
@@ -22,20 +26,23 @@ import com.example.luowenliang.idouban.VedioViewer.VideoViewerActivity;
 import com.example.luowenliang.idouban.castdetail.CastDetailActivity;
 import com.example.luowenliang.idouban.moviedetail.adapter.CastRecyclerViewAdapter;
 import com.example.luowenliang.idouban.moviedetail.adapter.CommentRecyclerViewAdapter;
+import com.example.luowenliang.idouban.moviedetail.adapter.MovieResourceRecyclerViewAdapter;
+import com.example.luowenliang.idouban.moviedetail.adapter.ResourceIconRecyclerViewAdapter;
 import com.example.luowenliang.idouban.moviedetail.adapter.StageRecyclerViewAdapter;
 import com.example.luowenliang.idouban.moviedetail.entity.CastInfo;
 import com.example.luowenliang.idouban.moviedetail.entity.CommentInfo;
 import com.example.luowenliang.idouban.moviedetail.entity.MovieDetailItem;
+import com.example.luowenliang.idouban.moviedetail.entity.MovieResourceInfo;
 import com.example.luowenliang.idouban.moviedetail.entity.StagePhotoInfo;
 import com.example.luowenliang.idouban.moviedetail.service.MovieDetailService;
 import com.example.luowenliang.idouban.moviedetail.utils.SetMovieDetailData;
 import com.example.luowenliang.idouban.photoViewer.ViewPagerActivity;
+import com.flipboard.bottomsheet.BottomSheetLayout;
 import com.hedgehog.ratingbar.RatingBar;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
@@ -54,19 +61,25 @@ public class MovieDetailActivity extends BaseActivity {
     private MovieDetailItem localMovieDetailItem;
     private CastInfo castInfo;
     private CommentInfo commentInfo;
+    private MovieResourceInfo movieResourceInfo;
     private Toolbar detailToolbar;
     private ImageView image;
     private TextView movieDetailExit,detailTitleText,title,originTitleYear,mesage,rating,noneRating,starCount,summary;
     private RatingBar ratingBar;
     private ProgressBar star5,star4,star3,star2,star1;
+    private RelativeLayout watchMovie;
+    private List<MovieResourceInfo>movieResourceInfos=new ArrayList<>();
     private List<CastInfo> castInfos=new ArrayList<>();
     private List<StagePhotoInfo>stagePhotoInfos=new ArrayList<>();
     private List<CommentInfo>commentInfos=new ArrayList<>();
     private SetMovieDetailData setDetailData;
-    private RecyclerView castRecyclerView,stageRecyclerView,commentRecyclerView;
+    private RecyclerView resourceIconRecyclerView,castRecyclerView,stageRecyclerView,commentRecyclerView;
+    private ResourceIconRecyclerViewAdapter resourceIconRecyclerViewAdapter;
     private CastRecyclerViewAdapter castRecyclerViewAdapter;
     private StageRecyclerViewAdapter stageRecyclerViewAdapter;
     private CommentRecyclerViewAdapter commentRecyclerViewAdapter;
+    private BottomSheetLayout bottomSheetLayout;
+    private View bottomSheet;//弹出框的子布局
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -88,9 +101,13 @@ public class MovieDetailActivity extends BaseActivity {
         Log.d(TAG, "接收id："+id);
         Log.d("搜索", "接收id: "+id);
         initMovieDetailData();
+        showHideFullSummary();
+        //按键退出
         exitMovieDetailActivity();
 
     }
+
+
 
     /**
      * 按键退出
@@ -134,12 +151,16 @@ public class MovieDetailActivity extends BaseActivity {
         star2=findViewById(R.id.progress_bar_h2);
         star1=findViewById(R.id.progress_bar_h1);
         starCount=findViewById(R.id.rating_count);
+        watchMovie=findViewById(R.id.watch_movie);
         summary=findViewById(R.id.summary);
+        resourceIconRecyclerView=findViewById(R.id.resource_icon_recycler_view);
         castRecyclerView=findViewById(R.id.cast_recycler_view);
         stageRecyclerView=findViewById(R.id.stage_photo_recycler_view);
         commentRecyclerView=findViewById(R.id.comment_recycler_view);
+        bottomSheetLayout=findViewById(R.id.bottomSheetLayout);
         ratingBar.setmClickable(false);
         //summary.setMovementMethod(ScrollingMovementMethod.getInstance());
+        resourceIconRecyclerView.setLayoutManager(new LinearLayoutManager(this,LinearLayoutManager.HORIZONTAL,false));
         castRecyclerView.setLayoutManager(new LinearLayoutManager(this,LinearLayoutManager.HORIZONTAL,false));
         stageRecyclerView.setLayoutManager(new LinearLayoutManager(this,LinearLayoutManager.HORIZONTAL,false));
         //评论不可滑动recyclerview
@@ -150,23 +171,70 @@ public class MovieDetailActivity extends BaseActivity {
             }
         };
         commentRecyclerView.setLayoutManager(layoutManager);
-        showHideFullSummary();
+
     }
 
-    //网络请求
-    private rx.Observable<MovieDetailItem> requsetMovieDetailData() {
-        Log.d(TAG, "requsetDetailData: ");
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("http://api.douban.uieee.com/v2/movie/subject/")
-                .addConverterFactory(GsonConverterFactory.create())
-                .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
-                .build();
-        MovieDetailService movieDetailService = retrofit.create(MovieDetailService.class);
-//        rx.Observable<MovieItem> top250Movie = movieService.getMovie();//"0b2bdeda43b5688921839c8ecb20399b"
-        return movieDetailService.getMovieDetail(id);
+    /**
+     * 唤醒底部抽屉
+     */
+    private void wakeBottomSheet() {
+        resourceIconRecyclerViewAdapter.setOnResourceIconClickListener(new ResourceIconRecyclerViewAdapter.OnResourceIconClickListener() {
+            @Override
+            public void onClick() {
+                bottomSheet= showBottomSheetView();
+                //弹出布局
+                bottomSheetLayout.showWithSheetView(bottomSheet);
+            }
+        });
     }
-    //RxJava数据线程切换
+
+    /**
+     * 从底部弹出的子布局,设置点击事件
+     * @return
+     */
+    private View showBottomSheetView() {
+        View view = LayoutInflater.from(this).inflate(R.layout.layout_bottom_sheet, (ViewGroup) getWindow().getDecorView(), false);
+        //在子布局中绑定控件一定要在子布局的view中进行，不然会默认主布局报空指针
+        TextView title =view.findViewById(R.id.resource_title);
+        RecyclerView movieResourceRecyclerView=view.findViewById(R.id.movie_resource_recycler_view);
+        movieResourceRecyclerView.setLayoutManager(new LinearLayoutManager(this,LinearLayoutManager.VERTICAL,false));
+        MovieResourceRecyclerViewAdapter adapter=new MovieResourceRecyclerViewAdapter(movieResourceInfos);
+        movieResourceRecyclerView.setAdapter(adapter);
+        //布局item点击事件,跳转网页观看全片
+        adapter.setOnMovieResourceClickListener
+                (new MovieResourceRecyclerViewAdapter.OnMovieResourceClickListener() {
+                    @Override
+                    public void onClick(String resourceUrl) {
+                        if(resourceUrl!=null){
+                            openUrlWithBrowser(MovieDetailActivity.this,resourceUrl);
+                        }
+                    }
+                });
+        return view;
+    }
+    /**
+     * 浏览器打开url
+     *
+     * @param context
+     * @param url
+     * @return
+     */
+    public static void openUrlWithBrowser(Context context, String url) {
+        try {
+            Intent intent = new Intent();
+            intent.setAction("android.intent.action.VIEW");
+            intent.setData(Uri.parse(url));
+            context.startActivity(intent);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * 网络请求详情界面数据
+     */
     private void initMovieDetailData() {
+        //rxjava线程切换
         Log.d(TAG, "initMovieTop250Data: ");
         requsetMovieDetailData()
                 .subscribeOn(Schedulers.io())//io加载数据
@@ -178,6 +246,8 @@ public class MovieDetailActivity extends BaseActivity {
                         setStageRecyclerViewOnclickItem();
                         setPosterOnclickItem();
                         setCastOnclickItem();
+                        //唤醒电影资源抽屉
+                        wakeBottomSheet();
                     }
 
                     @Override
@@ -193,6 +263,7 @@ public class MovieDetailActivity extends BaseActivity {
                         setDetailData=new SetMovieDetailData(movieDetailItem);
                         setDetailData.setMovieMessage(detailTitleText,image,title,originTitleYear,mesage,ratingBar,rating,
                                 noneRating,star5,star4,star3,star2,star1,starCount,summary);
+                        setMovieResource(movieDetailItem);
                         setCastData(movieDetailItem);
                         setStagePhoto(movieDetailItem);
                         setCommentData(movieDetailItem);
@@ -202,17 +273,44 @@ public class MovieDetailActivity extends BaseActivity {
                 });
     }
 
+    //网络请求
+    private rx.Observable<MovieDetailItem> requsetMovieDetailData() {
+        Log.d(TAG, "requsetDetailData: ");
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl("http://api.douban.uieee.com/v2/movie/subject/")
+                .addConverterFactory(GsonConverterFactory.create())
+                .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
+                .build();
+        MovieDetailService movieDetailService = retrofit.create(MovieDetailService.class);
+//        rx.Observable<MovieItem> top250Movie = movieService.getMovie();//"0b2bdeda43b5688921839c8ecb20399b"
+        return movieDetailService.getMovieDetail(id);
+    }
+
     /**
-     * 数据接入RecyclerView
+     * 获取电影播放源图标
+     * @param movieDetailItem
      */
-    private void showRecyclerViewData() {
-        castRecyclerViewAdapter=new CastRecyclerViewAdapter(castInfos,this);
-        castRecyclerView.setAdapter(castRecyclerViewAdapter);
-        stageRecyclerViewAdapter=new StageRecyclerViewAdapter(stagePhotoInfos);
-        stageRecyclerView.setAdapter(stageRecyclerViewAdapter);
-        commentRecyclerViewAdapter=new CommentRecyclerViewAdapter(commentInfos);
-        commentRecyclerView.setAdapter(commentRecyclerViewAdapter);
-        commentRecyclerView.addItemDecoration(new DividerItemDecoration(this,DividerItemDecoration.VERTICAL));
+    private void setMovieResource(MovieDetailItem movieDetailItem) {
+        String resourcePicture,resourceName,resourceUrl;
+        boolean needPay;
+       if( movieDetailItem.getVideos().size()!=0){
+           Log.d("播放", "video:"+movieDetailItem.getVideos().size());
+           watchMovie.setVisibility(View.VISIBLE);
+           Log.d("播放", "显示");
+           for(int i=0;i<movieDetailItem.getVideos().size();i++){
+               resourcePicture= movieDetailItem.getVideos().get(i).getSource().getPic();
+               resourceName=movieDetailItem.getVideos().get(i).getSource().getName();
+               resourceUrl=movieDetailItem.getVideos().get(i).getSample_link();
+               needPay=movieDetailItem.getVideos().get(i).isNeed_pay();
+
+
+               movieResourceInfo=new MovieResourceInfo(resourcePicture,resourceName,needPay,resourceUrl);
+               movieResourceInfos.add(movieResourceInfo);
+           }
+       }else {
+           watchMovie.setVisibility(View.GONE);
+           Log.d("播放", "隐藏");
+       }
     }
 
     /**
@@ -310,6 +408,22 @@ public class MovieDetailActivity extends BaseActivity {
             commentInfos.add(commentInfo);
         }
     }
+
+    /**
+     * 数据接入RecyclerView
+     */
+    private void showRecyclerViewData() {
+        resourceIconRecyclerViewAdapter=new ResourceIconRecyclerViewAdapter(movieResourceInfos);
+        resourceIconRecyclerView.setAdapter(resourceIconRecyclerViewAdapter);
+        castRecyclerViewAdapter=new CastRecyclerViewAdapter(castInfos,this);
+        castRecyclerView.setAdapter(castRecyclerViewAdapter);
+        stageRecyclerViewAdapter=new StageRecyclerViewAdapter(stagePhotoInfos);
+        stageRecyclerView.setAdapter(stageRecyclerViewAdapter);
+        commentRecyclerViewAdapter=new CommentRecyclerViewAdapter(commentInfos);
+        commentRecyclerView.setAdapter(commentRecyclerViewAdapter);
+        commentRecyclerView.addItemDecoration(new DividerItemDecoration(this,DividerItemDecoration.VERTICAL));
+    }
+
     /**简介点击展开收缩全文*/
     private void showHideFullSummary(){
         summary.setOnClickListener(new View.OnClickListener() {
