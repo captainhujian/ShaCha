@@ -7,14 +7,18 @@ public class HotMovieInfo {
     String hotMovieId;
     double fitMovieRate;
     String hotMovieMessage;
+    String hotMovieCollect;
+    String hotMovieUpDate;
 
-    public HotMovieInfo(String hotMoviePicture, String hotMovieTitle, double hotMovieRating, String hotMovieId, double fitMovieRate, String hotMovieMessage) {
+    public HotMovieInfo(String hotMoviePicture, String hotMovieTitle, double hotMovieRating, String hotMovieId, double fitMovieRate, String hotMovieMessage, String hotMovieCollect, String hotMovieUpDate) {
         this.hotMoviePicture = hotMoviePicture;
         this.hotMovieTitle = hotMovieTitle;
         this.hotMovieRating = hotMovieRating;
         this.hotMovieId = hotMovieId;
         this.fitMovieRate = fitMovieRate;
         this.hotMovieMessage = hotMovieMessage;
+        this.hotMovieCollect = hotMovieCollect;
+        this.hotMovieUpDate = hotMovieUpDate;
     }
 
     public String getHotMoviePicture() {
@@ -63,5 +67,21 @@ public class HotMovieInfo {
 
     public void setHotMovieMessage(String hotMovieMessage) {
         this.hotMovieMessage = hotMovieMessage;
+    }
+
+    public String getHotMovieCollect() {
+        return hotMovieCollect;
+    }
+
+    public void setHotMovieCollect(String hotMovieCollect) {
+        this.hotMovieCollect = hotMovieCollect;
+    }
+
+    public String getHotMovieUpDate() {
+        return hotMovieUpDate;
+    }
+
+    public void setHotMovieUpDate(String hotMovieUpDate) {
+        this.hotMovieUpDate = hotMovieUpDate;
     }
 }

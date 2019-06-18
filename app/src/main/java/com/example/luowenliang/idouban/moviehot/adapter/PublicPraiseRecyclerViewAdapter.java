@@ -2,6 +2,7 @@ package com.example.luowenliang.idouban.moviehot.adapter;
 
 import android.graphics.Color;
 import android.support.annotation.NonNull;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -17,6 +18,8 @@ import com.example.luowenliang.idouban.moviehot.entity.HotMovieInfo;
 import com.hedgehog.ratingbar.RatingBar;
 
 import java.util.List;
+
+import retrofit2.http.PUT;
 
 public class PublicPraiseRecyclerViewAdapter extends RecyclerView.Adapter<PublicPraiseRecyclerViewAdapter.ViewHolder> {
     private List<HotMovieInfo> publicPraiseInfos;
@@ -67,6 +70,7 @@ public class PublicPraiseRecyclerViewAdapter extends RecyclerView.Adapter<Public
             viewHolder.publicPraiseRatingBar.setStarCount(5);
             viewHolder.publicPraiseRatingBar.setStar((float) hotMovieInfo.getFitMovieRate());
         }
+        viewHolder.publicPraisePubDateCard.setVisibility(View.GONE);
         viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -88,6 +92,7 @@ public class PublicPraiseRecyclerViewAdapter extends RecyclerView.Adapter<Public
         public TextView publicPraiseRating;
         public TextView publicPraiseMessage;
         public RatingBar publicPraiseRatingBar;
+        public CardView publicPraisePubDateCard;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             publicPraiseRank=itemView.findViewById(R.id.praise_rank);
@@ -97,6 +102,7 @@ public class PublicPraiseRecyclerViewAdapter extends RecyclerView.Adapter<Public
             publicPraiseMessage=itemView.findViewById(R.id.praise_message);
             publicPraiseRatingBar=itemView.findViewById(R.id.praise_rating_bar);
             publicPraiseRatingBar.setmClickable(false);
+            publicPraisePubDateCard=itemView.findViewById(R.id.praise_pubdates_card);
         }
     }
     /**

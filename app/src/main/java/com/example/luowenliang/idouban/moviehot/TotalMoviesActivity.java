@@ -35,6 +35,7 @@ import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
 import static com.example.luowenliang.idouban.moviedetail.MovieDetailActivity.PICTURE_PLACE_HOLDER;
+import static com.example.luowenliang.idouban.moviehot.HotMoviesFragment.fitDateFormat;
 
 public class TotalMoviesActivity extends BaseActivity {
     private static final String TAG = "全部";
@@ -148,7 +149,14 @@ public class TotalMoviesActivity extends BaseActivity {
                             double fitFilmRate = fragment.fitRating(totalMovieRating);
                             Log.d("分数", "合理的分数: " + fitFilmRate);
                             String totalMoviesMessage = setTotalMoviesMesssage(hotMovieItem, i);
-                            totalMovieInfo = new HotMovieInfo(totalMoviePicture, publicPraiseTitle, totalMovieRating, publicPraiseId, fitFilmRate, totalMoviesMessage);
+                            //大陆上映日期
+                            String totalPubDate;
+                            if(hotMovieItem.getSubjects().get(i).getMainland_pubdate()!=null){
+                                totalPubDate = fitDateFormat(hotMovieItem.getSubjects().get(i).getMainland_pubdate());
+                            }else {
+                                totalPubDate="时间待定";
+                            }
+                            totalMovieInfo = new HotMovieInfo(totalMoviePicture, publicPraiseTitle, totalMovieRating, publicPraiseId, fitFilmRate, totalMoviesMessage,"",totalPubDate);
                             totalMovieInfos.add(totalMovieInfo);
                         }
                     }

@@ -1,6 +1,7 @@
 package com.example.luowenliang.idouban.moviehot.adapter;
 
 import android.support.annotation.NonNull;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -40,16 +41,12 @@ public class ComingSoonRecyclerViewAdapter extends RecyclerView.Adapter<ComingSo
         final HotMovieInfo hotMovieInfo=comingSoonInfos.get(i);
         Glide.with(MyApplication.getContext()).load(hotMovieInfo.getHotMoviePicture()).into(viewHolder.hotMoviePicture);
         viewHolder.hotMovieTitle.setText(hotMovieInfo.getHotMovieTitle());
-        if (hotMovieInfo.getFitMovieRate() == 0f) {
-            viewHolder.hotMovieRatingBar.setVisibility(View.GONE);
-            viewHolder.hotMovieRating.setText("暂无评分");
-        } else {
-            //必须要有这句代码，不然会出现滑动后非0分电影星级条消失的情况
-            viewHolder.hotMovieRatingBar.setVisibility(View.VISIBLE);
-            viewHolder.hotMovieRating.setText(String.valueOf(hotMovieInfo.getHotMovieRating()));
-            viewHolder.hotMovieRatingBar.setStarCount(5);
-            viewHolder.hotMovieRatingBar.setStar((float) hotMovieInfo.getFitMovieRate());
-        }
+        viewHolder.hotMovieRating.setVisibility(View.GONE);
+        viewHolder.hotMovieRatingBar.setVisibility(View.GONE);
+        viewHolder.hotMovieCollect.setVisibility(View.VISIBLE);
+        viewHolder.hotMovieUpDateCard.setVisibility(View.VISIBLE);
+        viewHolder.hotMovieCollect.setText(hotMovieInfo.getHotMovieCollect());
+        viewHolder.hotMovieUpDate.setText(hotMovieInfo.getHotMovieUpDate());
         viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -69,6 +66,9 @@ public class ComingSoonRecyclerViewAdapter extends RecyclerView.Adapter<ComingSo
         public TextView hotMovieTitle;
         public TextView hotMovieRating;
         public RatingBar hotMovieRatingBar;
+        public TextView hotMovieCollect;
+        public CardView hotMovieUpDateCard;
+        public TextView hotMovieUpDate;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             hotMoviePicture = itemView.findViewById(R.id.hot_movie_picture);
@@ -76,6 +76,9 @@ public class ComingSoonRecyclerViewAdapter extends RecyclerView.Adapter<ComingSo
             hotMovieRating=itemView.findViewById(R.id.hot_movie_rating);
             hotMovieRatingBar=itemView.findViewById(R.id.hot_movie_rating_bar);
             hotMovieRatingBar.setmClickable(false);
+            hotMovieCollect=itemView.findViewById(R.id.hot_movie_collect);
+            hotMovieUpDateCard=itemView.findViewById(R.id.hot_movie_pubdates_card);
+            hotMovieUpDate=itemView.findViewById(R.id.hot_movie_pubdates);
         }
     }
     /**

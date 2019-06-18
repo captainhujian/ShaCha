@@ -1,6 +1,7 @@
 package com.example.luowenliang.idouban.moviehot.adapter;
 
 import android.support.annotation.NonNull;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -16,6 +17,8 @@ import com.example.luowenliang.idouban.moviehot.entity.HotMovieInfo;
 import com.hedgehog.ratingbar.RatingBar;
 
 import java.util.List;
+
+import static com.example.luowenliang.idouban.moviehot.HotMoviesFragment.fitDateFormat;
 
 public class TotalMoviesRecyclerViewAdapter extends RecyclerView.Adapter<TotalMoviesRecyclerViewAdapter.ViewHolder>{
     private List<HotMovieInfo> totalMovieInfos;
@@ -40,10 +43,10 @@ public class TotalMoviesRecyclerViewAdapter extends RecyclerView.Adapter<TotalMo
     @Override
     public void onBindViewHolder(@NonNull TotalMoviesRecyclerViewAdapter.ViewHolder viewHolder, int i) {
         final HotMovieInfo totalMovieInfo=totalMovieInfos.get(i);
-        viewHolder.totalMovieRank.setText("No."+(i+1));
-        Glide.with(MyApplication.getContext()).load(totalMovieInfo.getHotMoviePicture()).into(viewHolder.totalMoviePicture);
-        viewHolder.totalMovieTitle.setText(totalMovieInfo.getHotMovieTitle());
-        viewHolder.totalMovieMessage.setText(totalMovieInfo.getHotMovieMessage());
+            viewHolder.totalMovieRank.setText("No."+(i+1));
+            Glide.with(MyApplication.getContext()).load(totalMovieInfo.getHotMoviePicture()).into(viewHolder.totalMoviePicture);
+            viewHolder.totalMovieTitle.setText(totalMovieInfo.getHotMovieTitle());
+            viewHolder.totalMovieMessage.setText(totalMovieInfo.getHotMovieMessage());
         if (totalMovieInfo.getFitMovieRate() == 0f) {
             viewHolder.totalMovieRatingBar.setVisibility(View.GONE);
             viewHolder.totalMovieRating.setText("暂无评分");
@@ -54,7 +57,11 @@ public class TotalMoviesRecyclerViewAdapter extends RecyclerView.Adapter<TotalMo
             viewHolder.totalMovieRatingBar.setStarCount(5);
             viewHolder.totalMovieRatingBar.setStar((float) totalMovieInfo.getFitMovieRate());
         }
-        viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
+            //大陆上映时间
+            viewHolder.totalPubDateCard.setVisibility(View.VISIBLE);
+            viewHolder.totalPubDate.setText(totalMovieInfo.getHotMovieUpDate());
+            //点击事件
+            viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 listener.onClick(totalMovieInfo.getHotMovieId());
@@ -75,6 +82,8 @@ public class TotalMoviesRecyclerViewAdapter extends RecyclerView.Adapter<TotalMo
         public TextView totalMovieRating;
         public TextView totalMovieMessage;
         public RatingBar totalMovieRatingBar;
+        public CardView totalPubDateCard;
+        public TextView totalPubDate;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             totalMovieRank=itemView.findViewById(R.id.praise_rank);
@@ -84,6 +93,8 @@ public class TotalMoviesRecyclerViewAdapter extends RecyclerView.Adapter<TotalMo
             totalMovieMessage=itemView.findViewById(R.id.praise_message);
             totalMovieRatingBar=itemView.findViewById(R.id.praise_rating_bar);
             totalMovieRatingBar.setmClickable(false);
+            totalPubDateCard=itemView.findViewById(R.id.praise_pubdates_card);
+            totalPubDate=itemView.findViewById(R.id.praise_pubdates);
         }
     }
     /**

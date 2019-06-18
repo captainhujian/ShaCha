@@ -44,7 +44,6 @@ public class Top250MoviesFragment extends Fragment {
     int lastVisibleItem;
     private  int start = 0;
     private static int count = 25;
-    //用来控制进入getdata()的次数
     boolean isLoading = false;
 
 

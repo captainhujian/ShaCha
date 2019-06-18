@@ -39,7 +39,11 @@ import com.example.luowenliang.idouban.moviehot.service.PublicPraiseService;
 import com.example.luowenliang.idouban.moviehot.service.SearchService;
 
 import java.math.BigDecimal;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import retrofit2.Retrofit;
@@ -414,7 +418,16 @@ public class HotMoviesFragment extends Fragment {
             //星级评分
             double fitFilmRate = fitRating(hotMovieRating);
             Log.d("分数", "合理的分数: " + fitFilmRate);
-            hotMovieInfo=new HotMovieInfo(hotMoviePicture,hotMovieTitle,hotMovieRating,hotMovieId,fitFilmRate,"");
+            //想看人数
+            String hotMovieCollect=hotMovieItem.getSubjects().get(i).getCollect_count()+"人想看";
+            //大陆上映日期
+            String hotMoviePubDate;
+            if(hotMovieItem.getSubjects().get(i).getMainland_pubdate()!=null){
+                hotMoviePubDate= fitDateFormat(hotMovieItem.getSubjects().get(i).getMainland_pubdate());
+            }else {
+                hotMoviePubDate="时间待定";
+            }
+            hotMovieInfo=new HotMovieInfo(hotMoviePicture,hotMovieTitle,hotMovieRating,hotMovieId,fitFilmRate,"",hotMovieCollect,hotMoviePubDate);
             tempList.add(hotMovieInfo);
         }
         movieInfoList.addAll(tempList);
@@ -442,7 +455,7 @@ public class HotMoviesFragment extends Fragment {
             double fitFilmRate = fitRating(publicPraiseRating);
             Log.d("分数", "合理的分数: " + fitFilmRate);
             String publicPraiseMessage = setPublicPraiseMesssage(publicPraiseItem, i);
-            hotMovieInfo = new HotMovieInfo(publicPraisePicture, publicPraiseTitle, publicPraiseRating, publicPraiseId, fitFilmRate,publicPraiseMessage);
+            hotMovieInfo = new HotMovieInfo(publicPraisePicture, publicPraiseTitle, publicPraiseRating, publicPraiseId, fitFilmRate,publicPraiseMessage,"","");
             publicPraiseInfos.add(hotMovieInfo);
         }
     }
@@ -573,6 +586,26 @@ public class HotMoviesFragment extends Fragment {
 
         }
         return ratingIn5;
+    }
+
+    /**
+     * 转换时间格式
+     * @return 返回短时间字符串格式MM月dd日
+     */
+    public static String fitDateFormat(String commentDate) {
+        //创建SimpleDateFormat对象sdf1,指定日期模式为yyyy-MM-dd
+        SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");
+        Date date= null;//字符串转成date对象类型
+        try {
+            date = sdf.parse(commentDate);
+
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        DateFormat sdf2=new SimpleDateFormat("MM月dd日");
+        Log.d(TAG, "fitDateFormat: "+date);
+        String str2= sdf2.format(date);//date类型转换成字符串
+        return str2;
     }
 
 }
