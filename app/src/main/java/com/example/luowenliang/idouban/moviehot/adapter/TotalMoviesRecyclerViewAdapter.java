@@ -1,6 +1,5 @@
-package com.example.luowenliang.idouban.moviehot;
+package com.example.luowenliang.idouban.moviehot.adapter;
 
-import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;

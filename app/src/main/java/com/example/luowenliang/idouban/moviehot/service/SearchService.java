@@ -1,6 +1,6 @@
 package com.example.luowenliang.idouban.moviehot.service;
 
-import com.example.luowenliang.idouban.moviehot.SearchItem;
+import com.example.luowenliang.idouban.moviehot.entity.SearchItem;
 
 import retrofit2.http.GET;
 import retrofit2.http.Query;

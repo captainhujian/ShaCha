@@ -31,6 +31,8 @@ import com.example.luowenliang.idouban.moviehot.adapter.PublicPraiseRecyclerView
 import com.example.luowenliang.idouban.moviehot.entity.HotMovieInfo;
 import com.example.luowenliang.idouban.moviehot.entity.HotMovieItem;
 import com.example.luowenliang.idouban.moviehot.entity.PublicPraiseItem;
+import com.example.luowenliang.idouban.moviehot.entity.SearchInfo;
+import com.example.luowenliang.idouban.moviehot.entity.SearchItem;
 import com.example.luowenliang.idouban.moviehot.service.ComingSoonService;
 import com.example.luowenliang.idouban.moviehot.service.HotMovieService;
 import com.example.luowenliang.idouban.moviehot.service.PublicPraiseService;

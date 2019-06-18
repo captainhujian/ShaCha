@@ -1,4 +1,4 @@
-package com.example.luowenliang.idouban.moviehot;
+package com.example.luowenliang.idouban.moviehot.entity;
 
 public class SearchInfo {
     private String searchId;

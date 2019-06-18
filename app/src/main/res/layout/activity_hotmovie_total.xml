@@ -40,6 +40,16 @@
                 android:layout_centerHorizontal="true"
                 android:layout_marginBottom="10dp"
                 />
+                <TextView
+                    android:layout_alignParentRight="true"
+                    android:layout_marginRight="@dimen/margin_size_large"
+                    android:layout_alignParentBottom="true"
+                    android:layout_marginBottom="10dp"
+                    android:id="@+id/location_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=""
+                    />
         </RelativeLayout>
     </android.support.v7.widget.Toolbar>
         <android.support.v7.widget.RecyclerView

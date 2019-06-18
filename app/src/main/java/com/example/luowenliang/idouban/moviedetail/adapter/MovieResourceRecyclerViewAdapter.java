@@ -50,7 +50,7 @@ public class MovieResourceRecyclerViewAdapter extends RecyclerView.Adapter<Movie
             @Override
             public void onClick(View view) {
                 if(movieResourceInfos.get(i).getResourceUrl()!=null){
-                    listener.onClick(movieResourceInfos.get(i).getResourceUrl());
+                    listener.onClick(movieResourceInfos.get(i).getResourceUrl(),movieResourceInfos.get(i).getResourceName());
                 }
             }
         });
@@ -79,7 +79,7 @@ public class MovieResourceRecyclerViewAdapter extends RecyclerView.Adapter<Movie
      * item点击事件
      */
     public interface OnMovieResourceClickListener {
-        void onClick(String resourceUrl);
+        void onClick(String resourceUrl,String resourceName);
     }
 
     private MovieResourceRecyclerViewAdapter.OnMovieResourceClickListener listener;

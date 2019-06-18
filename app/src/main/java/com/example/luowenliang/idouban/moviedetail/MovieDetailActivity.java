@@ -36,6 +36,7 @@ import com.example.luowenliang.idouban.moviedetail.entity.MovieDetailItem;
 import com.example.luowenliang.idouban.moviedetail.entity.MovieResourceInfo;
 import com.example.luowenliang.idouban.moviedetail.entity.StagePhotoInfo;
 import com.example.luowenliang.idouban.moviedetail.service.MovieDetailService;
+import com.example.luowenliang.idouban.moviedetail.utils.GetResourcePackageName;
 import com.example.luowenliang.idouban.moviedetail.utils.SetMovieDetailData;
 import com.example.luowenliang.idouban.photoViewer.ViewPagerActivity;
 import com.flipboard.bottomsheet.BottomSheetLayout;
@@ -82,6 +83,7 @@ public class MovieDetailActivity extends BaseActivity {
     private CommentRecyclerViewAdapter commentRecyclerViewAdapter;
     private BottomSheetLayout bottomSheetLayout;
     private View bottomSheet;//弹出框的子布局
+    private GetResourcePackageName getResourcePackageName;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -206,9 +208,15 @@ public class MovieDetailActivity extends BaseActivity {
         adapter.setOnMovieResourceClickListener
                 (new MovieResourceRecyclerViewAdapter.OnMovieResourceClickListener() {
                     @Override
-                    public void onClick(String resourceUrl) {
+                    public void onClick(String resourceUrl,String resourceName) {
                         if(resourceUrl!=null){
-                            openUrlWithBrowser(MovieDetailActivity.this,resourceUrl);
+                            //getResourcePackageName=new GetResourcePackageName(resourceName,MovieDetailActivity.this);
+//                            String resourcePackageName=getResourcePackageName.getAppPackageName();
+//                            if(resourcePackageName!=null){
+//                                openUrlWithPackageName(MovieDetailActivity.this,resourceUrl,resourcePackageName);
+//                            }else{
+                                openUrlWithBrowser(MovieDetailActivity.this,resourceUrl);
+//                            }
                         }
                     }
                 });
@@ -228,6 +236,24 @@ public class MovieDetailActivity extends BaseActivity {
             intent.setData(Uri.parse(url));
             context.startActivity(intent);
         } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    /**
+     * 根据应用包名指定app打开Url
+     *  该方法暂时不用
+     * @param context
+     * @param url
+     */
+    public static void openUrlWithPackageName(Context context, String url, String PackageName) {
+        try {
+            Intent intent = new Intent();
+            intent.setAction("android.intent.action.VIEW");
+            intent.setData(Uri.parse(url));
+            intent.setPackage(PackageName);
+            context.startActivity(intent);
+        } catch (Exception e) {
+            Log.d(TAG, "跳转错误："+e.toString());
             e.printStackTrace();
         }
     }

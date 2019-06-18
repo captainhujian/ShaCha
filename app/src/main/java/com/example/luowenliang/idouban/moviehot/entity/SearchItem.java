@@ -1,4 +1,4 @@
-package com.example.luowenliang.idouban.moviehot;
+package com.example.luowenliang.idouban.moviehot.entity;
 
 import java.util.List;
 

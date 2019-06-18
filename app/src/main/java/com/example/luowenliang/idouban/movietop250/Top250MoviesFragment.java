@@ -38,8 +38,6 @@ public class Top250MoviesFragment extends Fragment {
     private static final String TAG = "豆瓣";
     private RecyclerView movieRecyclerView;
     private Top250Movie top250Movie;
-    private List<Top250Movie> movieList = new ArrayList<>();
-    private List<Top250Movie>addedMovieList=new ArrayList<>();
     private MovieRecyclerViewAdapter adapter;
     private ProgressBar progressBar;
     private LinearLayoutManager linearLayoutManager;
