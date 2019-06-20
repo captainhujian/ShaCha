@@ -13,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
@@ -53,7 +54,7 @@ public class CastDetailActivity extends BaseActivity {
     private CastDetailAlbumInfo castDetailAlbumInfo;
     private List<CastDetailAlbumInfo>castDetailAlbumInfos=new ArrayList<>();
     private ImageView castPhotoView;
-    private TextView castDetailExit,castDetailNameView,castDetailOriginNameView,birthdayView,bornPlaceView,professionsView,castSummaryView;
+    private TextView castDetailExit,castDetailNameView,castDetailOriginNameView,birthdayView,bornPlaceView,professionsView,castSummaryView,castAlbumTitle,castFilmTitle;
     private RecyclerView castFilmRecyclerView;
     private RecyclerView castAlbumRecyclerView;
     private CastFilmRecyclerViewAdapter castFilmRecyclerViewAdapter;
@@ -77,7 +78,7 @@ public class CastDetailActivity extends BaseActivity {
         if(castId!=null){
             initCastDetailData();
         }else{
-            initSpareCastDetailData(intent);
+            //initSpareCastDetailData(intent);(使用备用数据会出现影视跳转崩溃，先屏蔽)
         }
 
         exitCastDetailActivity();
@@ -117,6 +118,8 @@ public class CastDetailActivity extends BaseActivity {
         bornPlaceView=findViewById(R.id.born_place);
         professionsView=findViewById(R.id.professions);
         castSummaryView=findViewById(R.id.cast_summary);
+        castFilmTitle=findViewById(R.id.cast_film_title);
+        castAlbumTitle=findViewById(R.id.album);
         castFilmRecyclerView=findViewById(R.id.film_recycler_view);
         castAlbumRecyclerView=findViewById(R.id.album_recycler_view);
     }
@@ -239,7 +242,7 @@ public class CastDetailActivity extends BaseActivity {
      * @param castDetailItem
      */
     private void setFilmData(CastDetailItem castDetailItem) {
-
+        castFilmTitle.setVisibility(View.VISIBLE);
         //防止有的图片为空导致recyclerView不显示，这里设置占位图
         String filmPicture = null;
         for(int i=0;i<castDetailItem.getWorks().size();i++){
@@ -264,12 +267,15 @@ public class CastDetailActivity extends BaseActivity {
      * 获取相册数据
      */
     private void setAlbum(CastDetailItem castDetailItem) {
+        castAlbumTitle.setVisibility(View.VISIBLE);
         for (int j =0;j<castDetailItem.getPhotos().size();j++){
             String album= castDetailItem.getPhotos().get(j).getImage();
             castDetailAlbumInfo=new CastDetailAlbumInfo(album);
             castDetailAlbumInfos.add(castDetailAlbumInfo);
         }
-
+        if (castDetailAlbumInfos.size()==0){
+            castAlbumTitle.setVisibility(View.GONE);
+        }
 
     }
 

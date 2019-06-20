@@ -18,7 +18,6 @@
             android:layout_height="match_parent"
             android:fitsSystemWindows="true"
             app:contentScrim="#2B2B2B"
-            app:expandedTitleMarginStart="48dp"
             app:layout_scrollFlags="scroll|exitUntilCollapsed">
 
             <ImageView
@@ -35,7 +34,12 @@
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 app:layout_collapseMode="pin"
+                app:contentInsetLeft="0dp"
+                app:contentInsetStart="0dp"
                 app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+                app:title="豆瓣Top250"
+                android:gravity="center"
+                app:titleTextColor="@color/white"
                 >
             </android.support.v7.widget.Toolbar>
 

@@ -6,8 +6,8 @@ android {
         applicationId "com.example.luowenliang.idouban"
         minSdkVersion 14
         targetSdkVersion 28
-        versionCode 5
-        versionName "1.0.4"
+        versionCode 6
+        versionName "1.0.5"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
@@ -52,6 +52,8 @@ dependencies {
     implementation 'cn.yc:YCVideoPlayerLib:2.6.4'
     //抽屉
     implementation 'com.flipboard:bottomsheet-core:1.5.1'
+    //取色器
+    implementation 'com.android.support:palette-v7:27.1.1'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'//
 

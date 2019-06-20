@@ -1,5 +1,13 @@
 package com.example.luowenliang.idouban.moviedetail.utils;
 
+import android.graphics.Bitmap;
+import android.graphics.Color;
+import android.graphics.drawable.Drawable;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.support.v7.graphics.Palette;
+import android.support.v7.widget.CardView;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
@@ -7,30 +15,49 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.GlideBuilder;
 import com.bumptech.glide.request.RequestOptions;
+import com.bumptech.glide.request.target.SimpleTarget;
+import com.bumptech.glide.request.transition.Transition;
 import com.example.luowenliang.idouban.R;
 import com.example.luowenliang.idouban.application.MyApplication;
 import com.example.luowenliang.idouban.moviedetail.entity.MovieDetailItem;
 import com.hedgehog.ratingbar.RatingBar;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
+
+import static android.support.constraint.Constraints.TAG;
+import static java.util.Arrays.asList;
 
 /**
  * 获取电影详情非RecyclerView的数据
  */
 public class SetMovieDetailData {
+    private static final String TAG = "取色";
     boolean isTelevision;
     private MovieDetailItem movieDetailItem;
     private TextView message,detailTitleText;
+    private CardView stagePhotoCard;
     private String genres,genre1,genre2,oTitle,year,country,pubdate,duration,episodesCount;
+    private  Palette.Swatch swatch;
+    private int backColor;
+    private List<String>colorList=new ArrayList<>();
+    private View view;
+    private Toolbar detailToolbar;
 
     public SetMovieDetailData(MovieDetailItem movieDetailItem) {
         this.movieDetailItem = movieDetailItem;
     }
 
-    public void setMovieMessage(TextView detailTitleText,ImageView image, TextView title, TextView originTitleYear, TextView message, RatingBar ratingBar, TextView rating
-            ,TextView noneRating, ProgressBar star5,ProgressBar star4,ProgressBar star3,ProgressBar star2,ProgressBar star1,TextView starCount,TextView summary) {
-
+    public void setMovieMessage(TextView detailTitleText, ImageView image, TextView title, TextView originTitleYear, TextView message,
+                                RatingBar ratingBar, TextView rating, TextView noneRating, ProgressBar star5, ProgressBar star4,
+                                ProgressBar star3, ProgressBar star2, ProgressBar star1, TextView starCount, TextView summary,
+                                View view, Toolbar detailToolbar, CardView stagePhotoCard) {
+        this.view=view;
+        this.detailToolbar=detailToolbar;
+        this.stagePhotoCard=stagePhotoCard;
         this.message=message;
         this.detailTitleText=detailTitleText;
         Glide.with(MyApplication.getContext())
@@ -38,6 +65,16 @@ public class SetMovieDetailData {
                 .apply(new RequestOptions().placeholder(R.drawable.placeholder))
                 .apply(new RequestOptions().error(R.drawable.placeholder))
                 .into(image);
+        //获取glide加载的bitmap图片，设置背景色
+        Glide.with(MyApplication.getContext())
+                .asBitmap()
+                .load(movieDetailItem.getImages().getLarge())
+                .into(new SimpleTarget<Bitmap>() {
+                    @Override
+                    public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
+                        setBackGroundColor(resource);
+                    }
+                });
         title.setText(movieDetailItem.getTitle());
         evadeMessageNull();
         message.setText(country+genres+pubdate+episodesCount+duration+">");
@@ -142,6 +179,37 @@ public class SetMovieDetailData {
             detailTitleText.setText("电影");
         }
     }
+
+    /**
+     * 根据海报颜色动态设置详情界面背景色
+     */
+    private void setBackGroundColor(Bitmap poster) {
+        if(movieDetailItem.getImages()!=null){
+            Log.d(TAG, "poster:"+poster);
+            Palette.from(poster).generate(new Palette.PaletteAsyncListener() {
+                @Override
+                public void onGenerated(@NonNull Palette palette) {
+                    swatch = palette.getMutedSwatch();
+                    Log.d(TAG, "back:"+swatch);
+                    if (swatch != null) {
+                        backColor=swatch.getRgb();
+                    }else {
+                        Log.d(TAG, "没取到颜色");
+//                        colorList = asList("#42426F","#5C4033","#4A766E","#42426F","#4A708B","#993333","#8B4789","#473C8B","#8B7D7B","#426F42","#CD919E",
+//                                "#8B7355","#668B8B","#CD853F","#2F2F4F","#4A766E","#104E8B","#27408B","#996699","#8B8386","#339966");
+//                        String colorString=colorList.get((int)(0+Math.random()*(colorList.size()-0)));
+                        String colorString="#4A708B";
+                        backColor = Color.parseColor(colorString);
+                    }
+                    view.setBackgroundColor(backColor);
+                    detailToolbar.setBackgroundColor(backColor);
+                    stagePhotoCard.setCardBackgroundColor(backColor);
+                }
+            });
+        }
+
+    }
+
 
     /**
          * 获取前两个影片类型

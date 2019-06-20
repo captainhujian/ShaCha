@@ -62,7 +62,7 @@ public class HotMoviesFragment extends Fragment {
     private SwipeRefreshLayout swipeRefreshLayout;
     private EditText search;
     private TextView hotMovieTitle,hotMovieTotal,comingSoonTitle,comingSoonTotal,publicPraiseTitle,publicPraiseUpdate;
-    private String searchText;
+    private String searchText,hotMovieTotalCount,comingSoonTotalCount;
     private SearchInfo searchInfo;
     private HotMovieInfo hotMovieInfo;
     private List<HotMovieInfo> hotMovieInfos = new ArrayList<>();
@@ -136,33 +136,6 @@ public class HotMoviesFragment extends Fragment {
 
 
         return view;
-    }
-
-    /**
-     * 跳转显示热门和即将上映的全部电影
-     */
-    private void showTotalMovie() {
-        //热门
-        hotMovieTotal.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent=new Intent(getActivity(),TotalMoviesActivity.class);
-                intent.putExtra("total_url",TOTAL_HOT_MOVIES_URL);
-                intent.putExtra("total_title","影院热映");
-                startActivity(intent);
-            }
-        });
-        //即将上映
-        comingSoonTotal.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent=new Intent(getActivity(),TotalMoviesActivity.class);
-                intent.putExtra("total_url",TOTAL_COMING_SOON_URL);
-                intent.putExtra("total_title","即将上映");
-                startActivity(intent);
-            }
-        });
-
     }
 
     /**
@@ -265,7 +238,7 @@ public class HotMoviesFragment extends Fragment {
 
 
     /**
-     * 影院热门的网络请求
+     * 影院热门的网络请求(6个)
      * @return
      */
     private rx.Observable<HotMovieItem> requestHotMovieData() {
@@ -292,6 +265,7 @@ public class HotMoviesFragment extends Fragment {
                         showTitle();
                         hotMovieRecyclerViewAdapter=new HotMovieRecyclerViewAdapter(hotMovieInfos);
                         hotMovieRecyclerView.setAdapter(hotMovieRecyclerViewAdapter);
+                        hotMovieTotal.setText("全部"+hotMovieTotalCount+">");
                         HotMovieRecyclerViewOnClickItem();
                     }
 
@@ -306,12 +280,13 @@ public class HotMoviesFragment extends Fragment {
 
                         hotMovieProgressBar.setVisibility(View.VISIBLE);
                         setHotMovieData(hotMovieItem,hotMovieInfos);
+                        hotMovieTotalCount= String.valueOf(hotMovieItem.getTotal());
                     }
                 });
     }
 
     /**
-     * 即将上映的网络请求
+     * 即将上映的网络请求(6个)
      * @return
      */
     private rx.Observable<HotMovieItem> requestComingSoonData() {
@@ -335,6 +310,7 @@ public class HotMoviesFragment extends Fragment {
                     public void onCompleted() {
                         comingSoonRecyclerViewAdapter=new ComingSoonRecyclerViewAdapter(comingSoonMovieInfos);
                         comingSoonRecyclerView.setAdapter(comingSoonRecyclerViewAdapter);
+                        comingSoonTotal.setText("全部"+comingSoonTotalCount+">");
                         ComingSoonRecyclerViewOnClickItem();
                     }
 
@@ -346,6 +322,7 @@ public class HotMoviesFragment extends Fragment {
                     @Override
                     public void onNext(HotMovieItem hotMovieItem) {
                         setHotMovieData(hotMovieItem,comingSoonMovieInfos);
+                        comingSoonTotalCount= String.valueOf(hotMovieItem.getTotal());
                     }
                 });
     }
@@ -433,6 +410,10 @@ public class HotMoviesFragment extends Fragment {
         movieInfoList.addAll(tempList);
     }
 
+    /**
+     * 口碑榜数据防空逻辑
+     * @param publicPraiseItem
+     */
     private void setPublicPraiseData(PublicPraiseItem publicPraiseItem) {
         String publicPraisePicture;
         double publicPraiseRating;
@@ -518,6 +499,34 @@ public class HotMoviesFragment extends Fragment {
         publicPraiseUpdate.setVisibility(View.VISIBLE);
     }
 
+    /**
+     * 跳转显示热门和即将上映的全部电影
+     */
+    private void showTotalMovie() {
+        //热门
+        hotMovieTotal.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent=new Intent(getActivity(),TotalMoviesActivity.class);
+                intent.putExtra("total_url",TOTAL_HOT_MOVIES_URL);
+                intent.putExtra("total_title","影院热映");
+                intent.putExtra("total_count",Integer.valueOf(hotMovieTotalCount));
+                startActivity(intent);
+            }
+        });
+        //即将上映
+        comingSoonTotal.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent=new Intent(getActivity(),TotalMoviesActivity.class);
+                intent.putExtra("total_url",TOTAL_COMING_SOON_URL);
+                intent.putExtra("total_title","即将上映");
+                intent.putExtra("total_count",Integer.valueOf(comingSoonTotalCount));
+                startActivity(intent);
+            }
+        });
+
+    }
 
     /**
      * 热门电影点击事件
@@ -603,7 +612,6 @@ public class HotMoviesFragment extends Fragment {
             e.printStackTrace();
         }
         DateFormat sdf2=new SimpleDateFormat("MM月dd日");
-        Log.d(TAG, "fitDateFormat: "+date);
         String str2= sdf2.format(date);//date类型转换成字符串
         return str2;
     }

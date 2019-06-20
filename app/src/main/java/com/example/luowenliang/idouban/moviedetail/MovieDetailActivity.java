@@ -2,10 +2,13 @@ package com.example.luowenliang.idouban.moviedetail;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v7.graphics.Palette;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
@@ -20,10 +23,13 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.example.luowenliang.idouban.BaseActivity;
 import com.example.luowenliang.idouban.R;
 import com.example.luowenliang.idouban.VedioViewer.VideoViewerActivity;
+import com.example.luowenliang.idouban.application.MyApplication;
 import com.example.luowenliang.idouban.castdetail.CastDetailActivity;
 import com.example.luowenliang.idouban.moviedetail.adapter.CastRecyclerViewAdapter;
 import com.example.luowenliang.idouban.moviedetail.adapter.CommentRecyclerViewAdapter;
@@ -53,12 +59,10 @@ import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
-import static java.util.Arrays.asList;
 
 public class MovieDetailActivity extends BaseActivity {
     private static final String TAG = "详情";
     public static final String PICTURE_PLACE_HOLDER="http://6120491.s21i.faiusr.com/2/ABUIABACGAAg0725rAUoiLv9qAQwrAI4rAI.jpg";
-    private List<String>colorList=new ArrayList<>();
     private String id;
     private MovieDetailItem localMovieDetailItem;
     private CastInfo castInfo;
@@ -82,23 +86,18 @@ public class MovieDetailActivity extends BaseActivity {
     private StageRecyclerViewAdapter stageRecyclerViewAdapter;
     private CommentRecyclerViewAdapter commentRecyclerViewAdapter;
     private BottomSheetLayout bottomSheetLayout;
-    private View bottomSheet;//弹出框的子布局
+    private View bottomSheet,view;
     private GetResourcePackageName getResourcePackageName;
+
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setSlideable(isActivitySlideBack());
-        View view=LayoutInflater.from(this).inflate(R.layout.activity_movie_detail,null,false);
+        view=LayoutInflater.from(this).inflate(R.layout.activity_movie_detail,null,false);
         setContentView(view);
         //界面和控件初始化
         initView();
-        //动态设置背景色
-        colorList = asList("#42426F","#5C4033","#4A766E","#42426F","#4A708B","#993333","#8B4789","#473C8B","#8B7D7B","#426F42","#CD919E",
-                "#8B7355","#668B8B","#CD853F","#2F2F4F","#4A766E","#104E8B","#27408B","#996699","#8B8386","#339966");
-        String colorString=colorList.get((int)(0+Math.random()*(colorList.size()-0)));
-        view.setBackgroundColor(Color.parseColor(colorString));
-        detailToolbar.setBackgroundColor(Color.parseColor(colorString));
         //接收影片id，接着进行影片详情信息的网络请求
         Intent intent =getIntent();
         id = intent.getStringExtra("id");
@@ -185,6 +184,7 @@ public class MovieDetailActivity extends BaseActivity {
         resourceIconRecyclerViewAdapter.setOnResourceIconClickListener(new ResourceIconRecyclerViewAdapter.OnResourceIconClickListener() {
             @Override
             public void onClick() {
+                //弹出框的子布局
                 bottomSheet= showBottomSheetView();
                 //弹出布局
                 bottomSheetLayout.showWithSheetView(bottomSheet);
@@ -290,7 +290,7 @@ public class MovieDetailActivity extends BaseActivity {
                         localMovieDetailItem=movieDetailItem;
                         setDetailData=new SetMovieDetailData(movieDetailItem);
                         setDetailData.setMovieMessage(detailTitleText,image,title,originTitleYear,mesage,ratingBar,rating,
-                                noneRating,star5,star4,star3,star2,star1,starCount,summary);
+                                noneRating,star5,star4,star3,star2,star1,starCount,summary,view,detailToolbar,stagePhotoCardView);
                         setMovieResource(movieDetailItem);
                         setCastData(movieDetailItem);
                         setStagePhoto(movieDetailItem);
@@ -545,25 +545,29 @@ public class MovieDetailActivity extends BaseActivity {
         castRecyclerViewAdapter.setOnItemClickListener(new CastRecyclerViewAdapter.OnCastItemClickListener() {
             @Override
             public void onClick(CastInfo castInfo) {
-                String castId=castInfo.getCastId();
-                //当id为空,传空值给卡司详情无法做网络请求时的备用数据
-                String castName=castInfo.getCastName();
-                String castDetailPhoto=castInfo.getCastPicture();
-                String castDetailFilmPicture = localMovieDetailItem.getImages().getLarge();
-                String castDetailFilmTitle=localMovieDetailItem.getTitle();
-                double castDetailFilmRating=localMovieDetailItem.getRating().getAverage();
-                String castDetailFilmId=localMovieDetailItem.getId();
-                Intent intent =new Intent(MovieDetailActivity.this,CastDetailActivity.class);
-                intent.putExtra("castId",castId);
-                //传递备用数据
-                intent.putExtra("castName",castName);
-                intent.putExtra("castEnName",castName);
-                intent.putExtra("castDetailPhoto",castDetailPhoto);
-                intent.putExtra("castDetailFilmPicture",castDetailFilmPicture);
-                intent.putExtra("castDetailFilmTitle",castDetailFilmTitle);
-                intent.putExtra("castDetailFilmRating",castDetailFilmRating);
-                intent.putExtra("castDetailFilmId",castDetailFilmId);
-                startActivity(intent);
+                if(castInfo.getCastId()!=null) {
+                    String castId = castInfo.getCastId();
+                    //当id为空,传空值给卡司详情无法做网络请求时的备用数据
+                    String castName = castInfo.getCastName();
+                    String castDetailPhoto = castInfo.getCastPicture();
+                    String castDetailFilmPicture = localMovieDetailItem.getImages().getLarge();
+                    String castDetailFilmTitle = localMovieDetailItem.getTitle();
+                    double castDetailFilmRating = localMovieDetailItem.getRating().getAverage();
+                    String castDetailFilmId = localMovieDetailItem.getId();
+                    Intent intent = new Intent(MovieDetailActivity.this, CastDetailActivity.class);
+                    intent.putExtra("castId", castId);
+                    //传递备用数据（暂不用）
+                    intent.putExtra("castName", castName);
+                    intent.putExtra("castEnName", castName);
+                    intent.putExtra("castDetailPhoto", castDetailPhoto);
+                    intent.putExtra("castDetailFilmPicture", castDetailFilmPicture);
+                    intent.putExtra("castDetailFilmTitle", castDetailFilmTitle);
+                    intent.putExtra("castDetailFilmRating", castDetailFilmRating);
+                    intent.putExtra("castDetailFilmId", castDetailFilmId);
+                    startActivity(intent);
+                }else {
+                    Toast.makeText(MovieDetailActivity.this,"暂无该影人信息",Toast.LENGTH_SHORT).show();
+                }
             }
         });
     }

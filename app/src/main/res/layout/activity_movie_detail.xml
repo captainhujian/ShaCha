@@ -1,55 +1,54 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.flipboard.bottomsheet.BottomSheetLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<com.flipboard.bottomsheet.BottomSheetLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/bottomSheetLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/detail_title"
+        android:layout_width="match_parent"
+        android:layout_height="64dp"
+        android:theme="@style/ToolbarTheme"
+        app:contentInsetLeft="0dp"
+        app:contentInsetStart="0dp"
+        >
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            >
+            <TextView
+                android:id="@+id/movie_detail_exit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="35dp"
+                android:layout_marginLeft="@dimen/margin_size_small"
+                android:textColor="@color/white"
+                android:layout_alignParentBottom="true"
+                />
+            <TextView
+                android:id="@+id/detail_title_text"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center|bottom"
+                android:layout_marginBottom="@dimen/margin_size_small"
+                android:textColor="@color/white"
+                android:textSize="15dp" />
+        </RelativeLayout>
+    </android.support.v7.widget.Toolbar>
 
 <android.support.v4.widget.NestedScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-
     xmlns:app="http://schemas.android.com/apk/res-auto">
         <android.support.constraint.ConstraintLayout
-            xmlns:android="http://schemas.android.com/apk/res/android"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:id="@+id/detail_movie"
-            xmlns:app="http://schemas.android.com/apk/res-auto">
-
-            <android.support.v7.widget.Toolbar
-                android:id="@+id/detail_title"
-                android:layout_width="match_parent"
-                android:layout_height="64dp"
-                android:background="@color/themeGreen"
-                android:theme="@style/ToolbarTheme"
-                app:contentInsetLeft="0dp"
-                app:contentInsetStart="0dp"
-                ><RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                >
-                <TextView
-                    android:id="@+id/movie_detail_exit"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textSize="30dp"
-                    android:layout_marginLeft="@dimen/margin_size_small"
-                    android:textColor="@color/white"
-                    android:layout_alignParentBottom="true"
-                    />
-                <TextView
-                    android:id="@+id/detail_title_text"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:gravity="center|bottom"
-                    android:layout_marginBottom="@dimen/margin_size_small"
-                    android:textColor="@color/white"
-                    android:textSize="15dp" />
-            </RelativeLayout>
-            </android.support.v7.widget.Toolbar>
-
+            android:id="@+id/detail_movie">
             <LinearLayout
                 android:id="@+id/message"
                 android:layout_width="match_parent"
@@ -57,8 +56,7 @@
                 android:layout_marginLeft="@dimen/margin_size_tiny"
                 android:layout_marginTop="@dimen/margin_size_small"
                 android:layout_marginRight="@dimen/margin_size_large"
-                android:orientation="vertical"
-                app:layout_constraintTop_toBottomOf="@id/detail_title">
+                android:orientation="vertical">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -441,6 +439,7 @@
                 android:layout_height="160dp"
                 android:layout_margin="@dimen/margin_size_large"
                 app:cardCornerRadius="10dp"
+                app:cardElevation="0dp"
                 app:layout_constraintTop_toBottomOf="@id/stage_photo"
                 >
                 <android.support.v7.widget.RecyclerView
@@ -497,4 +496,5 @@
                 />
         </android.support.constraint.ConstraintLayout>
 </android.support.v4.widget.NestedScrollView>
+</LinearLayout>
 </com.flipboard.bottomsheet.BottomSheetLayout>
