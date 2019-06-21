@@ -8,11 +8,11 @@ import android.support.v4.app.FragmentPagerAdapter;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DoubanPagerAdapter extends FragmentPagerAdapter {
+public class ShaChaPagerAdapter extends FragmentPagerAdapter {
     private final List<Fragment> fragments = new ArrayList<>();
     private final List<String> fragmentTitles = new ArrayList<>();
 
-    public DoubanPagerAdapter(FragmentManager fm) {
+    public ShaChaPagerAdapter(FragmentManager fm) {
         super(fm);
     }
 

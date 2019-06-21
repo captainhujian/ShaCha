@@ -1,20 +1,33 @@
 package com.example.luowenliang.idouban.moviehot;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationManager;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.support.annotation.RequiresApi;
+import android.support.design.widget.CollapsingToolbarLayout;
+import android.support.v7.graphics.Palette;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.target.SimpleTarget;
+import com.bumptech.glide.request.transition.Transition;
 import com.example.luowenliang.idouban.BaseActivity;
 import com.example.luowenliang.idouban.R;
 import com.example.luowenliang.idouban.moviedetail.MovieDetailActivity;
@@ -22,6 +35,7 @@ import com.example.luowenliang.idouban.moviehot.adapter.TotalMoviesRecyclerViewA
 import com.example.luowenliang.idouban.moviehot.entity.HotMovieInfo;
 import com.example.luowenliang.idouban.moviehot.entity.HotMovieItem;
 import com.example.luowenliang.idouban.moviehot.service.TotalMoviesService;
+import com.example.luowenliang.idouban.moviehot.utils.ImageFilter;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -39,8 +53,10 @@ import static com.example.luowenliang.idouban.moviehot.HotMoviesFragment.fitDate
 
 public class TotalMoviesActivity extends BaseActivity {
     private static final String TAG = "全部";
-    private TextView totalMoviesTitle;
+    private Toolbar totalMoviesTitle;
+    private ImageView totalTitleBackground;
     private TextView totalExit;
+    private CollapsingToolbarLayout collapsingLayout;
     private ProgressBar totalProgressBar;
     private RecyclerView totalMoviesRecyclerView;
     private TotalMoviesRecyclerViewAdapter adapter;
@@ -54,13 +70,16 @@ public class TotalMoviesActivity extends BaseActivity {
     private int start = 0;
     private static int count = 20;
     boolean isLoading = false;
+    boolean isFirstImage=true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(LayoutInflater.from(this).inflate(R.layout.activity_hotmovie_total, null, false));
-        totalMoviesTitle = findViewById(R.id.total_movie_title);
+        totalTitleBackground=findViewById(R.id.total_movie_toolbar_image);
+        totalMoviesTitle = findViewById(R.id.total_movie_toolbar_title);
         totalExit = findViewById(R.id.total_exit);
+        collapsingLayout=findViewById(R.id.movie_collapsing_toolbar);
         totalProgressBar = findViewById(R.id.total_movie_progress_bar);
         totalMoviesRecyclerView = findViewById(R.id.total_movie_recycle_view);
         totalMoviesRecyclerView.setItemAnimator(new DefaultItemAnimator());
@@ -161,9 +180,13 @@ public class TotalMoviesActivity extends BaseActivity {
                     @Override
                     public void onCompleted() {
                         totalProgressBar.setVisibility(View.GONE);
+                        //设置标题栏背景图(只取第一次请求的第一张图片)
+                        if(isFirstImage){
+                            setTotalTitleBackGround(updateTotalMovieList);
+                        }
                         //showTitle();
                         initData();
-                        totalMoviesTitle.setText(title);
+                        totalMoviesTitle.setTitle((CharSequence)title);
                         adapter.setData(updateTotalMovieList);
                         adapter.notifyDataSetChanged();
                         TotalMovieRecyclerViewOnClickItem();
@@ -227,6 +250,7 @@ public class TotalMoviesActivity extends BaseActivity {
 
                 });
     }
+
 
     private String setTotalMoviesMesssage(HotMovieItem hotMovieItem, int i) {
         String year, genre1, genre2, director, cast1 = null, cast2 = null;
@@ -297,6 +321,43 @@ public class TotalMoviesActivity extends BaseActivity {
             }
         });
     }
+
+    /**
+     * 设置全部电影标题栏背景图
+     */
+    private void setTotalTitleBackGround(List<HotMovieInfo>updateTotalMovieList) {
+        //获取第一个电影海报作为标题封面
+            //取出bitmap图片资源
+            Glide.with(TotalMoviesActivity.this)
+                    .asBitmap()
+                    .load(updateTotalMovieList.get(0).getHotMoviePicture())
+                    .into(new SimpleTarget<Bitmap>() {
+                        @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR1)
+                        @Override
+                        public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
+                            //图片高斯模糊
+                            Bitmap gaussBitmap=ImageFilter.blufBitmap(TotalMoviesActivity.this,resource,5f);
+                            //imageview变暗
+                            totalTitleBackground.setColorFilter(Color.parseColor("#bb141414"));
+                            totalTitleBackground.setImageBitmap(resource);
+                            Palette.from(resource).generate(new Palette.PaletteAsyncListener() {
+                                @Override
+                                public void onGenerated(@NonNull Palette palette) {
+                                    int color;
+                                    Palette.Swatch swatch = palette.getDarkMutedSwatch();
+                                    if (swatch != null) {
+                                        color=swatch.getRgb();
+                                    }else {
+                                        color=Color.parseColor("#CD853F");
+                                    }
+                                    collapsingLayout.setContentScrimColor(color);
+                                }
+                            });
+                        }
+                    });
+            isFirstImage=false;
+        }
+
     /**
      * 根据经纬度获得城市名
      */
@@ -305,7 +366,7 @@ public class TotalMoviesActivity extends BaseActivity {
         double lat=0;
         double lng=0;
         TextView myLocationText;
-        myLocationText = findViewById(R.id.location_name);
+        //myLocationText = findViewById(R.id.location_name);(使用时需打开)
         if (location != null) {
             lat = location.getLatitude();
             lng = location.getLongitude();
@@ -332,7 +393,7 @@ public class TotalMoviesActivity extends BaseActivity {
                 Log.d(TAG, "结束");
             }
         }
-        myLocationText.setText(latLongString);
+       // myLocationText.setText(latLongString);（使用时需打开）
     }
 
     @Override

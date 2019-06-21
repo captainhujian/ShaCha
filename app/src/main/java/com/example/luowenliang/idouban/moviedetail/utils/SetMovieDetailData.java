@@ -183,7 +183,7 @@ public class SetMovieDetailData {
     /**
      * 根据海报颜色动态设置详情界面背景色
      */
-    private void setBackGroundColor(Bitmap poster) {
+    public void setBackGroundColor(Bitmap poster) {
         if(movieDetailItem.getImages()!=null){
             Log.d(TAG, "poster:"+poster);
             Palette.from(poster).generate(new Palette.PaletteAsyncListener() {

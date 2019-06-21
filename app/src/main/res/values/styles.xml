@@ -4,9 +4,10 @@
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
         <item name="windowNoTitle">true</item>
         <!-- Customize your theme here. -->
-        <item name="colorPrimary">@color/themeGreen</item>
-        <item name="colorPrimaryDark">@color/white</item>
+        <item name="colorPrimary">@color/grey</item>
+        <item name="colorPrimaryDark">#00ffffff</item>
         <item name="colorAccent">@color/themeGreen</item>
+        <item name="colorControlNormal">@color/white</item>
     </style>
 
     <style name="update_progress_horizontal" parent="Widget.AppCompat.ProgressBar.Horizontal">
