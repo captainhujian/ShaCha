@@ -7,7 +7,7 @@
     android:layout_marginRight="15dp"
     android:layout_marginTop="15dp"
     android:layout_marginBottom="15dp">
-    <com.shehuan.niv.NiceImageView
+    <com.example.luowenliang.idouban.NickImageView
         android:id="@+id/commenter_picture"
         android:layout_width="30dp"
         android:layout_height="30dp"

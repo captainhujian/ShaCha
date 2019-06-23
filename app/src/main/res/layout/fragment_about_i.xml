@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".AboutI.AboutIFragment"
+    tools:context=".aboutI.AboutIFragment"
     android:background="#ffd39b">
 
     <!-- TODO: Update blank fragment layout -->
@@ -22,7 +22,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent">
-        <com.shehuan.niv.NiceImageView
+        <com.example.luowenliang.idouban.NickImageView
             android:layout_width="100dp"
             android:layout_height="100dp"
             android:src="@drawable/ic_head_portrait"
@@ -41,7 +41,7 @@
             android:layout_marginTop="5dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="帅气的天然卷"
+            android:text="不是银白的天然卷"
             android:textSize="12dp"
             android:textColor="@color/white"
             android:layout_gravity="center"/>
@@ -49,7 +49,7 @@
             android:layout_marginTop="5dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="人生三大乐事：吸猫、摸鱼、遛狗"
+            android:text="人生三大快事：吸猫、摸鱼、遛狗"
             android:textSize="12dp"
             android:textColor="@color/white"
             android:layout_gravity="center"/>

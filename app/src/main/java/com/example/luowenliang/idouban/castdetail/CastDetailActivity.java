@@ -122,6 +122,10 @@ public class CastDetailActivity extends BaseActivity {
         castAlbumTitle=findViewById(R.id.album);
         castFilmRecyclerView=findViewById(R.id.film_recycler_view);
         castAlbumRecyclerView=findViewById(R.id.album_recycler_view);
+        //适配android 9.0的行间距
+        if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.O_MR1) {
+            castSummaryView.setLineSpacing(1.1f,1f);
+        }
     }
 
     /**

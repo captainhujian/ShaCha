@@ -1,5 +1,6 @@
 package com.example.luowenliang.idouban.moviedetail.adapter;
 
+import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -44,8 +45,12 @@ public class CommentRecyclerViewAdapter extends RecyclerView.Adapter<CommentRecy
         Glide.with(MyApplication.getContext()).load(commentInfo.getCommenterPisture()).into(viewHolder.conmentePicture);
         viewHolder.commenterName.setText(commentInfo.getCommenterName());
         viewHolder.commentTime.setText(fitDateFormat(commentInfo.getCommentTime()));
-        viewHolder.comment.setText(commentInfo.getComment());
         viewHolder.usefulCount.setText(fitUsefulCount(commentInfo.getUsefulCount()));
+        //适配android 9.0的行间距
+        if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.O_MR1) {
+            viewHolder.comment.setLineSpacing(1.1f,1f);
+        }
+        viewHolder.comment.setText(commentInfo.getComment());
         //星级评分
         double fitRate = commentInfo.getCommenterRating();
             viewHolder.commenterRatingBar.setStarCount(5);

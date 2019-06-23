@@ -338,7 +338,7 @@ public class TotalMoviesActivity extends BaseActivity {
                             //图片高斯模糊
                             Bitmap gaussBitmap=ImageFilter.blufBitmap(TotalMoviesActivity.this,resource,5f);
                             //imageview变暗
-                            totalTitleBackground.setColorFilter(Color.parseColor("#bb141414"));
+                            totalTitleBackground.setColorFilter(Color.parseColor("#cc141414"));
                             totalTitleBackground.setImageBitmap(resource);
                             Palette.from(resource).generate(new Palette.PaletteAsyncListener() {
                                 @Override

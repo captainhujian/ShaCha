@@ -1,12 +1,9 @@
-package com.example.luowenliang.idouban.VedioViewer;
+package com.example.luowenliang.idouban.vedioViewer;
 
 import android.content.Intent;
-import android.graphics.Color;
-import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.View;
 
 import com.example.luowenliang.idouban.BaseActivity;
 import com.example.luowenliang.idouban.R;

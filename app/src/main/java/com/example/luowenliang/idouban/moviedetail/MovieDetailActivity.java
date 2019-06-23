@@ -2,13 +2,10 @@ package com.example.luowenliang.idouban.moviedetail;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.Color;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v7.graphics.Palette;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
@@ -25,11 +22,9 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.bumptech.glide.Glide;
 import com.example.luowenliang.idouban.BaseActivity;
 import com.example.luowenliang.idouban.R;
-import com.example.luowenliang.idouban.VedioViewer.VideoViewerActivity;
-import com.example.luowenliang.idouban.application.MyApplication;
+import com.example.luowenliang.idouban.vedioViewer.VideoViewerActivity;
 import com.example.luowenliang.idouban.castdetail.CastDetailActivity;
 import com.example.luowenliang.idouban.moviedetail.adapter.CastRecyclerViewAdapter;
 import com.example.luowenliang.idouban.moviedetail.adapter.CommentRecyclerViewAdapter;
@@ -174,8 +169,13 @@ public class MovieDetailActivity extends BaseActivity {
             }
         };
         commentRecyclerView.setLayoutManager(layoutManager);
-
+        //适配android 9.0的行间距
+        if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.O_MR1) {
+            summary.setLineSpacing(1.1f,1f);
+        }
     }
+
+
 
     /**
      * 唤醒底部抽屉

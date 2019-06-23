@@ -6,7 +6,7 @@ import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.LayoutInflater;
 
-import com.example.luowenliang.idouban.AboutI.AboutIFragment;
+import com.example.luowenliang.idouban.aboutI.AboutIFragment;
 import com.example.luowenliang.idouban.moviehot.HotMoviesFragment;
 import com.example.luowenliang.idouban.movietop250.Top250MoviesFragment;
 

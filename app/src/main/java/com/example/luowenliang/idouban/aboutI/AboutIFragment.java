@@ -1,10 +1,8 @@
-package com.example.luowenliang.idouban.AboutI;
+package com.example.luowenliang.idouban.aboutI;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -27,7 +25,7 @@ public class AboutIFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view=inflater.inflate(R.layout.fragment_about_i,null);
         iBackGround=view.findViewById(R.id.i_backgound);
-        iBackGround.setColorFilter(Color.parseColor("#bb141414"));
+        iBackGround.setColorFilter(Color.parseColor("#ee141414"));
         Bitmap background = ImageFilter.blufBitmap(getActivity(),BitmapFactory.decodeResource(getResources(),R.drawable.ic_head_portrait),25f);
         iBackGround.setImageBitmap(background);
         return view;
