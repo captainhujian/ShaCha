@@ -45,11 +45,12 @@ dependencies {
     implementation 'me.zhanghai.android.materialratingbar:library:1.3.2'
     //圆形图片
     implementation 'com.github.SheHuan:NiceImageView:1.0.5'
-    implementation 'com.github.chrisbanes:PhotoView:2.0.0'
     //左侧边缘滑动退出
     implementation 'com.github.zouxianbincc:AndroidSlideBack:v1.0.0'
     //视频播放器
     implementation 'cn.yc:YCVideoPlayerLib:2.6.4'
+    //图片查看器
+    implementation'com.github.chrisbanes:PhotoView:1.3.1'
     //抽屉
     implementation 'com.flipboard:bottomsheet-core:1.5.1'
     //取色器

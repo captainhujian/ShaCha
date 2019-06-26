@@ -12,6 +12,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -54,7 +55,8 @@ public class CastDetailActivity extends BaseActivity {
     private CastDetailAlbumInfo castDetailAlbumInfo;
     private List<CastDetailAlbumInfo>castDetailAlbumInfos=new ArrayList<>();
     private ImageView castPhotoView;
-    private TextView castDetailExit,castDetailNameView,castDetailOriginNameView,birthdayView,bornPlaceView,professionsView,castSummaryView,castAlbumTitle,castFilmTitle;
+    private TextView castDetailExit,castDetailNameView,castDetailOriginNameView,birthdayView,bornPlaceView,professionsView,castSummaryView,castAlbumTitle,castTotalWorks;
+    private RelativeLayout castFilmTitle;
     private RecyclerView castFilmRecyclerView;
     private RecyclerView castAlbumRecyclerView;
     private CastFilmRecyclerViewAdapter castFilmRecyclerViewAdapter;
@@ -119,6 +121,7 @@ public class CastDetailActivity extends BaseActivity {
         professionsView=findViewById(R.id.professions);
         castSummaryView=findViewById(R.id.cast_summary);
         castFilmTitle=findViewById(R.id.cast_film_title);
+        castTotalWorks=findViewById(R.id.total_works);
         castAlbumTitle=findViewById(R.id.album);
         castFilmRecyclerView=findViewById(R.id.film_recycler_view);
         castAlbumRecyclerView=findViewById(R.id.album_recycler_view);
@@ -154,6 +157,7 @@ public class CastDetailActivity extends BaseActivity {
                         setPosterOnclickItem();
                         setAlbumRecyclerViewOnclickItem();
                         setFilmRecyclerViewOnclickItem();
+                        getTotalWorks();
                     }
 
                     @Override
@@ -186,6 +190,7 @@ public class CastDetailActivity extends BaseActivity {
 
                 });
     }
+
 
     /**
      * 如果castId为空,无法做网络请求，使用intent传来的备用值
@@ -267,6 +272,22 @@ public class CastDetailActivity extends BaseActivity {
             castDetailFilmInfos.add(castDetailFilmInfo);
         }
     }
+
+    /**
+     * 获取影人全部作品
+     */
+    private void getTotalWorks() {
+        castTotalWorks.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent =new Intent(CastDetailActivity.this,TotalWorksActivity.class);
+                intent.putExtra("cast_id",castId);
+                intent.putExtra("cast_total_title","全部影片");
+                startActivity(intent);
+            }
+        });
+    }
+
     /**
      * 获取相册数据
      */

@@ -3,6 +3,7 @@ package com.example.luowenliang.idouban.movietop250;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -175,6 +176,10 @@ public class MovieRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.
             number = itemView.findViewById(R.id.number);
             ratingBar = itemView.findViewById(R.id.rating_bar);
             ratingBar.setmClickable(false);
+            //适配android 9.0的行间距
+            if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.O_MR1) {
+                director_cast.setLineSpacing(1.1f,1f);
+            }
         }
     }
     /**

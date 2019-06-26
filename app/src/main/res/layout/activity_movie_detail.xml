@@ -11,14 +11,16 @@
     <android.support.v7.widget.Toolbar
         android:id="@+id/detail_title"
         android:layout_width="match_parent"
-        android:layout_height="64dp"
+        android:layout_height="72dp"
         android:theme="@style/ToolbarTheme"
         app:contentInsetLeft="0dp"
         app:contentInsetStart="0dp"
         >
         <RelativeLayout
+            android:id="@+id/toobar1"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:visibility="visible"
             >
             <TextView
                 android:id="@+id/movie_detail_exit"
@@ -38,9 +40,104 @@
                 android:textColor="@color/white"
                 android:textSize="15dp" />
         </RelativeLayout>
+        <android.support.constraint.ConstraintLayout
+            android:id="@+id/toobar2"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone"
+            >
+            <TextView
+                android:id="@+id/movie_detail_exit2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                android:textSize="35dp"
+                android:layout_marginLeft="@dimen/margin_size_small"
+                android:textColor="@color/white"
+                android:text="×"
+                android:layout_alignParentBottom="true"
+                />
+            <android.support.v7.widget.CardView
+                android:id="@+id/detail_toolbar_pic_card"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:cardCornerRadius="3dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:layout_marginBottom="@dimen/margin_size_tiny"
+                app:layout_constraintLeft_toRightOf="@id/movie_detail_exit2"
+                android:layout_marginLeft="20dp">
+                <ImageView
+                    android:id="@+id/detail_toolbar_pic"
+                    android:layout_width="26dp"
+                    android:layout_height="35dp"
+                    android:scaleType="centerCrop"/>
+            </android.support.v7.widget.CardView>
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintLeft_toRightOf="@id/detail_toolbar_pic_card"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:layout_marginLeft="@dimen/margin_size_small"
+                android:layout_marginBottom="@dimen/margin_size_small"
+                android:orientation="vertical"
+                >
+                <TextView
+                    android:id="@+id/detail_toolbar_movie_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="影片名"
+                    android:textColor="@color/white"
+                    android:textStyle="bold"
+                    android:singleLine="true"
+                    android:layout_marginRight="30dp"/>
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    >
+                    <com.hedgehog.ratingbar.RatingBar
+                        android:id="@+id/detail_toolbar_rating_bar"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:visibility="visible"
+                        app:halfstart="true"
+                        android:clickable="false"
+                        app:starEmpty="@drawable/ic_star_normal"
+                        app:starFill="@drawable/ic_star_selected"
+                        app:starHalf="@drawable/ic_star_half"
+                        app:starImageHeight="12dp"
+                        app:starImagePadding="2dp"
+                        app:starImageWidth="12dp" />
+                    <TextView
+                        android:id="@+id/detail_toolbar_none_rating"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/white"
+                        android:visibility="gone"
+                        android:textStyle="bold"
+                        android:textSize="10dp"
+                        android:text="暂无评分"/>
+
+                    <TextView
+                        android:id="@+id/detail_toolbar_rating"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center_horizontal"
+                        android:text="0.0"
+                        android:textColor="@color/white"
+                        android:textSize="10dp"
+                        android:visibility="visible"
+                        android:textStyle="bold"
+                        android:layout_marginLeft="1dp"/>
+
+                </LinearLayout>
+            </LinearLayout>
+        </android.support.constraint.ConstraintLayout>
     </android.support.v7.widget.Toolbar>
 
 <android.support.v4.widget.NestedScrollView
+    android:id="@+id/detail_nested_scroll_view"
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"

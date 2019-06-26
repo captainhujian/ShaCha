@@ -32,6 +32,7 @@
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:screenOrientation="portrait"/>
         <activity android:name=".moviehot.TotalMoviesActivity"/>
+        <activity android:name=".castdetail.TotalWorksActivity"/>
     </application>
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />

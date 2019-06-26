@@ -12,9 +12,10 @@ import android.view.ViewGroup;
 import com.bumptech.glide.Glide;
 import com.example.luowenliang.idouban.application.MyApplication;
 import com.example.luowenliang.idouban.moviedetail.entity.StagePhotoInfo;
-import com.github.chrisbanes.photoview.PhotoView;
 
 import java.util.List;
+
+import uk.co.senab.photoview.PhotoView;
 
 public class MyImageAdapter extends PagerAdapter  {
 

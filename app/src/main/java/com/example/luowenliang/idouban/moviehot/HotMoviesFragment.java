@@ -311,6 +311,7 @@ public class HotMoviesFragment extends Fragment {
                         comingSoonRecyclerViewAdapter=new ComingSoonRecyclerViewAdapter(comingSoonMovieInfos);
                         comingSoonRecyclerView.setAdapter(comingSoonRecyclerViewAdapter);
                         comingSoonTotal.setText("全部"+comingSoonTotalCount+">");
+                        Log.d(TAG, "全部："+comingSoonTotalCount);
                         ComingSoonRecyclerViewOnClickItem();
                     }
 

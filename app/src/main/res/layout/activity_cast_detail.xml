@@ -161,18 +161,31 @@
         android:textSize="15dp"
         android:hint="暂无简介"
         app:layout_constraintTop_toBottomOf="@id/cast_summary_title" />
-
-    <TextView
+    <RelativeLayout
         android:id="@+id/cast_film_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="影视"
-        android:textSize="18dp"
-        android:textStyle="bold"
-        app:layout_constraintTop_toBottomOf="@id/cast_summary"
         android:layout_marginLeft="15dp"
         android:layout_marginTop="15dp"
-        android:visibility="gone"/>
+        android:layout_marginRight="@dimen/margin_size_large"
+        app:layout_constraintTop_toBottomOf="@id/cast_summary">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="影视"
+            android:textSize="18dp"
+            android:textStyle="bold"
+
+            android:visibility="visible"/>
+        <TextView
+            android:id="@+id/total_works"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:text="全部>"/>
+    </RelativeLayout>
+
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/film_recycler_view"

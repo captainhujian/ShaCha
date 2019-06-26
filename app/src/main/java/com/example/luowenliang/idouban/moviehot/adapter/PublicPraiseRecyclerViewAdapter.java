@@ -1,6 +1,7 @@
 package com.example.luowenliang.idouban.moviehot.adapter;
 
 import android.graphics.Color;
+import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
@@ -103,6 +104,10 @@ public class PublicPraiseRecyclerViewAdapter extends RecyclerView.Adapter<Public
             publicPraiseRatingBar=itemView.findViewById(R.id.praise_rating_bar);
             publicPraiseRatingBar.setmClickable(false);
             publicPraisePubDateCard=itemView.findViewById(R.id.praise_pubdates_card);
+            //适配android 9.0的行间距
+            if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.O_MR1) {
+                publicPraiseMessage.setLineSpacing(1.1f,1f);
+            }
         }
     }
     /**

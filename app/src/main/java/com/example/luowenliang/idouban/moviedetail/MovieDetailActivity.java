@@ -6,6 +6,8 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.constraint.ConstraintLayout;
+import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
@@ -22,6 +24,8 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.example.luowenliang.idouban.BaseActivity;
 import com.example.luowenliang.idouban.R;
 import com.example.luowenliang.idouban.vedioViewer.VideoViewerActivity;
@@ -64,8 +68,14 @@ public class MovieDetailActivity extends BaseActivity {
     private CommentInfo commentInfo;
     private MovieResourceInfo movieResourceInfo;
     private Toolbar detailToolbar;
+    private RelativeLayout toolbar1;
+    private ConstraintLayout toolbar2;
+    private ImageView detailToolbarPic;
+    private RatingBar detailToolbarRatingBar;
+    private TextView movieDetailExit,detailTitleText,movieDetailExit2,detailToolbarMovieTitle,detailToolbarRating,detailToolBarNoRating;
+    private NestedScrollView detailNestedScrollView;
     private ImageView image;
-    private TextView movieDetailExit,detailTitleText,title,originTitleYear,mesage,rating,noneRating,starCount,summary,stagePhotoTitle;
+    private TextView title,originTitleYear,message,rating,noneRating,starCount,summary,stagePhotoTitle;
     private CardView stagePhotoCardView;
     private RatingBar ratingBar;
     private ProgressBar star5,star4,star3,star2,star1;
@@ -106,11 +116,59 @@ public class MovieDetailActivity extends BaseActivity {
     }
 
     /**
+     * 上滑更改toolbar样式
+     */
+    private void changeToolbarStyle() {
+        //获取toolbar2样式数据
+        Glide.with(MovieDetailActivity.this)
+                .load(localMovieDetailItem.getImages().getLarge())
+                .apply(new RequestOptions().placeholder(R.drawable.placeholder))
+                .apply(new RequestOptions().error(R.drawable.placeholder))
+                .into(detailToolbarPic);
+        detailToolbarMovieTitle.setText(localMovieDetailItem.getTitle());
+        //星级评分
+        double fitRate =setDetailData.fitRating(localMovieDetailItem.getRating().getAverage());
+        Log.d("分数", "合理的分数: " + fitRate);
+        //暂无评价
+        if (fitRate == 0f) {
+            detailToolbarRatingBar.setVisibility(View.GONE);
+            detailToolbarRating.setVisibility(View.GONE);
+            detailToolBarNoRating.setVisibility(View.VISIBLE);
+
+        } else {
+            detailToolbarRatingBar.setVisibility(View.VISIBLE);
+            detailToolbarRating.setText(String.valueOf(localMovieDetailItem.getRating().getAverage()));
+            detailToolbarRatingBar.setStarCount(5);
+            detailToolbarRatingBar.setStar((float) fitRate);
+        }
+        //滑动监听
+        detailNestedScrollView.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
+            @Override
+            public void onScrollChange(NestedScrollView nestedScrollView, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
+                if(scrollY>=150){
+                    toolbar1.setVisibility(View.GONE);
+                    toolbar2.setVisibility(View.VISIBLE);
+                }else {
+                    toolbar1.setVisibility(View.VISIBLE);
+                    toolbar2.setVisibility(View.GONE);
+                }
+            }
+        });
+    }
+
+    /**
      * 按键退出
      */
     private void exitMovieDetailActivity() {
         movieDetailExit.setText("×");
+        movieDetailExit2.setText("×");
         movieDetailExit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
+        movieDetailExit2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 finish();
@@ -131,13 +189,22 @@ public class MovieDetailActivity extends BaseActivity {
      * 界面初始化
      */
     private void initView() {
+        toolbar1=findViewById(R.id.toobar1);
+        toolbar2=findViewById(R.id.toobar2);
         movieDetailExit=findViewById(R.id.movie_detail_exit);
+        movieDetailExit2=findViewById(R.id.movie_detail_exit2);
+        detailToolbarMovieTitle=findViewById(R.id.detail_toolbar_movie_title);
+        detailToolbarPic=findViewById(R.id.detail_toolbar_pic);
+        detailToolbarRatingBar=findViewById(R.id.detail_toolbar_rating_bar);
+        detailToolbarRating=findViewById(R.id.detail_toolbar_rating);
+        detailToolBarNoRating=findViewById(R.id.detail_toolbar_none_rating);
         detailToolbar=findViewById(R.id.detail_title);
         detailTitleText=findViewById(R.id.detail_title_text);
+        detailNestedScrollView=findViewById(R.id.detail_nested_scroll_view);
         image=findViewById(R.id.movie_image);
         title=findViewById(R.id.movie_title);
         originTitleYear=findViewById(R.id.movie_origin_title_year);
-        mesage=findViewById(R.id.detail_message);
+        message=findViewById(R.id.detail_message);
         rating=findViewById(R.id.rating_number);
         noneRating=findViewById(R.id.none_rating);
         stagePhotoTitle=findViewById(R.id.stage_photo);
@@ -171,11 +238,10 @@ public class MovieDetailActivity extends BaseActivity {
         commentRecyclerView.setLayoutManager(layoutManager);
         //适配android 9.0的行间距
         if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.O_MR1) {
+            message.setLineSpacing(1.1f,1f);
             summary.setLineSpacing(1.1f,1f);
         }
     }
-
-
 
     /**
      * 唤醒底部抽屉
@@ -276,6 +342,8 @@ public class MovieDetailActivity extends BaseActivity {
                         setCastOnclickItem();
                         //唤醒电影资源抽屉
                         wakeBottomSheet();
+                        //上滑更改toolbar样式
+                        changeToolbarStyle();
                     }
 
                     @Override
@@ -289,7 +357,7 @@ public class MovieDetailActivity extends BaseActivity {
                         localMovieDetailItem=new MovieDetailItem();
                         localMovieDetailItem=movieDetailItem;
                         setDetailData=new SetMovieDetailData(movieDetailItem);
-                        setDetailData.setMovieMessage(detailTitleText,image,title,originTitleYear,mesage,ratingBar,rating,
+                        setDetailData.setMovieMessage(detailTitleText,image,title,originTitleYear,message,ratingBar,rating,
                                 noneRating,star5,star4,star3,star2,star1,starCount,summary,view,detailToolbar,stagePhotoCardView);
                         setMovieResource(movieDetailItem);
                         setCastData(movieDetailItem);

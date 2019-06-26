@@ -2,6 +2,7 @@ package com.example.luowenliang.idouban.moviehot.adapter;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
@@ -171,6 +172,10 @@ public class TotalMoviesRecyclerViewAdapter extends RecyclerView.Adapter<Recycle
             totalMovieRatingBar.setmClickable(false);
             totalPubDateCard=itemView.findViewById(R.id.praise_pubdates_card);
             totalPubDate=itemView.findViewById(R.id.praise_pubdates);
+            //适配android 9.0的行间距
+            if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.O_MR1) {
+                totalMovieMessage.setLineSpacing(1.1f,1f);
+            }
         }
     }
     /**
