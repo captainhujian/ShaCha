@@ -4,9 +4,6 @@ package com.example.luowenliang.idouban.castdetail;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
-import android.location.Address;
-import android.location.Geocoder;
-import android.location.Location;
 import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
@@ -29,35 +26,29 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.request.transition.Transition;
+import com.example.luowenliang.idouban.BaseActivity;
 import com.example.luowenliang.idouban.R;
 import com.example.luowenliang.idouban.castdetail.entity.WorksItem;
 import com.example.luowenliang.idouban.castdetail.service.CastTotalWorksSercive;
 import com.example.luowenliang.idouban.moviedetail.MovieDetailActivity;
 import com.example.luowenliang.idouban.moviehot.HotMoviesFragment;
-import com.example.luowenliang.idouban.moviehot.TotalMoviesActivity;
 import com.example.luowenliang.idouban.moviehot.adapter.TotalMoviesRecyclerViewAdapter;
 import com.example.luowenliang.idouban.moviehot.entity.HotMovieInfo;
-import com.example.luowenliang.idouban.moviehot.entity.HotMovieItem;
-import com.example.luowenliang.idouban.moviehot.service.TotalMoviesService;
 import com.example.luowenliang.idouban.moviehot.utils.ImageFilter;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
-import rx.Observable;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Func1;
 import rx.schedulers.Schedulers;
 
 import static com.example.luowenliang.idouban.moviedetail.MovieDetailActivity.PICTURE_PLACE_HOLDER;
-import static com.example.luowenliang.idouban.moviehot.HotMoviesFragment.fitDateFormat;
 
-public class TotalWorksActivity extends TotalMoviesActivity {
+public class TotalWorksActivity extends BaseActivity {
     private static final String TAG = "全部";
     private Toolbar totalMoviesTitle;
     private ImageView totalTitleBackground;
@@ -71,7 +62,7 @@ public class TotalWorksActivity extends TotalMoviesActivity {
     private List<HotMovieInfo> totalMovieInfos = new ArrayList<>();
     private LocationManager locationManager;
     private LinearLayoutManager linearLayoutManager;
-    private String id,totalTitle;
+    private String id,totalTitle,totalBackground;
     private int lastVisibleItem,totalCount=0;
     private int start = 0;
     private static int count = 20;
@@ -98,6 +89,7 @@ public class TotalWorksActivity extends TotalMoviesActivity {
         Intent intent = getIntent();
         id = intent.getStringExtra("cast_id");
         totalTitle = intent.getStringExtra("cast_total_title");
+        totalBackground=intent.getStringExtra("cast_photo");
         //请求作品总数
         initTotalWorkCount(id);
         exitActivity();
@@ -221,7 +213,7 @@ public class TotalWorksActivity extends TotalMoviesActivity {
                         totalProgressBar.setVisibility(View.GONE);
                         //设置标题栏背景图(只取第一次请求的第一张图片)
                         if(isFirstImage){
-                            setTotalTitleBackGround(updateTotalMovieList);
+                            setTotalTitleBackGround(totalBackground);
                         }
                         //showTitle();
                         initData();
@@ -271,9 +263,9 @@ public class TotalWorksActivity extends TotalMoviesActivity {
                             }
                             String publicPraiseId = worksItem.getWorks().get(i).getSubject().getId();
                             //充当角色
-                            String role,role1=null,role2=null,role3=null;
+                            String role,role1="",role2="",role3="";
                             if (worksItem.getWorks().get(i).getRoles().size()==0) {
-                                Log.d(TAG, "xxxxxxxxxxxxxx4");
+                                Log.d(TAG, "xxxxxxxxxxxxxx");
                                 role1 = "无";
                                 role2 = "";
                                 role3 = "";
@@ -289,7 +281,7 @@ public class TotalWorksActivity extends TotalMoviesActivity {
                                     role2 = "、" + worksItem.getWorks().get(i).getRoles().get(1);
                                     role3 ="";
                                 }
-                                if (worksItem.getWorks().get(i).getRoles().size() == 3) {
+                                if (worksItem.getWorks().get(i).getRoles().size() >= 3) {
                                     Log.d(TAG, "zzzzzzzzzzzzzz");
                                     role1 = worksItem.getWorks().get(i).getRoles().get(0);
                                     role2 = "、"+worksItem.getWorks().get(i).getRoles().get(1);
@@ -310,7 +302,7 @@ public class TotalWorksActivity extends TotalMoviesActivity {
 
 
     private String setTotalMoviesMesssage(WorksItem worksItem, int i) {
-        String year, genre1=null, genre2=null, director, cast1 = null, cast2 = null;
+        String year, genre1="", genre2="", director, cast1 ="", cast2 = "";
         //年份
         if (worksItem.getWorks().get(i).getSubject().getYear() != null) {
             year = worksItem.getWorks().get(i).getSubject().getYear() + "/";
@@ -320,7 +312,7 @@ public class TotalWorksActivity extends TotalMoviesActivity {
             year = "";
         }
         //类型
-        if (worksItem.getWorks().get(i).getSubject().getGenres() == null) {
+        if (worksItem.getWorks().get(i).getSubject().getGenres().size()==0) {
             Log.d(TAG, "-2");
             genre1 = "";
             genre2 = "";
@@ -351,9 +343,9 @@ public class TotalWorksActivity extends TotalMoviesActivity {
             }
         }
         //卡司
-        if (worksItem.getWorks().get(i).getSubject().getCasts().size()==0) {
+        if (worksItem.getWorks().get(i).getSubject().getCasts()==null) {
             Log.d(TAG, "444444444444444444");
-            cast1 = "";
+            cast1 = "无";
             cast2 = "";
         } else {
             if (worksItem.getWorks().get(i).getSubject().getCasts().size() > 1) {
@@ -388,12 +380,12 @@ public class TotalWorksActivity extends TotalMoviesActivity {
     /**
      * 设置全部电影标题栏背景图
      */
-    private void setTotalTitleBackGround(List<HotMovieInfo>updateTotalMovieList) {
-        //获取第一个电影海报作为标题封面
+    private void setTotalTitleBackGround(String castPhoto) {
+        //获取影人照片作为标题封面
         //取出bitmap图片资源
         Glide.with(TotalWorksActivity.this)
                 .asBitmap()
-                .load(updateTotalMovieList.get(0).getHotMoviePicture())
+                .load(castPhoto)
                 .into(new SimpleTarget<Bitmap>() {
                     @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR1)
                     @Override

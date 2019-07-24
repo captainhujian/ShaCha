@@ -33,6 +33,7 @@
             android:screenOrientation="portrait"/>
         <activity android:name=".moviehot.TotalMoviesActivity"/>
         <activity android:name=".castdetail.TotalWorksActivity"/>
+        <activity android:name=".moviedetail.TotalCommentsActivity"/>
     </application>
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />

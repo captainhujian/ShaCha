@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginLeft="@dimen/margin_size_large"
+    android:layout_marginRight="@dimen/margin_size_large"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical">
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/comments_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:contentInsetLeft="0dp"
+        app:contentInsetStart="0dp">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:gravity="center|bottom"
+            android:text="短评"
+            android:textSize="15dp"
+            android:textColor="@color/white"
+            android:textStyle="bold"/>
+    </android.support.v7.widget.Toolbar>
+    <TextView
+        android:id="@+id/comments_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin_size_small"
+        android:layout_marginLeft="@dimen/margin_size_large"
+        android:textSize="20dp"
+        android:textColor="@color/white"
+        android:textStyle="bold" />
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/total_comments_recyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:layout_marginTop="@dimen/margin_size_large"
+        android:background="#eeFFFFFF">
+    </android.support.v7.widget.RecyclerView>
+
+</LinearLayout>

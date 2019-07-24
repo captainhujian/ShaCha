@@ -564,15 +564,29 @@
                     android:layout_marginTop="@dimen/margin_size_large"
                     app:layout_constraintTop_toBottomOf="@id/cast_recycler_view">
 
-                    <TextView
-                        android:id="@+id/short_comment"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="@dimen/margin_size_large"
-                        android:text="短评"
-                        android:textColor="@color/white"
-                        android:textSize="18dp"
-                        android:textStyle="bold" />
+                  <RelativeLayout
+                      android:id="@+id/short_comment"
+                      android:layout_width="match_parent"
+                      android:layout_height="wrap_content"
+                      android:layout_marginLeft="@dimen/margin_size_large">
+                      <TextView
+                          android:layout_width="wrap_content"
+                          android:layout_height="wrap_content"
+                          android:layout_centerVertical="true"
+                          android:text="短评"
+                          android:textColor="@color/white"
+                          android:textSize="18dp"
+                          android:textStyle="bold" />
+                      <TextView
+                          android:id="@+id/total_comments"
+                          android:layout_width="wrap_content"
+                          android:layout_height="wrap_content"
+                          android:layout_alignParentRight="true"
+                          android:layout_centerVertical="true"
+                          android:text="全部>"
+                          android:layout_marginRight="20dp"
+                          android:textColor="@color/white"/>
+                  </RelativeLayout>
 
                     <android.support.v7.widget.RecyclerView
                         android:id="@+id/comment_recycler_view"

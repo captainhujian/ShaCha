@@ -2,6 +2,7 @@ package com.example.luowenliang.idouban.moviedetail;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -62,7 +63,7 @@ import rx.schedulers.Schedulers;
 public class MovieDetailActivity extends BaseActivity {
     private static final String TAG = "详情";
     public static final String PICTURE_PLACE_HOLDER="http://6120491.s21i.faiusr.com/2/ABUIABACGAAg0725rAUoiLv9qAQwrAI4rAI.jpg";
-    private String id;
+    private String id,movieTitle;
     private MovieDetailItem localMovieDetailItem;
     private CastInfo castInfo;
     private CommentInfo commentInfo;
@@ -75,7 +76,7 @@ public class MovieDetailActivity extends BaseActivity {
     private TextView movieDetailExit,detailTitleText,movieDetailExit2,detailToolbarMovieTitle,detailToolbarRating,detailToolBarNoRating;
     private NestedScrollView detailNestedScrollView;
     private ImageView image;
-    private TextView title,originTitleYear,message,rating,noneRating,starCount,summary,stagePhotoTitle;
+    private TextView title,originTitleYear,message,rating,noneRating,starCount,summary,stagePhotoTitle,totalComments;
     private CardView stagePhotoCardView;
     private RatingBar ratingBar;
     private ProgressBar star5,star4,star3,star2,star1;
@@ -186,7 +187,7 @@ public class MovieDetailActivity extends BaseActivity {
     }
 
     /**
-     * 界面初始化
+     * 界面初始化绑定控件
      */
     private void initView() {
         toolbar1=findViewById(R.id.toobar1);
@@ -218,6 +219,7 @@ public class MovieDetailActivity extends BaseActivity {
         starCount=findViewById(R.id.rating_count);
         watchMovie=findViewById(R.id.watch_movie);
         summary=findViewById(R.id.summary);
+        totalComments=findViewById(R.id.total_comments);
         resourceIconRecyclerView=findViewById(R.id.resource_icon_recycler_view);
         castRecyclerView=findViewById(R.id.cast_recycler_view);
         stageRecyclerView=findViewById(R.id.stage_photo_recycler_view);
@@ -344,6 +346,8 @@ public class MovieDetailActivity extends BaseActivity {
                         wakeBottomSheet();
                         //上滑更改toolbar样式
                         changeToolbarStyle();
+                        //获取全部影评
+                        showtotalComents();
                     }
 
                     @Override
@@ -353,6 +357,7 @@ public class MovieDetailActivity extends BaseActivity {
 
                     @Override
                     public void onNext(MovieDetailItem movieDetailItem) {
+                        movieTitle=movieDetailItem.getTitle();
                         //为获取海报图片对movieDetailItem取实例
                         localMovieDetailItem=new MovieDetailItem();
                         localMovieDetailItem=movieDetailItem;
@@ -398,8 +403,6 @@ public class MovieDetailActivity extends BaseActivity {
                resourceName=movieDetailItem.getVideos().get(i).getSource().getName();
                resourceUrl=movieDetailItem.getVideos().get(i).getSample_link();
                needPay=movieDetailItem.getVideos().get(i).isNeed_pay();
-
-
                movieResourceInfo=new MovieResourceInfo(resourcePicture,resourceName,needPay,resourceUrl);
                movieResourceInfos.add(movieResourceInfo);
            }
@@ -506,6 +509,12 @@ public class MovieDetailActivity extends BaseActivity {
      * 获取短评
      */
     private void setCommentData(MovieDetailItem movieDetailItem) {
+        //判断是否需要显示全部短评（是否有大于4个短评）
+        if (movieDetailItem.getPopular_comments().size()<4){
+            totalComments.setVisibility(View.GONE);
+        }else {
+            totalComments.setVisibility(View.VISIBLE);
+        }
         for(int k=0 ;k<movieDetailItem.getPopular_comments().size();k++){
             //防止有的图片为空导致recyclerView不显示，这里设置占位图
             String commenterPisture =null ;
@@ -535,7 +544,7 @@ public class MovieDetailActivity extends BaseActivity {
         castRecyclerView.setAdapter(castRecyclerViewAdapter);
         stageRecyclerViewAdapter=new StageRecyclerViewAdapter(stagePhotoInfos);
         stageRecyclerView.setAdapter(stageRecyclerViewAdapter);
-        commentRecyclerViewAdapter=new CommentRecyclerViewAdapter(commentInfos);
+        commentRecyclerViewAdapter=new CommentRecyclerViewAdapter(commentInfos, Color.WHITE);
         commentRecyclerView.setAdapter(commentRecyclerViewAdapter);
         commentRecyclerView.addItemDecoration(new DividerItemDecoration(this,DividerItemDecoration.VERTICAL));
     }
@@ -639,6 +648,22 @@ public class MovieDetailActivity extends BaseActivity {
             }
         });
     }
+
+    /**
+     * 获取全部短评
+     */
+    private void showtotalComents() {
+        totalComments.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent=new Intent(MovieDetailActivity.this,TotalCommentsActivity.class);
+                intent.putExtra("movieId",id);
+                intent.putExtra("movieTitle",movieTitle);
+                startActivity(intent);
+            }
+        });
+    }
+
 
     @Override
     protected void onDestroy() {

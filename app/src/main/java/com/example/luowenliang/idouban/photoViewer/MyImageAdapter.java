@@ -1,11 +1,8 @@
 package com.example.luowenliang.idouban.photoViewer;
 
-import android.content.DialogInterface;
 import android.support.annotation.NonNull;
 import android.support.v4.view.PagerAdapter;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -16,6 +13,7 @@ import com.example.luowenliang.idouban.moviedetail.entity.StagePhotoInfo;
 import java.util.List;
 
 import uk.co.senab.photoview.PhotoView;
+import uk.co.senab.photoview.PhotoViewAttacher;
 
 public class MyImageAdapter extends PagerAdapter  {
 
@@ -34,11 +32,13 @@ public class MyImageAdapter extends PagerAdapter  {
         PhotoView photoView = new PhotoView(activity);
         Glide.with(MyApplication.getContext()).load(stagephoto).into(photoView);
         container.addView(photoView);
-        photoView.setOnClickListener(new View.OnClickListener() {
+        photoView.setOnPhotoTapListener(new PhotoViewAttacher.OnPhotoTapListener() {
             @Override
-            public void onClick(View view) {
-                Log.d("剧照", "onClick: ");
+            public void onPhotoTap(View view, float x, float y) {
                 activity.finish();
+            }
+            @Override
+            public void onOutsidePhotoTap() {
             }
         });
         photoView.setOnLongClickListener(new View.OnLongClickListener() {

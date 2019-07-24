@@ -26,9 +26,11 @@ import java.util.List;
 
 public class CommentRecyclerViewAdapter extends RecyclerView.Adapter<CommentRecyclerViewAdapter.ViewHolder> {
     private List<CommentInfo>commentInfos=new ArrayList<>();
+    private int textColor;
 
-    public CommentRecyclerViewAdapter(List<CommentInfo> commentInfos) {
+    public CommentRecyclerViewAdapter(List<CommentInfo> commentInfos, int textColor) {
         this.commentInfos = commentInfos;
+        this.textColor = textColor;
     }
 
     @NonNull
@@ -78,6 +80,11 @@ public class CommentRecyclerViewAdapter extends RecyclerView.Adapter<CommentRecy
             commentTime=itemView.findViewById(R.id.commenter_time);
             comment=itemView.findViewById(R.id.comment);
             usefulCount=itemView.findViewById(R.id.useful_count);
+            //设置文字颜色
+            commenterName.setTextColor(textColor);
+            commentTime.setTextColor(textColor);
+            comment.setTextColor(textColor);
+            usefulCount.setTextColor(textColor);
          }
      }
 

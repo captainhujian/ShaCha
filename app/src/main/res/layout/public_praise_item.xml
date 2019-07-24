@@ -75,6 +75,7 @@
                             android:layout_height="wrap_content"
                             android:textSize="17sp"
                             android:textStyle="bold"
+                            android:singleLine="true"
                             android:text="123"
                             android:textColor="#000"
                             />

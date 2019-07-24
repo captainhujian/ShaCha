@@ -94,7 +94,7 @@ public class TotalMoviesActivity extends BaseActivity {
         totalTitle = intent.getStringExtra("total_title");
         totalCount=intent.getIntExtra("total_count",0);
         //第一次totalmovie请求
-        Log.d(TAG, "第1次请求开始");
+        Log.d(TAG, "第①次请求开始");
         if(totalCount>=20){
             count=20;
         }else if(totalCount>=10){
@@ -261,7 +261,7 @@ public class TotalMoviesActivity extends BaseActivity {
             year = "";
         }
         //类型
-        if (hotMovieItem.getSubjects().get(i).getGenres() == null) {
+        if (hotMovieItem.getSubjects().get(i).getGenres().size()==0) {
             genre1 = "";
             genre2 = "";
         } else {
@@ -290,7 +290,7 @@ public class TotalMoviesActivity extends BaseActivity {
         //卡司
         if (hotMovieItem.getSubjects().get(i).getCasts().size()==0) {
             Log.d(TAG, "444444444444444444");
-            cast1 = "";
+            cast1 = "无";
             cast2 = "";
         } else {
             if (hotMovieItem.getSubjects().get(i).getCasts().size() > 1) {

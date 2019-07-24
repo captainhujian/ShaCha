@@ -1,5 +1,6 @@
 package com.example.luowenliang.idouban.moviedetail.utils;
 
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
@@ -41,7 +42,7 @@ public class SetMovieDetailData {
     private TextView message,detailTitleText;
     private CardView stagePhotoCard;
     private String genres,genre1,genre2,oTitle,year,country,pubdate,duration,episodesCount;
-    private  Palette.Swatch swatch;
+    private  Palette.Swatch swatch,swatch2;
     private int backColor;
     private List<String>colorList=new ArrayList<>();
     private View view;
@@ -190,17 +191,21 @@ public class SetMovieDetailData {
                 @Override
                 public void onGenerated(@NonNull Palette palette) {
                     swatch = palette.getMutedSwatch();
+                    swatch2=palette.getDarkVibrantSwatch();
                     Log.d(TAG, "back:"+swatch);
                     if (swatch != null) {
                         backColor=swatch.getRgb();
                     }else {
-                        Log.d(TAG, "没取到颜色");
-//                        colorList = asList("#42426F","#5C4033","#4A766E","#42426F","#4A708B","#993333","#8B4789","#473C8B","#8B7D7B","#426F42","#CD919E",
-//                                "#8B7355","#668B8B","#CD853F","#2F2F4F","#4A766E","#104E8B","#27408B","#996699","#8B8386","#339966");
-//                        String colorString=colorList.get((int)(0+Math.random()*(colorList.size()-0)));
-                        String colorString="#4A708B";
-                        backColor = Color.parseColor(colorString);
+                        if(swatch2!=null){
+                            backColor = swatch2.getRgb();
+                        }else {
+                            Log.d(TAG, "没取到颜色");
+                            String colorString="#4A708B";
+                            backColor=Color.parseColor(colorString);
+                        }
                     }
+                    //储存背景颜色到sharepreference里
+                    SharePreferencesUtil.putInt(MyApplication.getContext(),"background_color",backColor);
                     view.setBackgroundColor(backColor);
                     detailToolbar.setBackgroundColor(backColor);
                     stagePhotoCard.setCardBackgroundColor(backColor);

@@ -48,7 +48,7 @@ import static com.example.luowenliang.idouban.moviedetail.MovieDetailActivity.PI
 public class CastDetailActivity extends BaseActivity {
     private static final String TAG = "影人详情";
     private CastDetailItem localCastDetailItem;
-    private String castId,castSpareName,castSpareEnName,castSpareDetailFilmPicture,castSpareDetailFilmTitle,castSpareDetailFilmId,castSpareDetailPhoto;
+    private String castId,castName,castPhoto,castSpareName,castSpareEnName,castSpareDetailFilmPicture,castSpareDetailFilmTitle,castSpareDetailFilmId,castSpareDetailPhoto;
     private double castSpareDetailFilmRating;
     private CastDetailFilmInfo castDetailFilmInfo;
     private List<CastDetailFilmInfo>castDetailFilmInfos=new ArrayList<>();
@@ -136,6 +136,7 @@ public class CastDetailActivity extends BaseActivity {
      * @return
      */
     private rx.Observable<CastDetailItem> requsetCastDetailData() {
+        String castDetailName=null;
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl("https://douban.uieee.com/v2/movie/celebrity/")
                 .addConverterFactory(GsonConverterFactory.create())
@@ -157,7 +158,7 @@ public class CastDetailActivity extends BaseActivity {
                         setPosterOnclickItem();
                         setAlbumRecyclerViewOnclickItem();
                         setFilmRecyclerViewOnclickItem();
-                        getTotalWorks();
+                        getTotalWorks(castName,castPhoto);
                     }
 
                     @Override
@@ -170,12 +171,12 @@ public class CastDetailActivity extends BaseActivity {
                         //为获取海报图片对movieDetailItem取实例
                         localCastDetailItem=castDetailItem;
                         //防止有的图片为空导致页面不显示数据，这里设置占位图
-                        String castPhoto = null;
+                        String castDetailPhoto = null;
                             if(castDetailItem.getAvatars().getLarge()==null){
-                                castPhoto=PICTURE_PLACE_HOLDER;
+                                castDetailPhoto=PICTURE_PLACE_HOLDER;
                             }
                             else{
-                                castPhoto =castDetailItem.getAvatars().getLarge();
+                                castDetailPhoto =castDetailItem.getAvatars().getLarge();
                             }
                        String castDetailName=castDetailItem.getName();
                        String castDetailOriginName=castDetailItem.getName_en();
@@ -183,9 +184,12 @@ public class CastDetailActivity extends BaseActivity {
                        String castSummary=castDetailItem.getSummary();
                        String bornPlace=castDetailItem.getBorn_place();
                        List<String>professions=castDetailItem.getProfessions();
-                        setCastDetailMessage(castPhoto,castDetailName,castDetailOriginName,birthday,bornPlace,professions,castSummary);
+                        setCastDetailMessage(castDetailPhoto,castDetailName,castDetailOriginName,birthday,bornPlace,professions,castSummary);
                         setFilmData(castDetailItem);
                         setAlbum(castDetailItem);
+                        //为了传值给全部作品界面显示标题toolbar
+                        castName=castDetailName;
+                        castPhoto=castDetailPhoto;
                     }
 
                 });
@@ -276,13 +280,14 @@ public class CastDetailActivity extends BaseActivity {
     /**
      * 获取影人全部作品
      */
-    private void getTotalWorks() {
+    private void getTotalWorks(final String castName, final String castPhoto) {
         castTotalWorks.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent =new Intent(CastDetailActivity.this,TotalWorksActivity.class);
                 intent.putExtra("cast_id",castId);
-                intent.putExtra("cast_total_title","全部影片");
+                intent.putExtra("cast_total_title",castName);
+                intent.putExtra("cast_photo",castPhoto);
                 startActivity(intent);
             }
         });
