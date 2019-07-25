@@ -27,6 +27,7 @@ import android.widget.TextView;
 
 import com.example.luowenliang.idouban.R;
 import com.example.luowenliang.idouban.moviedetail.MovieDetailActivity;
+import com.example.luowenliang.idouban.moviedetail.utils.NetworkUtil;
 import com.example.luowenliang.idouban.moviehot.adapter.ComingSoonRecyclerViewAdapter;
 import com.example.luowenliang.idouban.moviehot.adapter.HotMovieRecyclerViewAdapter;
 import com.example.luowenliang.idouban.moviehot.adapter.PublicPraiseRecyclerViewAdapter;
@@ -294,6 +295,12 @@ public class HotMoviesFragment extends Fragment {
 
                     @Override
                     public void onError(Throwable e) {
+                        //判断网络情况，更改请求失败提示词
+                        if(NetworkUtil.getNetWorkStart(getContext())==1){
+                            errorText.setText(getContext().getText(R.string.no_network));
+                        }else {
+                            errorText.setText(getContext().getText(R.string.request_error));
+                        }
                         errorView.setVisibility(View.VISIBLE);
                         succeedView.setVisibility(View.GONE);
                         loadingView.setVisibility(View.GONE);
@@ -347,6 +354,12 @@ public class HotMoviesFragment extends Fragment {
 
                     @Override
                     public void onError(Throwable e) {
+                        //判断网络情况，更改请求失败提示词
+                        if(NetworkUtil.getNetWorkStart(getContext())==1){
+                            errorText.setText(getContext().getText(R.string.no_network));
+                        }else {
+                            errorText.setText(getContext().getText(R.string.request_error));
+                        }
                         errorView.setVisibility(View.VISIBLE);
                         succeedView.setVisibility(View.GONE);
                         loadingView.setVisibility(View.GONE);
@@ -395,6 +408,12 @@ public class HotMoviesFragment extends Fragment {
 
                     @Override
                     public void onError(Throwable e) {
+                        //判断网络情况，更改请求失败提示词
+                        if(NetworkUtil.getNetWorkStart(getContext())==1){
+                            errorText.setText(getContext().getText(R.string.no_network));
+                        }else {
+                            errorText.setText(getContext().getText(R.string.request_error));
+                        }
                         errorView.setVisibility(View.VISIBLE);
                         succeedView.setVisibility(View.GONE);
                         loadingView.setVisibility(View.GONE);

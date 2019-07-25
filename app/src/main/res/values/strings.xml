@@ -8,4 +8,6 @@
     <string name="movies_fragment">电影 fragment</string>
     <string name="books_fragment">读书 fragment(敬请期待)</string>
     <string name="hot_movies_fragment">热门电影 Fragment</string>
+    <string name="request_error">加载失败,请点击重试∠(ᐛ」∠)＿</string>
+    <string name="no_network">无网络，请查看网络连接情况┐(´∀｀)┌</string>
 </resources>

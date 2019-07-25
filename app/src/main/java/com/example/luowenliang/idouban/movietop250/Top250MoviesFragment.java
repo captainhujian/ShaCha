@@ -23,6 +23,7 @@ import android.widget.Toast;
 
 import com.example.luowenliang.idouban.moviedetail.MovieDetailActivity;
 import com.example.luowenliang.idouban.R;
+import com.example.luowenliang.idouban.moviedetail.utils.NetworkUtil;
 import com.example.luowenliang.idouban.movietop250.entity.MovieItem;
 import com.example.luowenliang.idouban.movietop250.entity.Top250Movie;
 
@@ -180,6 +181,12 @@ public class Top250MoviesFragment extends Fragment {
 
                     @Override
                     public void onError(Throwable e) {
+                        //判断网络情况，更改请求失败提示词
+                        if(NetworkUtil.getNetWorkStart(getContext())==1){
+                            request250Error.setText(getContext().getText(R.string.no_network));
+                        }else {
+                            request250Error.setText(getContext().getText(R.string.request_error));
+                        }
                             errorView.setVisibility(View.VISIBLE);
                             loadingView.setVisibility(View.GONE);
                             succeedView.setVisibility(View.GONE);
