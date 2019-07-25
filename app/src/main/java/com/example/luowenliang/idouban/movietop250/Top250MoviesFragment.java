@@ -5,6 +5,8 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.constraint.ConstraintLayout;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
@@ -15,6 +17,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.luowenliang.idouban.moviedetail.MovieDetailActivity;
@@ -41,10 +45,15 @@ public class Top250MoviesFragment extends Fragment {
     private MovieRecyclerViewAdapter adapter;
     private ProgressBar progressBar;
     private LinearLayoutManager linearLayoutManager;
-    int lastVisibleItem;
+    private int lastVisibleItem;
     private  int start = 0;
     private static int count = 25;
-    boolean isLoading = false;
+    private boolean isLoading = false;
+    private boolean isFirstRequest=true;
+    private RelativeLayout errorView,loadingView;
+    private CoordinatorLayout succeedView;
+    private TextView request250Error;
+
 
 
     @Nullable
@@ -52,7 +61,11 @@ public class Top250MoviesFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         Log.d(TAG, "onCreateView: ");
         View view = inflater.inflate(R.layout.fragment_movies_top250, null);
-        progressBar = view.findViewById(R.id.progress_bar);
+        errorView=view.findViewById(R.id.top250_error);
+        succeedView=view.findViewById(R.id.top250_succeed);
+        loadingView=view.findViewById(R.id.top250_progress_bar);
+//        progressBar = view.findViewById(R.id.progress_bar);
+        request250Error=view.findViewById(R.id.request250_error);
         movieRecyclerView = view.findViewById(R.id.movies_list);
         linearLayoutManager=new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
         movieRecyclerView.setLayoutManager(linearLayoutManager);
@@ -64,9 +77,27 @@ public class Top250MoviesFragment extends Fragment {
         Log.d(TAG, "第1次请求成功");
         initMovieTop250Data(String.valueOf(start));
         Log.d(TAG, "第1次请求成功");
+        loadingView.setVisibility(View.VISIBLE);
+        succeedView.setVisibility(View.GONE);
+        clickToRefresh();
         return view;
     }
 
+    /**
+     * 请求失败时点击重新请求
+     */
+    private void clickToRefresh() {
+       request250Error.setOnClickListener(new View.OnClickListener() {
+           @Override
+           public void onClick(View v) {
+               errorView.setVisibility(View.GONE);
+               loadingView.setVisibility(View.VISIBLE);
+               succeedView.setVisibility(View.GONE);
+               initMovieTop250Data(String.valueOf(start));
+           }
+       });
+
+    }
 
 
     private void initData() {
@@ -131,8 +162,14 @@ public class Top250MoviesFragment extends Fragment {
                 .subscribe(new Subscriber<MovieItem>() {
                     @Override
                     public void onCompleted() {
+                        if (isFirstRequest){
+                            errorView.setVisibility(View.GONE);
+                            loadingView.setVisibility(View.GONE);
+                            succeedView.setVisibility(View.VISIBLE);
+                            isFirstRequest=false;
+                        }
                         Log.d(TAG, "onCompleted: ");
-                        progressBar.setVisibility(View.GONE);
+//                        progressBar.setVisibility(View.GONE);
                         initData();
                         adapter.setData(updateMovieList);
                         adapter.notifyDataSetChanged();
@@ -143,14 +180,22 @@ public class Top250MoviesFragment extends Fragment {
 
                     @Override
                     public void onError(Throwable e) {
+                            errorView.setVisibility(View.VISIBLE);
+                            loadingView.setVisibility(View.GONE);
+                            succeedView.setVisibility(View.GONE);
                         Log.d(TAG, "onError: " + e.toString());
                     }
 
                     @Override
                     public void onNext(MovieItem movieItem) {
+                        if(isFirstRequest){
+                            errorView.setVisibility(View.GONE);
+                            loadingView.setVisibility(View.VISIBLE);
+                            succeedView.setVisibility(View.GONE);
+                        }
                         String durations,director,cast1=null,cast2=null ,genres1=null,genres2=null;
                         Log.d(TAG, "onNext: ");
-                        progressBar.setVisibility(View.VISIBLE);
+//                        progressBar.setVisibility(View.VISIBLE);
                         for (int i = 0; i < movieItem.getSubjects().size(); i++) {
                             String id = movieItem.getSubjects().get(i).getId();
                             //防止有的图片为空导致recyclerView不显示，这里设置占位图

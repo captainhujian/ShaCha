@@ -28,6 +28,7 @@ import com.example.luowenliang.idouban.castdetail.entity.CastDetailFilmInfo;
 import com.example.luowenliang.idouban.castdetail.entity.CastDetailItem;
 import com.example.luowenliang.idouban.castdetail.service.CastDetailService;
 import com.example.luowenliang.idouban.moviedetail.MovieDetailActivity;
+import com.example.luowenliang.idouban.moviedetail.TotalStagePhotosActivity;
 import com.example.luowenliang.idouban.moviedetail.entity.StagePhotoInfo;
 import com.example.luowenliang.idouban.photoViewer.ViewPagerActivity;
 
@@ -55,8 +56,8 @@ public class CastDetailActivity extends BaseActivity {
     private CastDetailAlbumInfo castDetailAlbumInfo;
     private List<CastDetailAlbumInfo>castDetailAlbumInfos=new ArrayList<>();
     private ImageView castPhotoView;
-    private TextView castDetailExit,castDetailNameView,castDetailOriginNameView,birthdayView,bornPlaceView,professionsView,castSummaryView,castAlbumTitle,castTotalWorks;
-    private RelativeLayout castFilmTitle;
+    private TextView castDetailExit,castDetailNameView,castDetailOriginNameView,birthdayView,bornPlaceView,professionsView,castSummaryView,castTotalWorks,castTotalPhotos;
+    private RelativeLayout castFilmTitle,castAlbumTitle;
     private RecyclerView castFilmRecyclerView;
     private RecyclerView castAlbumRecyclerView;
     private CastFilmRecyclerViewAdapter castFilmRecyclerViewAdapter;
@@ -122,6 +123,7 @@ public class CastDetailActivity extends BaseActivity {
         castSummaryView=findViewById(R.id.cast_summary);
         castFilmTitle=findViewById(R.id.cast_film_title);
         castTotalWorks=findViewById(R.id.total_works);
+        castTotalPhotos=findViewById(R.id.total_cast_photos);
         castAlbumTitle=findViewById(R.id.album);
         castFilmRecyclerView=findViewById(R.id.film_recycler_view);
         castAlbumRecyclerView=findViewById(R.id.album_recycler_view);
@@ -159,6 +161,7 @@ public class CastDetailActivity extends BaseActivity {
                         setAlbumRecyclerViewOnclickItem();
                         setFilmRecyclerViewOnclickItem();
                         getTotalWorks(castName,castPhoto);
+                        getTotalCastPotos();
                     }
 
                     @Override
@@ -187,7 +190,7 @@ public class CastDetailActivity extends BaseActivity {
                         setCastDetailMessage(castDetailPhoto,castDetailName,castDetailOriginName,birthday,bornPlace,professions,castSummary);
                         setFilmData(castDetailItem);
                         setAlbum(castDetailItem);
-                        //为了传值给全部作品界面显示标题toolbar
+                        //为了传值给全部作品界面和全部图片显示标题toolbar
                         castName=castDetailName;
                         castPhoto=castDetailPhoto;
                     }
@@ -256,6 +259,12 @@ public class CastDetailActivity extends BaseActivity {
      */
     private void setFilmData(CastDetailItem castDetailItem) {
         castFilmTitle.setVisibility(View.VISIBLE);
+        //若作品少于5个则关闭显示全部作品功能
+        if(castDetailItem.getWorks().size()<5){
+            castTotalWorks.setVisibility(View.GONE);
+        }else {
+            castTotalWorks.setVisibility(View.VISIBLE);
+        }
         //防止有的图片为空导致recyclerView不显示，这里设置占位图
         String filmPicture = null;
         for(int i=0;i<castDetailItem.getWorks().size();i++){
@@ -307,6 +316,22 @@ public class CastDetailActivity extends BaseActivity {
             castAlbumTitle.setVisibility(View.GONE);
         }
 
+    }
+
+    /**
+     * 获取影人全部照片
+     */
+    private void getTotalCastPotos() {
+        castTotalPhotos.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent=new Intent(CastDetailActivity.this,TotalStagePhotosActivity.class);
+                intent.putExtra("url","https://douban.uieee.com/v2/movie/celebrity/");
+                intent.putExtra("id",castId);
+                intent.putExtra("title",castName+"的照片");
+                startActivity(intent);
+            }
+        });
     }
 
     /**

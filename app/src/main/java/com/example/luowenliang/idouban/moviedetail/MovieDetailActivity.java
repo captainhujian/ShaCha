@@ -64,6 +64,7 @@ public class MovieDetailActivity extends BaseActivity {
     private static final String TAG = "详情";
     public static final String PICTURE_PLACE_HOLDER="http://6120491.s21i.faiusr.com/2/ABUIABACGAAg0725rAUoiLv9qAQwrAI4rAI.jpg";
     private String id,movieTitle;
+    private double ratingNumber;
     private MovieDetailItem localMovieDetailItem;
     private CastInfo castInfo;
     private CommentInfo commentInfo;
@@ -76,8 +77,8 @@ public class MovieDetailActivity extends BaseActivity {
     private TextView movieDetailExit,detailTitleText,movieDetailExit2,detailToolbarMovieTitle,detailToolbarRating,detailToolBarNoRating;
     private NestedScrollView detailNestedScrollView;
     private ImageView image;
-    private TextView title,originTitleYear,message,rating,noneRating,starCount,summary,stagePhotoTitle,totalComments;
-    private CardView stagePhotoCardView;
+    private TextView title,originTitleYear,message,rating,noneRating,starCount,summary,stagePhotoTitle,totalComments,totalStagePhotos;
+    private CardView stagePhotoCardView,ratingCardView;
     private RatingBar ratingBar;
     private ProgressBar star5,star4,star3,star2,star1;
     private RelativeLayout watchMovie;
@@ -210,6 +211,7 @@ public class MovieDetailActivity extends BaseActivity {
         noneRating=findViewById(R.id.none_rating);
         stagePhotoTitle=findViewById(R.id.stage_photo);
         stagePhotoCardView=findViewById(R.id.stage_photo_card_view);
+        ratingCardView=findViewById(R.id.rating_card);
         ratingBar=findViewById(R.id.movie_detail_rating_bar);
         star5=findViewById(R.id.progress_bar_h5);
         star4=findViewById(R.id.progress_bar_h4);
@@ -220,6 +222,7 @@ public class MovieDetailActivity extends BaseActivity {
         watchMovie=findViewById(R.id.watch_movie);
         summary=findViewById(R.id.summary);
         totalComments=findViewById(R.id.total_comments);
+        totalStagePhotos=findViewById(R.id.total_stage_photos);
         resourceIconRecyclerView=findViewById(R.id.resource_icon_recycler_view);
         castRecyclerView=findViewById(R.id.cast_recycler_view);
         stageRecyclerView=findViewById(R.id.stage_photo_recycler_view);
@@ -348,6 +351,8 @@ public class MovieDetailActivity extends BaseActivity {
                         changeToolbarStyle();
                         //获取全部影评
                         showtotalComents();
+                        //获取全部剧照
+                        showTotalStagePhoto();
                     }
 
                     @Override
@@ -357,7 +362,9 @@ public class MovieDetailActivity extends BaseActivity {
 
                     @Override
                     public void onNext(MovieDetailItem movieDetailItem) {
+                        //传递给全部评论页面作为标题数据
                         movieTitle=movieDetailItem.getTitle();
+                        ratingNumber=movieDetailItem.getRating().getAverage();
                         //为获取海报图片对movieDetailItem取实例
                         localMovieDetailItem=new MovieDetailItem();
                         localMovieDetailItem=movieDetailItem;
@@ -509,7 +516,7 @@ public class MovieDetailActivity extends BaseActivity {
      * 获取短评
      */
     private void setCommentData(MovieDetailItem movieDetailItem) {
-        //判断是否需要显示全部短评（是否有大于4个短评）
+        //判断是否需要查看全部短评（是否有大于4个短评）
         if (movieDetailItem.getPopular_comments().size()<4){
             totalComments.setVisibility(View.GONE);
         }else {
@@ -650,6 +657,23 @@ public class MovieDetailActivity extends BaseActivity {
     }
 
     /**
+     * 获取全部电影剧照
+     */
+    private void showTotalStagePhoto() {
+        totalStagePhotos.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent=new Intent(MovieDetailActivity.this,TotalStagePhotosActivity.class);
+                intent.putExtra("url","https://douban.uieee.com/v2/movie/subject/");
+                intent.putExtra("id",id);
+                intent.putExtra("title",movieTitle+"的剧照");
+                startActivity(intent);
+            }
+        });
+
+    }
+
+    /**
      * 获取全部短评
      */
     private void showtotalComents() {
@@ -659,6 +683,17 @@ public class MovieDetailActivity extends BaseActivity {
                 Intent intent=new Intent(MovieDetailActivity.this,TotalCommentsActivity.class);
                 intent.putExtra("movieId",id);
                 intent.putExtra("movieTitle",movieTitle);
+                intent.putExtra("rating",ratingNumber);
+                startActivity(intent);
+            }
+        });
+        ratingCardView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent=new Intent(MovieDetailActivity.this,TotalCommentsActivity.class);
+                intent.putExtra("movieId",id);
+                intent.putExtra("movieTitle",movieTitle);
+                intent.putExtra("rating",ratingNumber);
                 startActivity(intent);
             }
         });

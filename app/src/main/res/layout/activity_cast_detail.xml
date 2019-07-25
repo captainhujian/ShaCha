@@ -183,6 +183,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
+            android:visibility="gone"
             android:text="全部>"/>
     </RelativeLayout>
 
@@ -197,17 +198,30 @@
         app:layout_constraintTop_toBottomOf="@id/cast_film_title">
     </android.support.v7.widget.RecyclerView>
 
-    <TextView
+    <RelativeLayout
         android:id="@+id/album"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintTop_toBottomOf="@id/film_recycler_view"
+        android:layout_marginLeft="@dimen/margin_size_large"
+        android:layout_marginTop="@dimen/margin_size_large"
+        android:layout_marginRight="20dp"
+        android:visibility="gone">
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:text="相册"
         android:textSize="18dp"
         android:textStyle="bold"
-        android:layout_marginLeft="15dp"
-        android:layout_marginTop="15dp"
-        android:visibility="gone"/>
+       />
+        <TextView
+            android:id="@+id/total_cast_photos"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:text="全部>"/>
+    </RelativeLayout>
     <LinearLayout
         android:id="@+id/album_layout"
         android:layout_width="match_parent"

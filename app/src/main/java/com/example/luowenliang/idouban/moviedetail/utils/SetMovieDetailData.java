@@ -237,7 +237,7 @@ public class SetMovieDetailData {
         /**
          * 转换合理的评分以星级显示
          */
-        public double fitRating ( double rating) {
+        public static double fitRating ( double rating) {
             double ratingIn5 = 0;
             if (rating >= 9.2f) {
                 ratingIn5 = 5f;

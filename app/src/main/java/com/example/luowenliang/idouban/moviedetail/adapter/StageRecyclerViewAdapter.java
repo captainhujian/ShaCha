@@ -4,6 +4,7 @@ import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -35,6 +36,8 @@ public class StageRecyclerViewAdapter extends RecyclerView.Adapter<StageRecycler
 
     @Override
     public void onBindViewHolder(@NonNull final StageRecyclerViewAdapter.ViewHolder viewHolder, final int i) {
+        Log.d("厂长", "adapter里的list "+stagePhotoInfos);
+        Log.d("厂长", "i: "+i);
         final StagePhotoInfo stagePhotoInfo=stagePhotoInfos.get(i);
         //若为视频显示可播放标识
         if(stagePhotoInfo.getVideoUrl()!=null){

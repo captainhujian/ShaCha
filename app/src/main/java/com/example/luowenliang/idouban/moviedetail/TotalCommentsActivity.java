@@ -7,6 +7,7 @@ import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -19,7 +20,9 @@ import com.example.luowenliang.idouban.moviedetail.adapter.CommentRecyclerViewAd
 import com.example.luowenliang.idouban.moviedetail.entity.CommentInfo;
 import com.example.luowenliang.idouban.moviedetail.entity.CommentsItem;
 import com.example.luowenliang.idouban.moviedetail.service.TotalCommentsService;
+import com.example.luowenliang.idouban.moviedetail.utils.SetMovieDetailData;
 import com.example.luowenliang.idouban.moviedetail.utils.SharePreferencesUtil;
+import com.hedgehog.ratingbar.RatingBar;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,9 +37,12 @@ import rx.schedulers.Schedulers;
 public class TotalCommentsActivity extends BaseActivity {
     private String id,title;
     private int backGroundColor;
-    private TextView titleView;
+    private double ratingNumber;
+    private TextView titleView,rating,noneRating;
     private Toolbar commentsToolbar;
+    private RatingBar ratingBar;
     private RecyclerView totalCommentsRecyclerView;
+    private LinearLayout totalCommentsLayout;
     private CommentRecyclerViewAdapter adapter;
     private View view;
 
@@ -47,15 +53,21 @@ public class TotalCommentsActivity extends BaseActivity {
         setContentView(view);
         titleView=findViewById(R.id.comments_title);
         commentsToolbar=findViewById(R.id.comments_toolbar);
+        rating=findViewById(R.id.total_comments_rating);
+        noneRating=findViewById(R.id.total_comments_none_rating);
+        ratingBar=findViewById(R.id.total_comments_rating_bar);
+        totalCommentsLayout=findViewById(R.id.comments_rating_view);
         totalCommentsRecyclerView=findViewById(R.id.total_comments_recyclerView);
         totalCommentsRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayout.VERTICAL,false));
         totalCommentsRecyclerView.addItemDecoration(new DividerItemDecoration(this,DividerItemDecoration.VERTICAL));
         //获取背景颜色并使用
         backGroundColor= SharePreferencesUtil.getInt(MyApplication.getContext(),"background_color",0);
         commentsToolbar.setBackgroundColor(backGroundColor);
+        //接收传递数据
         Intent intent=getIntent();
         id = intent.getStringExtra("movieId");
         title=intent.getStringExtra("movieTitle");
+        ratingNumber=intent.getDoubleExtra("rating",0);
         initTotalComments();
     }
 
@@ -80,11 +92,12 @@ public class TotalCommentsActivity extends BaseActivity {
                     .subscribe(new Subscriber<CommentsItem>() {
                         @Override
                         public void onCompleted() {
-                            titleView.setText(title);
+
                             adapter=new CommentRecyclerViewAdapter(totalCommentsList,Color.BLACK);
                             totalCommentsRecyclerView.setAdapter(adapter);
                             //等数据加载完再填充背景色比较好看
                             view.setBackgroundColor(backGroundColor);
+                            setTitleView();
                         }
 
                         @Override
@@ -111,6 +124,29 @@ public class TotalCommentsActivity extends BaseActivity {
                         }
                     });
         }
+
+    /**
+     * 全部评论标题栏赋值
+     */
+    private void setTitleView() {
+        totalCommentsLayout.setVisibility(View.VISIBLE);
+        titleView.setText(title);
+        //星级评分
+        double fitRate =SetMovieDetailData.fitRating(ratingNumber);
+        Log.d("分数", "合理的分数: " + fitRate);
+        //暂无评价
+        if (fitRate == 0f) {
+            ratingBar.setVisibility(View.GONE);
+            rating.setVisibility(View.GONE);
+            noneRating.setVisibility(View.VISIBLE);
+
+        } else {
+            ratingBar.setVisibility(View.VISIBLE);
+            rating.setText(String.valueOf(ratingNumber));
+            ratingBar.setStarCount(5);
+            ratingBar.setStar((float) fitRate);
+        }
+    }
 
     @Override
     public boolean isActivitySlideBack() {

@@ -20,7 +20,9 @@ import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.example.luowenliang.idouban.R;
@@ -51,6 +53,7 @@ import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
+import rx.internal.operators.OperatorRetryWithPredicate;
 import rx.schedulers.Schedulers;
 
 import static com.example.luowenliang.idouban.moviedetail.MovieDetailActivity.PICTURE_PLACE_HOLDER;
@@ -61,7 +64,7 @@ public class HotMoviesFragment extends Fragment {
     private static String TOTAL_COMING_SOON_URL="coming_soon";
     private SwipeRefreshLayout swipeRefreshLayout;
     private EditText search;
-    private TextView hotMovieTitle,hotMovieTotal,comingSoonTitle,comingSoonTotal,publicPraiseTitle,publicPraiseUpdate;
+    private TextView hotMovieTitle,hotMovieTotal,comingSoonTitle,comingSoonTotal,publicPraiseTitle,publicPraiseUpdate,errorText;
     private String searchText,hotMovieTotalCount,comingSoonTotalCount;
     private SearchInfo searchInfo;
     private HotMovieInfo hotMovieInfo;
@@ -74,7 +77,8 @@ public class HotMoviesFragment extends Fragment {
     private ComingSoonRecyclerViewAdapter comingSoonRecyclerViewAdapter;
     private RecyclerView publicPraiseRecyclerView;
     private PublicPraiseRecyclerViewAdapter publicPraiseRecyclerViewAdapter;
-    private ProgressBar hotMovieProgressBar;
+    private RelativeLayout errorView,loadingView;
+    private SwipeRefreshLayout succeedView;
 
     @Nullable
     @Override
@@ -91,7 +95,10 @@ public class HotMoviesFragment extends Fragment {
         hotMovieRecyclerView = view.findViewById(R.id.hot_movie_recycler_view);
         comingSoonRecyclerView = view.findViewById(R.id.coming_soon_recycler_view);
         publicPraiseRecyclerView = view.findViewById(R.id.public_praise_recycler_view);
-        hotMovieProgressBar = view.findViewById(R.id.hot_movie_progress_bar);
+        loadingView = view.findViewById(R.id.hot_movie_progress_bar);
+        errorView=view.findViewById(R.id.error_view);
+        succeedView=view.findViewById(R.id.refresh_layout);
+        errorText=view.findViewById(R.id.request_error);
         //网格recyclerView的样式初始化
 
         //评论不可滑动recyclerview
@@ -126,39 +133,54 @@ public class HotMoviesFragment extends Fragment {
         swipeRefreshLayout.setColorSchemeColors(Color.parseColor("#CD853F"));
         //设置触发刷新的距离
         swipeRefreshLayout.setDistanceToTriggerSync(200);
-
+        loadingView.setVisibility(View.VISIBLE);
+        succeedView.setVisibility(View.GONE);
         searchMovie();
         initHotMovieData();
-        initComingSoonMovieData();
-        initPublicPraiseMovieData();
-        RefreshMovieData();
+        pullToRefresh();
+        clickToRefresh();
         showTotalMovie();
-
-
         return view;
+    }
+
+    /**
+     * 数据加载失败后点击刷新数据
+     */
+    private void clickToRefresh() {
+        errorText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                errorView.setVisibility(View.GONE);
+                loadingView.setVisibility(View.VISIBLE);
+                refreshMociesData();
+            }
+        });
     }
 
     /**
      * 下拉刷新数据
      */
-    private void RefreshMovieData(){
+    private void pullToRefresh(){
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener()
 
         {
             @Override
             public void onRefresh () {
                 Log.d(TAG, "刷新啦！");
-                //先清空list防止数据重复加载
-                hotMovieInfos.clear();
-                comingSoonMovieInfos.clear();
-                publicPraiseInfos.clear();
-                //重新做网络请求
-                initHotMovieData();
-                initComingSoonMovieData();
-                initPublicPraiseMovieData();
+                refreshMociesData();
                 swipeRefreshLayout.setRefreshing(false);
             }
         });
+    }
+
+    /**
+     * 刷新数据
+     */
+    private void refreshMociesData(){
+        //重新做网络请求
+        initHotMovieData();
+        initComingSoonMovieData();
+        initPublicPraiseMovieData();
     }
 
     /**
@@ -217,6 +239,7 @@ public class HotMoviesFragment extends Fragment {
                         intent.putExtra("id",searchInfo.getSearchId());
                         startActivity(intent);
                         Log.d(TAG, "id:"+searchInfo.getSearchId());
+
                     }
 
                     @Override
@@ -261,24 +284,30 @@ public class HotMoviesFragment extends Fragment {
                 .subscribe(new Subscriber<HotMovieItem>() {
                     @Override
                     public void onCompleted() {
-                        hotMovieProgressBar.setVisibility(View.GONE);
                         showTitle();
                         hotMovieRecyclerViewAdapter=new HotMovieRecyclerViewAdapter(hotMovieInfos);
                         hotMovieRecyclerView.setAdapter(hotMovieRecyclerViewAdapter);
                         hotMovieTotal.setText("全部"+hotMovieTotalCount+">");
                         HotMovieRecyclerViewOnClickItem();
+                        initComingSoonMovieData();
                     }
 
                     @Override
                     public void onError(Throwable e) {
+                        errorView.setVisibility(View.VISIBLE);
+                        succeedView.setVisibility(View.GONE);
+                        loadingView.setVisibility(View.GONE);
                         Log.d(TAG, "onError: "+e.toString());
 
                     }
 
                     @Override
                     public void onNext(HotMovieItem hotMovieItem) {
-
-                        hotMovieProgressBar.setVisibility(View.VISIBLE);
+                        hotMovieInfos.clear();
+                        Log.d("厂长", "onNext: ");
+                        loadingView.setVisibility(View.VISIBLE);
+                        succeedView.setVisibility(View.GONE);
+                        errorView.setVisibility(View.GONE);
                         setHotMovieData(hotMovieItem,hotMovieInfos);
                         hotMovieTotalCount= String.valueOf(hotMovieItem.getTotal());
                     }
@@ -313,15 +342,20 @@ public class HotMoviesFragment extends Fragment {
                         comingSoonTotal.setText("全部"+comingSoonTotalCount+">");
                         Log.d(TAG, "全部："+comingSoonTotalCount);
                         ComingSoonRecyclerViewOnClickItem();
+                        initPublicPraiseMovieData();
                     }
 
                     @Override
                     public void onError(Throwable e) {
+                        errorView.setVisibility(View.VISIBLE);
+                        succeedView.setVisibility(View.GONE);
+                        loadingView.setVisibility(View.GONE);
                         Log.d(TAG, "onErrorComingSoon: "+e.toString());
                     }
 
                     @Override
                     public void onNext(HotMovieItem hotMovieItem) {
+                        comingSoonMovieInfos.clear();
                         setHotMovieData(hotMovieItem,comingSoonMovieInfos);
                         comingSoonTotalCount= String.valueOf(hotMovieItem.getTotal());
                     }
@@ -350,6 +384,10 @@ public class HotMoviesFragment extends Fragment {
                 .subscribe(new Subscriber<PublicPraiseItem>() {
                     @Override
                     public void onCompleted() {
+                        Log.d("厂长", "onCompleted: ");
+                        errorView.setVisibility(View.GONE);
+                        succeedView.setVisibility(View.VISIBLE);
+                        loadingView.setVisibility(View.GONE);
                         publicPraiseRecyclerViewAdapter=new PublicPraiseRecyclerViewAdapter(publicPraiseInfos);
                         publicPraiseRecyclerView.setAdapter(publicPraiseRecyclerViewAdapter);
                         PublicPraiseRecyclerViewOnClickItem();
@@ -357,11 +395,15 @@ public class HotMoviesFragment extends Fragment {
 
                     @Override
                     public void onError(Throwable e) {
+                        errorView.setVisibility(View.VISIBLE);
+                        succeedView.setVisibility(View.GONE);
+                        loadingView.setVisibility(View.GONE);
                         Log.d(TAG, "onErrorPraise: "+e.toString());
                     }
 
                     @Override
                     public void onNext(PublicPraiseItem publicPraiseItem) {
+                        publicPraiseInfos.clear();
                         setPublicPraiseData(publicPraiseItem);
 
                     }

@@ -12,16 +12,16 @@
         android:layout_height="wrap_content"
         app:contentInsetLeft="0dp"
         app:contentInsetStart="0dp">
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:gravity="center|bottom"
-            android:text="短评"
-            android:textSize="15dp"
-            android:textColor="@color/white"
-            android:textStyle="bold"/>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:gravity="center|bottom"
+                android:text="短评"
+                android:textSize="15dp"
+                android:textColor="@color/white"
+                android:textStyle="bold"/>
     </android.support.v7.widget.Toolbar>
+
     <TextView
         android:id="@+id/comments_title"
         android:layout_width="match_parent"
@@ -31,6 +31,50 @@
         android:textSize="20dp"
         android:textColor="@color/white"
         android:textStyle="bold" />
+    <LinearLayout
+        android:id="@+id/comments_rating_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin_size_tiny"
+        android:layout_marginLeft="@dimen/margin_size_large"
+        android:visibility="gone"
+        >
+        <com.hedgehog.ratingbar.RatingBar
+            android:id="@+id/total_comments_rating_bar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:visibility="visible"
+            app:halfstart="true"
+            android:clickable="false"
+            app:starEmpty="@drawable/ic_star_normal"
+            app:starFill="@drawable/ic_star_selected"
+            app:starHalf="@drawable/ic_star_half"
+            app:starImageHeight="15dp"
+            app:starImagePadding="2dp"
+            app:starImageWidth="15dp" />
+        <TextView
+            android:id="@+id/total_comments_none_rating"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/white"
+            android:visibility="gone"
+            android:textStyle="bold"
+            android:textSize="15dp"
+            android:text="暂无评分"/>
+
+        <TextView
+            android:id="@+id/total_comments_rating"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_horizontal"
+            android:text="0.0"
+            android:textSize="12dp"
+            android:textColor="@color/white"
+            android:visibility="visible"
+            android:textStyle="bold"
+            android:layout_marginLeft="1dp"/>
+    </LinearLayout>
     <android.support.v7.widget.RecyclerView
         android:id="@+id/total_comments_recyclerView"
         android:layout_width="match_parent"

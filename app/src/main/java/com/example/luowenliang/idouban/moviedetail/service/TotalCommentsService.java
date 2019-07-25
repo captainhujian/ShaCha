@@ -6,6 +6,6 @@ import retrofit2.http.GET;
 import retrofit2.http.Path;
 
 public interface TotalCommentsService {
-    @GET("{id}/comments")
+    @GET("{id}/comments?start=0&count=100")
     rx.Observable<CommentsItem> getTotalComments(@Path("id")String id);
 }
