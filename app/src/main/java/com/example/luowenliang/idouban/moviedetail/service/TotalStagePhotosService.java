@@ -4,8 +4,9 @@ import com.example.luowenliang.idouban.moviedetail.entity.TotalStagePhotosItem;
 
 import retrofit2.http.GET;
 import retrofit2.http.Path;
+import retrofit2.http.Query;
 
 public interface TotalStagePhotosService {
-    @GET("{id}/photos?start=0&count=100")
-    rx.Observable<TotalStagePhotosItem> getTotalStagePhotos(@Path("id")String id);
+    @GET("{id}/photos")
+    rx.Observable<TotalStagePhotosItem> getTotalStagePhotos(@Path("id")String id,@Query("start")String start, @Query("count")String count);
 }

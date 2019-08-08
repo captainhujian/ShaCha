@@ -9,17 +9,32 @@
     <android.support.v7.widget.Toolbar
         android:id="@+id/comments_toolbar"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="70dp"
         app:contentInsetLeft="0dp"
         app:contentInsetStart="0dp">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <TextView
+                android:id="@+id/total_comments_back"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="@dimen/margin_size_small"
+                android:gravity="bottom"
+                android:textSize="35dp"
+                android:layout_alignParentBottom="true"
+                android:textColor="@color/white"
+                android:text="×"/>
             <TextView
                 android:layout_width="match_parent"
-                android:layout_height="60dp"
+                android:layout_height="match_parent"
                 android:gravity="center|bottom"
+                android:layout_marginBottom="@dimen/margin_size_small"
                 android:text="短评"
                 android:textSize="15dp"
-                android:textColor="@color/white"
-                android:textStyle="bold"/>
+                android:textColor="@color/white"/>
+        </RelativeLayout>
+
     </android.support.v7.widget.Toolbar>
 
     <TextView

@@ -177,9 +177,9 @@ public class MovieRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.
             ratingBar = itemView.findViewById(R.id.rating_bar);
             ratingBar.setmClickable(false);
             //适配android 9.0的行间距
-            if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.O_MR1) {
-                director_cast.setLineSpacing(1.1f,1f);
-            }
+//            if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.O_MR1) {
+//                director_cast.setLineSpacing(1.1f,1f);
+//            }
         }
     }
     /**

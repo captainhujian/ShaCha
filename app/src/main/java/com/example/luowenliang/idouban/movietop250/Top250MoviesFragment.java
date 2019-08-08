@@ -44,7 +44,6 @@ public class Top250MoviesFragment extends Fragment {
     private RecyclerView movieRecyclerView;
     private Top250Movie top250Movie;
     private MovieRecyclerViewAdapter adapter;
-    private ProgressBar progressBar;
     private LinearLayoutManager linearLayoutManager;
     private int lastVisibleItem;
     private  int start = 0;
@@ -94,7 +93,7 @@ public class Top250MoviesFragment extends Fragment {
                errorView.setVisibility(View.GONE);
                loadingView.setVisibility(View.VISIBLE);
                succeedView.setVisibility(View.GONE);
-               initMovieTop250Data(String.valueOf(start));
+               initMovieTop250Data(String.valueOf(start*count));
            }
        });
 
@@ -163,12 +162,12 @@ public class Top250MoviesFragment extends Fragment {
                 .subscribe(new Subscriber<MovieItem>() {
                     @Override
                     public void onCompleted() {
-                        if (isFirstRequest){
+//                        if (isFirstRequest){
                             errorView.setVisibility(View.GONE);
                             loadingView.setVisibility(View.GONE);
                             succeedView.setVisibility(View.VISIBLE);
                             isFirstRequest=false;
-                        }
+//                        }
                         Log.d(TAG, "onCompleted: ");
 //                        progressBar.setVisibility(View.GONE);
                         initData();
@@ -181,6 +180,8 @@ public class Top250MoviesFragment extends Fragment {
 
                     @Override
                     public void onError(Throwable e) {
+                        //请求失败则把失败时请求到的数据清空，防止重新请求后set数据重复
+                        updateMovieList.clear();
                         //判断网络情况，更改请求失败提示词
                         if(NetworkUtil.getNetWorkStart(getContext())==1){
                             request250Error.setText(getContext().getText(R.string.no_network));
@@ -195,11 +196,11 @@ public class Top250MoviesFragment extends Fragment {
 
                     @Override
                     public void onNext(MovieItem movieItem) {
-                        if(isFirstRequest){
+//                        if(isFirstRequest){
                             errorView.setVisibility(View.GONE);
                             loadingView.setVisibility(View.VISIBLE);
                             succeedView.setVisibility(View.GONE);
-                        }
+//                        }
                         String durations,director,cast1=null,cast2=null ,genres1=null,genres2=null;
                         Log.d(TAG, "onNext: ");
 //                        progressBar.setVisibility(View.VISIBLE);

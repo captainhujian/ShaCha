@@ -22,6 +22,7 @@ import com.example.luowenliang.idouban.moviedetail.entity.CommentsItem;
 import com.example.luowenliang.idouban.moviedetail.service.TotalCommentsService;
 import com.example.luowenliang.idouban.moviedetail.utils.SetMovieDetailData;
 import com.example.luowenliang.idouban.moviedetail.utils.SharePreferencesUtil;
+import com.example.luowenliang.idouban.moviedetail.utils.SmartRecyclerViewScrollLsnr;
 import com.hedgehog.ratingbar.RatingBar;
 
 import java.util.ArrayList;
@@ -38,7 +39,8 @@ public class TotalCommentsActivity extends BaseActivity {
     private String id,title;
     private int backGroundColor;
     private double ratingNumber;
-    private TextView titleView,rating,noneRating;
+    private int start,count=100;
+    private TextView titleView,rating,noneRating,back;
     private Toolbar commentsToolbar;
     private RatingBar ratingBar;
     private RecyclerView totalCommentsRecyclerView;
@@ -51,6 +53,7 @@ public class TotalCommentsActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         view =LayoutInflater.from(this).inflate(R.layout.activity_total_comments, null, false);
         setContentView(view);
+        back=findViewById(R.id.total_comments_back);
         titleView=findViewById(R.id.comments_title);
         commentsToolbar=findViewById(R.id.comments_toolbar);
         rating=findViewById(R.id.total_comments_rating);
@@ -60,6 +63,8 @@ public class TotalCommentsActivity extends BaseActivity {
         totalCommentsRecyclerView=findViewById(R.id.total_comments_recyclerView);
         totalCommentsRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayout.VERTICAL,false));
         totalCommentsRecyclerView.addItemDecoration(new DividerItemDecoration(this,DividerItemDecoration.VERTICAL));
+        adapter=new CommentRecyclerViewAdapter(Color.BLACK);
+        totalCommentsRecyclerView.setAdapter(adapter);
         //获取背景颜色并使用
         backGroundColor= SharePreferencesUtil.getInt(MyApplication.getContext(),"background_color",0);
         commentsToolbar.setBackgroundColor(backGroundColor);
@@ -68,36 +73,49 @@ public class TotalCommentsActivity extends BaseActivity {
         id = intent.getStringExtra("movieId");
         title=intent.getStringExtra("movieTitle");
         ratingNumber=intent.getDoubleExtra("rating",0);
-        initTotalComments();
+        quitActivity();
+        initTotalComments(0);
+    }
+
+    /**
+     * 退出页面
+     */
+    private void quitActivity() {
+        back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
     }
 
     /**
      * 请求全部短评
      */
-        private rx.Observable<CommentsItem> requestTotalComments() {
+        private rx.Observable<CommentsItem> requestTotalComments(int start) {
             Retrofit retrofit = new Retrofit.Builder()
                     .baseUrl("http://api.douban.uieee.com/v2/movie/subject/")
                     .addConverterFactory(GsonConverterFactory.create())
                     .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
                     .build();
             TotalCommentsService totalCommentsService = retrofit.create(TotalCommentsService.class);
-            return totalCommentsService.getTotalComments(id);
+            return totalCommentsService.getTotalComments(id,String.valueOf(start),String.valueOf(count));
         }
 
-        private void initTotalComments(){
+        private void initTotalComments(int start){
             final List<CommentInfo> totalCommentsList=new ArrayList<>();
-            requestTotalComments()
+            requestTotalComments(start)
                     .subscribeOn(Schedulers.io())//io加载数据
                     .observeOn(AndroidSchedulers.mainThread())//主线程显示数据
                     .subscribe(new Subscriber<CommentsItem>() {
                         @Override
                         public void onCompleted() {
-
-                            adapter=new CommentRecyclerViewAdapter(totalCommentsList,Color.BLACK);
-                            totalCommentsRecyclerView.setAdapter(adapter);
+                            adapter.setData(totalCommentsList);
+                            adapter.notifyDataSetChanged();
                             //等数据加载完再填充背景色比较好看
                             view.setBackgroundColor(backGroundColor);
                             setTitleView();
+                            loadMoreComments(totalCommentsRecyclerView);
                         }
 
                         @Override
@@ -124,6 +142,19 @@ public class TotalCommentsActivity extends BaseActivity {
                         }
                     });
         }
+
+    /**
+     * 监听滑动，加载更多评论（分页请求）
+     */
+    private void loadMoreComments(RecyclerView recyclerView) {
+        recyclerView.setOnScrollListener(new SmartRecyclerViewScrollLsnr(this) {
+            @Override
+            public void onLoadMore() {
+                start++;
+                initTotalComments(count*start);
+            }
+        });
+    }
 
     /**
      * 全部评论标题栏赋值

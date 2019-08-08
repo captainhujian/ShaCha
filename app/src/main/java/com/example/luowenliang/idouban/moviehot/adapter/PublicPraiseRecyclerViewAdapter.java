@@ -105,9 +105,9 @@ public class PublicPraiseRecyclerViewAdapter extends RecyclerView.Adapter<Public
             publicPraiseRatingBar.setmClickable(false);
             publicPraisePubDateCard=itemView.findViewById(R.id.praise_pubdates_card);
             //适配android 9.0的行间距
-            if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.O_MR1) {
-                publicPraiseMessage.setLineSpacing(1.1f,1f);
-            }
+//            if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.O_MR1) {
+//                publicPraiseMessage.setLineSpacing(1.1f,1f);
+//            }
         }
     }
     /**

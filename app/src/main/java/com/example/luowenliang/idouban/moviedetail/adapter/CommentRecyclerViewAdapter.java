@@ -28,9 +28,11 @@ public class CommentRecyclerViewAdapter extends RecyclerView.Adapter<CommentRecy
     private List<CommentInfo>commentInfos=new ArrayList<>();
     private int textColor;
 
-    public CommentRecyclerViewAdapter(List<CommentInfo> commentInfos, int textColor) {
-        this.commentInfos = commentInfos;
+    public CommentRecyclerViewAdapter(int textColor) {
         this.textColor = textColor;
+    }
+    public void setData(List<CommentInfo>updateCommentInfos) {
+        commentInfos.addAll(updateCommentInfos);
     }
 
     @NonNull
@@ -49,9 +51,9 @@ public class CommentRecyclerViewAdapter extends RecyclerView.Adapter<CommentRecy
         viewHolder.commentTime.setText(fitDateFormat(commentInfo.getCommentTime()));
         viewHolder.usefulCount.setText(fitUsefulCount(commentInfo.getUsefulCount()));
         //适配android 9.0的行间距
-        if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.O_MR1) {
-            viewHolder.comment.setLineSpacing(1.1f,1f);
-        }
+//        if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.O_MR1) {
+//            viewHolder.comment.setLineSpacing(1.1f,1f);
+//        }
         viewHolder.comment.setText(commentInfo.getComment());
         //星级评分
         double fitRate = commentInfo.getCommenterRating();

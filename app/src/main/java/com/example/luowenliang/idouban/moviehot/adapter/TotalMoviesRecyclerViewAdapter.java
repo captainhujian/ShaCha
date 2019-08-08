@@ -173,9 +173,9 @@ public class TotalMoviesRecyclerViewAdapter extends RecyclerView.Adapter<Recycle
             totalPubDateCard=itemView.findViewById(R.id.praise_pubdates_card);
             totalPubDate=itemView.findViewById(R.id.praise_pubdates);
             //适配android 9.0的行间距
-            if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.O_MR1) {
-                totalMovieMessage.setLineSpacing(1.1f,1f);
-            }
+//            if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.O_MR1) {
+//                totalMovieMessage.setLineSpacing(1.1f,1f);
+//            }
         }
     }
     /**

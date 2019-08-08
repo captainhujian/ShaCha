@@ -8,17 +8,36 @@
     android:orientation="vertical">
     <android.support.v7.widget.Toolbar
         android:layout_width="match_parent"
-        android:layout_height="60dp"
+        android:layout_height="70dp"
         app:contentInsetLeft="0dp"
         app:contentInsetStart="0dp">
+        <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+            <TextView
+                android:id="@+id/total_photos_back"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_alignParentLeft="true"
+                android:gravity="bottom"
+                android:textSize="35dp"
+                android:layout_alignParentBottom="true"
+                android:textColor="@color/black"
+                android:text="×"/>
         <TextView
             android:id="@+id/total_photos_title"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:gravity="left|bottom"
+            android:gravity="bottom"
+            android:layout_toRightOf="@id/total_photos_back"
+            android:layout_marginLeft="@dimen/margin_size_tiny"
+            android:layout_marginBottom="@dimen/margin_size_small"
+            android:textSize="18dp"
             android:textColor="@color/black"
-            android:singleLine="true"
-            android:textSize="18sp" />
+            android:textStyle="bold"
+            android:singleLine="true"/>
+
+    </RelativeLayout>
     </android.support.v7.widget.Toolbar>
     <android.support.v7.widget.RecyclerView
         android:id="@+id/total_photos_recyclerView"

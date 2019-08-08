@@ -28,7 +28,7 @@ public class NetworkUtil {
                     return NETWORW_WIFI;
                     //判断是否移动网络
                 }else if (activeNetworkInfo.getType()==(ConnectivityManager.TYPE_MOBILE)){
-//                    Toast.makeText(context, "当前处于移动网络", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, "当前处于移动网络", Toast.LENGTH_SHORT).show();
                     //返回移动网络
                     return NETWORK_MOBILE;
                 }

@@ -22,9 +22,10 @@ import java.util.List;
 public class StageRecyclerViewAdapter extends RecyclerView.Adapter<StageRecyclerViewAdapter.ViewHolder> {
     private List<StagePhotoInfo>stagePhotoInfos = new ArrayList<>();
 
-    public StageRecyclerViewAdapter(List<StagePhotoInfo> stagePhotoInfos) {
-        this.stagePhotoInfos = stagePhotoInfos;
+    public void setData(List<StagePhotoInfo> updateStagePhotoInfos) {
+        stagePhotoInfos.addAll(updateStagePhotoInfos);
     }
+
 
     @NonNull
     @Override

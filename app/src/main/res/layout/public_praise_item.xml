@@ -116,7 +116,7 @@
                             android:layout_height="wrap_content"
                             android:text="abc/abc"
                             android:textSize="13dp"
-                            android:lineSpacingExtra="2dp"
+                            android:lineSpacingExtra="3dp"
                             android:layout_marginRight="20dp"/>
 
                     <android.support.v7.widget.CardView

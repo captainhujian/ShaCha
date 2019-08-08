@@ -242,10 +242,10 @@ public class MovieDetailActivity extends BaseActivity {
         };
         commentRecyclerView.setLayoutManager(layoutManager);
         //适配android 9.0的行间距
-        if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.O_MR1) {
-            message.setLineSpacing(1.1f,1f);
-            summary.setLineSpacing(1.1f,1f);
-        }
+//        if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.O_MR1) {
+//            message.setLineSpacing(1.1f,1f);
+//            summary.setLineSpacing(1.1f,1f);
+//        }
     }
 
     /**
@@ -549,10 +549,14 @@ public class MovieDetailActivity extends BaseActivity {
         resourceIconRecyclerView.setAdapter(resourceIconRecyclerViewAdapter);
         castRecyclerViewAdapter=new CastRecyclerViewAdapter(castInfos,this);
         castRecyclerView.setAdapter(castRecyclerViewAdapter);
-        stageRecyclerViewAdapter=new StageRecyclerViewAdapter(stagePhotoInfos);
+        stageRecyclerViewAdapter=new StageRecyclerViewAdapter();
         stageRecyclerView.setAdapter(stageRecyclerViewAdapter);
-        commentRecyclerViewAdapter=new CommentRecyclerViewAdapter(commentInfos, Color.WHITE);
+        stageRecyclerViewAdapter.setData(stagePhotoInfos);
+        stageRecyclerViewAdapter.notifyDataSetChanged();
+        commentRecyclerViewAdapter=new CommentRecyclerViewAdapter(Color.WHITE);
         commentRecyclerView.setAdapter(commentRecyclerViewAdapter);
+        commentRecyclerViewAdapter.setData(commentInfos);
+        castRecyclerViewAdapter.notifyDataSetChanged();
         commentRecyclerView.addItemDecoration(new DividerItemDecoration(this,DividerItemDecoration.VERTICAL));
     }
 
